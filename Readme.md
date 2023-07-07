@@ -5,7 +5,7 @@
 &nbsp; &nbsp;&nbsp; &nbsp;This program is used to analyze RISC-V ELF file and extract CFG related information (excluding the control flow graph in the form of picture).
 
 ### Program Input
-&nbsp; &nbsp;&nbsp; &nbsp;The program requires an ELF disassemble file(.txt) as input, which can be generated using the RISC-V toolchain.
+&nbsp; &nbsp;&nbsp; &nbsp;The program requires an ELF disassemble file(.txt) as input, which can be generated using the RISC-V toolchain.We have prepared several disassembly files in the "objdump_files" folder, which you can use for software functionality testing.
 
 ### Program Output
 
