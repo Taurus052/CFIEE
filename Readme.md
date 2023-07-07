@@ -22,6 +22,7 @@
 
 	python CFG_Analyze.py
 &nbsp; &nbsp;&nbsp; &nbsp; In the pop-up window, you can click the' Browse' button to select the disassembled .txt file. Then click the' Analyze' button to start the analysis.
+
 &nbsp; &nbsp;&nbsp; &nbsp; What's more, in order to ensure the stability of program analysis as much as possible, we suggest that you click the "Rewrite file" button first, and select your disassembly file in the pop-up window. disassembled .txt file. The program will preprocess your disassembly file. After the preprocessing is complete, please continue to follow the above steps.
 
 ### Notice
