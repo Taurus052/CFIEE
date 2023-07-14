@@ -1,7 +1,11 @@
 '''
 Author: 'Taurus052' 'qq_52550864@gitcode.net'
 Date: 2023-05-08 14:14:15
+<<<<<<< HEAD:src/CFG_Analyze.py
 LastEditTime: 2023-07-07 14:59:39
+=======
+LastEditTime: 2023-07-14 10:39:11
+>>>>>>> de146bf (dev second commit):src/Analyze.py
 '''
 
 # import re
@@ -47,7 +51,7 @@ def main(objdump_file):
     
     end_addr_list, branch_or_jump_target_addr, \
         branch_taken_start_addr, all_taken_target_addr, order_start_addr_list= \
-            get_the_addr_information_of_all_function(address, mnemonic, operands, function_addr_ranges)
+            get_the_addr_information_for_basic_block(address, mnemonic, operands, function_addr_ranges)
     
     
     basic_block = create_basic_blocks_in_order(order_start_addr_list, end_addr_list, used_function_instr, function_addr_ranges,\
@@ -613,9 +617,9 @@ def extract_used_function_instr(function_instr, visited_functions):
             
     return used_function_instr
 
-def get_the_addr_information_of_all_function(address, mnemonic, operands, function_addr_ranges):
+def get_the_addr_information_for_basic_block(address, mnemonic, operands, function_addr_ranges):
     '''
-    Get address information for all functions.
+    Get address information for basic block.
 
     Args:
         address (list): List of instruction addresses.
@@ -1088,19 +1092,52 @@ File path: imput_file_path\ xxxxx_rewrite.txt\nPlease click 'Browse file' to sel
         self.status_label.config(text="Objdump file selected")
 
     def analyze_program(self):
+<<<<<<< HEAD:src/CFG_Analyze.py
         # 创建线程运行分析程序，防止界面阻塞
         t = threading.Thread(target=self.run_analyze_program)
         t.start()
 
     def run_analyze_program(self):
+=======
+        input_file = self.file_path_var.get()
+        rewrite_file = self.output_file_path_var.get()
+        # if not os.path.exists(input_file):
+        #     self.status_label.config(text="Please click the 'Preprocess file' button first.")
+        #     return
+
+        t = threading.Thread(target=self.run_analyze_program, args=(input_file, rewrite_file))
+        t.start()
+
+
+    def run_analyze_program(self, input_file, rewrite_file):
+>>>>>>> de146bf (dev second commit):src/Analyze.py
         try:
             self.progress_bar['value'] = 0 
             self.progress_bar.start()  # startup progress bar
             
+<<<<<<< HEAD:src/CFG_Analyze.py
             self.status_label.config(text="Analyzing...")
 
             # Execute analysis program
             main(self.file_path_var.get())
+=======
+            hash_algorithm = self.hash_algorithm_var.get()
+            result_length = self.result_length_var.get()
+
+            if not hash_algorithm or not result_length:
+                self.status_label.config(text="Please select hash algorithm and result length")
+                return
+            
+            if not rewrite_file:
+                self.progress_bar.start()  # startup progress bar 
+                self.status_label.config(text="Analyzing...")
+                main(input_file, hash_algorithm, result_length)
+            else:
+                self.progress_bar.start()  # startup progress bar 
+                self.status_label.config(text="Analyzing...")
+                # Execute analysis program
+                main(rewrite_file, hash_algorithm, result_length)
+>>>>>>> de146bf (dev second commit):src/Analyze.py
 
             self.progress_bar.stop()
             self.progress_bar['value'] = 100 
