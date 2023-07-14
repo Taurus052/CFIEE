@@ -1,7 +1,7 @@
 '''
 Author: 'Taurus052' 'qq_52550864@gitcode.net'
 Date: 2023-05-08 14:14:15
-LastEditTime: 2023-07-14 10:39:11
+LastEditTime: 2023-07-14 16:40:18
 '''
 
 # import re
@@ -1036,16 +1036,16 @@ import subprocess
 class ProgramAnalyzerUI:
     def __init__(self, master):
         self.master = master
-        master.title("CFG Information Analyzer")
-        master.geometry("600x400")  # 设置窗口的默认大小
+        master.title("CFIEE")
+        master.geometry("600x400") 
 
-        # 添加文件选择器
+        # Add file path label
         self.file_path_var = tk.StringVar()
         self.output_file_path_var = tk.StringVar()
         self.file_path_label = tk.Label(master, textvariable=self.file_path_var)
         self.file_path_label.pack(pady=10)
 
-        # 创建一个框架用于容纳按键
+        # Create a frame for the buttons
         button_frame = tk.Frame(master)
         button_frame.pack(side=tk.TOP, pady=10)
 
@@ -1058,7 +1058,7 @@ class ProgramAnalyzerUI:
         self.analyze_button = tk.Button(button_frame, text="Analyze", command=self.analyze_program)
         self.analyze_button.pack(side=tk.LEFT, padx=10, pady=5)
 
-        # 添加哈希算法选项
+        # Add hash algorithm option
         hash_algorithm_frame = tk.Frame(master)
         hash_algorithm_frame.pack(pady=10)
 
@@ -1070,7 +1070,7 @@ class ProgramAnalyzerUI:
                                                     "MD5", "SHA-1", "SHA-256", "SHA-512")
         self.hash_algorithm_optionmenu.pack(side=tk.LEFT, padx=10)
 
-        # 添加结果长度选项
+        # Add hash value length option
         result_length_frame = tk.Frame(master)
         result_length_frame.pack(pady=10)
 
@@ -1082,19 +1082,19 @@ class ProgramAnalyzerUI:
         self.result_length_combobox['values'] = ["8", "16", "32"]
         self.result_length_combobox.pack(side=tk.LEFT, padx=10)
 
-        # 添加进度条
+        # Add progress bar
         self.progress_bar = ttk.Progressbar(master, length=400, mode='determinate')
         self.progress_bar.pack(pady=20)
 
-        # 添加状态标签
+        # Add status label
         self.status_label = tk.Label(master, text="", font=("Arial", 10))
         self.status_label.pack(pady=6)
 
-        # 添加帮助按钮
+        # Add help button
         self.help_button = tk.Button(master, text="Help", command=self.show_help)
         self.help_button.pack(pady=10)
 
-        # 添加自定义文本
+        # Set custom text
         self.custom_text = tk.Label(master, text="Github @Taurus052", font=("Arial", 12), anchor="s")
         self.custom_text.pack(side=tk.BOTTOM, pady=10)
 
@@ -1123,7 +1123,7 @@ class ProgramAnalyzerUI:
             return
 
         self.file_path_var.set(objdump_file)
-        self.output_file_path_var.set("")  # 重置输出文件路径
+        self.output_file_path_var.set("")  
         self.status_label.config(text="Objdump file selected")
 
 

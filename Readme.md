@@ -1,4 +1,6 @@
-## CFG_Analyze.py
+# CFIEE： A Control Flow Information Extraction Engine for RISC-V
+
+
 #### Author: @Taurus052
 
 ### Program Function
@@ -20,7 +22,7 @@ All files will be stored in "output_files" directory.
 ### Program Usage
 &nbsp; &nbsp;&nbsp; &nbsp;This program can be used via the command line, with the following usage:
 
-	python CFG_Analyze.py
+	python Analyze.py
 	
 &nbsp; &nbsp;&nbsp; &nbsp; In the pop-up window, you can click the **"Browse"** button to select the disassembled .txt file. Then click the **"Preprocess file"** button. After the preprocessing, please select the hash algorithm and the length of the hash value according to your needs. The length of the hash value can be selected in the menu, or you can enter a custom value (it needs to be within the range of the result length supported by the hash function). At last, you can click the **"Analyze"** button to  startup analysis.
 
