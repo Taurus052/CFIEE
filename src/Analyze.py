@@ -1,11 +1,7 @@
 '''
 Author: 'Taurus052' 'qq_52550864@gitcode.net'
 Date: 2023-05-08 14:14:15
-<<<<<<< HEAD:src/CFG_Analyze.py
-LastEditTime: 2023-07-07 14:59:39
-=======
 LastEditTime: 2023-07-14 10:39:11
->>>>>>> de146bf (dev second commit):src/Analyze.py
 '''
 
 # import re
@@ -25,7 +21,7 @@ current_dir = os.path.dirname(os.path.abspath(__file__))
 #切换到当前目录
 os.chdir(current_dir)
 
-def main(objdump_file):
+def main(objdump_file, Hash_algorithm, Hash_value_length):
     function_line_ranges, function_addr_ranges, function_instr =  get_func_information(objdump_file)
     
     ### find the function to visit 
@@ -61,10 +57,13 @@ def main(objdump_file):
     
     sorted_basic_blocks =  sort_basic_blocks(basic_block)
     
-    export_results(function_addr_ranges, 'function_information.txt',\
-                    all_instr, sorted_functions_with_jump_instr_addr, 'may_used_control_transfers.txt',\
-                        'basic_block.txt', sorted_basic_blocks,\
-                        'bin_basic_block_inf.txt', 'hex_basic_block_inf.txt')
+    output_directory = os.path.join(os.path.dirname(os.getcwd()), 'output_files')
+    export_results(function_addr_ranges, 'function_information.txt',
+                all_instr, sorted_functions_with_jump_instr_addr, 'may_used_control_transfers.txt',
+                'basic_block.txt', sorted_basic_blocks,
+                'bin_basic_block_inf.txt', 'hex_basic_block_inf.txt',
+                Hash_algorithm, Hash_value_length, output_directory)
+
 
 
 def get_func_machine_code(input_data):
@@ -157,8 +156,9 @@ def get_func_information(objdump_file):
        
     return function_line_ranges, function_addr_ranges, function_instr
 
-def write_functions_information(function_addr_ranges, output_file):
-    with open(output_file, 'w') as f:
+def write_functions_information(function_addr_ranges, output_file, output_directory):
+    func_info_path = os.path.join(output_directory, output_file)
+    with open(func_info_path, 'w') as f:
         for func_name, func_range in function_addr_ranges.items():
             f.write(func_name + ':' + '\n' + '\tstart_addr:' + ' ' + str(func_range[0]) \
                 +'\n' + '\tend_addr:' + ' ' + str(func_range[1]) + '\n')
@@ -198,7 +198,7 @@ def find_to_visit_function(objdump_file, function_instr, function_addr_ranges, f
     # Search for called functions in the function range
     to_visit_functions = set()
     for line in function_instr[func_name]:
-        if range(len(lines)) == 1:
+        if len(function_instr[func_name]) == 1:
             if line.split()[2] == 'jal' or line.split()[2] ==  'j' :
                     operand = line.split()[3]
                     if ',' in operand:#jal
@@ -578,9 +578,10 @@ def get_all_control_transfer_instr(objdump_file, function_addr_ranges,visited_fu
    
     return all_instr, all_control_transfer_instr_addr, sorted_functions_with_jump_instr_addr
 
-def write_in_may_used_control_transfer_instr(all_instr, functions_with_jump_instr_addr, output_file):
+def write_in_may_used_control_transfer_instr(all_instr, functions_with_jump_instr_addr, output_file, output_directory):
+    ct_path = os.path.join(output_directory, output_file)
     
-    with open (output_file,'w',encoding='utf-8') as file:
+    with open (ct_path,'w',encoding='utf-8') as file:
         for func_name in functions_with_jump_instr_addr:
             file.write('\n' + func_name + ':\n'+'\n')
             for line in functions_with_jump_instr_addr[func_name]:
@@ -894,8 +895,9 @@ def sort_basic_blocks(basic_block):
     sorted_basic_blocks = sorted(basic_block, key=lambda bb: int(bb.start, 16))
     return sorted_basic_blocks
 
-def write_basic_blocks_to_file(file_name, basic_block):
-    with open(file_name, 'w', encoding='utf-8') as file:
+def write_basic_blocks_to_file(file_name, basic_block, output_directory):
+    basic_block_path = os.path.join(output_directory, file_name)
+    with open(basic_block_path, 'w', encoding='utf-8') as file:
         for bb in basic_block:
             file.write(f'Basic_block Name: {bb.name}\n')
             file.write(f'In Function:      {bb.func}\n')
@@ -913,14 +915,15 @@ def write_basic_blocks_to_file(file_name, basic_block):
                 file.write(f'\t{line.strip()}\n')
             file.write('\n\n')
 
-def convert_to_binary(basic_block, output_file_name):
+def convert_to_binary(basic_block, output_file_name, Hash_algorithm, value_length, output_directory):
     '''
     The convert_to_binary function takes in a list of basic blocks and an output file name. 
     The function converts the machine code instructions in each basic block to binary format and writes the binary instructions \
         and a hash value to the output file.
     '''
+    binary_file_path = os.path.join(output_directory, output_file_name)
     
-    with open (output_file_name,'w',encoding='utf-8') as file:
+    with open (binary_file_path,'w',encoding='utf-8') as file:
         for i in range (len(basic_block)):
             bb_instr = basic_block[i].instr
             address, machine_code, mnemonic, operands =  get_func_machine_code(bb_instr)
@@ -940,7 +943,7 @@ def convert_to_binary(basic_block, output_file_name):
                 binary_address.append(bin_address)
             
             # Get hash value
-            hash_value = calculate_hash_value(binary_machine_code, 'md5', 16)
+            hash_value = calculate_hash_value(binary_machine_code, Hash_algorithm, value_length)
 
             # Write to file
             file.write(f'Basic_block: {basic_block[i].name}\n')
@@ -952,19 +955,21 @@ def convert_to_binary(basic_block, output_file_name):
             file.write(f'hash_value: \n\t{hash_value}\n')
             file.write('\n')
 
-def convert_to_hex(basic_block, output_file):
+def convert_to_hex(basic_block, output_file, Hash_algorithm, value_length, output_directory):
     '''
     The convert_to_hex function takes in a list of basic blocks and an output file name. 
     The function converts the machine code instructions in each basic block to hexadecimal format and\
         writes the hexadecimal instructions and a hash value to the output file.
     '''
-    with open(output_file,'w',encoding='utf-8') as file:
+    hex_file_path = os.path.join(output_directory, output_file)
+    
+    with open(hex_file_path,'w',encoding='utf-8') as file:
         for i in range (len(basic_block)):
             bb_instr = basic_block[i].instr
             address, machine_code, mnemonic, operands =  get_func_machine_code(bb_instr)
         
             # Get hash value
-            hash_value = calculate_hash_value(address, 'md5', 16)
+            hash_value = calculate_hash_value(address, Hash_algorithm, value_length)
 
             # Write to file
             file.write(f'Basic_block: {basic_block[i].name}\n')
@@ -981,13 +986,13 @@ def calculate_hash_value(bin_data, algorithm, value_length):
     binary_data = binary_data.encode('utf-8')
 
     # Create hash object based on selected algorithm
-    if algorithm == 'sha256':
+    if algorithm == 'SHA-256':
         hash_type = hashlib.sha256()
-    elif algorithm == 'md5':
+    elif algorithm == 'MD5':
         hash_type = hashlib.md5()
-    elif algorithm == 'sha1':
+    elif algorithm == 'SHA-1':
         hash_type = hashlib.sha1()
-    elif algorithm == 'sha512':
+    elif algorithm == 'SHA-512':
         hash_type = hashlib.sha512()
 
     # Calculate hash value
@@ -997,24 +1002,24 @@ def calculate_hash_value(bin_data, algorithm, value_length):
     hash_value = hash_type.hexdigest()
     
     # Get the hash value of the specified number of digits
-    hash_value_spl = hash_value[:value_length]
+    hash_value_spl = hash_value[:int(value_length)]
 
     return hash_value_spl
 
 def export_results(function_addr_ranges, function_information_file,\
                     all_instr, functions_with_jump_instr_addr, control_transfer_file,\
                         basicblock_file_name, basic_block,\
-                        block_binary_file_name, hex_file_name  ):
+                        block_binary_file_name, hex_file_name, Hash_algorithm, value_length, output_directory):
     
-    write_functions_information(function_addr_ranges, function_information_file)
+    write_functions_information(function_addr_ranges, function_information_file, output_directory)
     
-    write_in_may_used_control_transfer_instr(all_instr, functions_with_jump_instr_addr, control_transfer_file)
+    write_in_may_used_control_transfer_instr(all_instr, functions_with_jump_instr_addr, control_transfer_file, output_directory)
     
-    write_basic_blocks_to_file(basicblock_file_name, basic_block)
+    write_basic_blocks_to_file(basicblock_file_name, basic_block, output_directory)
     
-    convert_to_binary(basic_block, block_binary_file_name)
+    convert_to_binary(basic_block, block_binary_file_name, Hash_algorithm, value_length, output_directory)
     
-    convert_to_hex(basic_block, hex_file_name)
+    convert_to_hex(basic_block, hex_file_name, Hash_algorithm, value_length, output_directory)
  
 # main(objdump_file)  
  
@@ -1036,69 +1041,93 @@ class ProgramAnalyzerUI:
 
         # 添加文件选择器
         self.file_path_var = tk.StringVar()
+        self.output_file_path_var = tk.StringVar()
         self.file_path_label = tk.Label(master, textvariable=self.file_path_var)
         self.file_path_label.pack(pady=10)
 
         # 创建一个框架用于容纳按键
         button_frame = tk.Frame(master)
-        button_frame.pack(side=tk.TOP, pady=5)
+        button_frame.pack(side=tk.TOP, pady=10)
 
-        self.rewrite_button = tk.Button(button_frame, text="Rewrite file", command=self.rewrite_file)
-        self.rewrite_button.pack(side=tk.TOP, pady=10)  # 设置按键的位置以及与周围的间距
-        
-        self.browse_button = tk.Button(button_frame, text="Browse file", command=self.browse_file)
-        self.browse_button.pack(side=tk.LEFT, padx=6, pady=6)  # 设置按键的位置以及与周围的间距
+        self.browse_button = tk.Button(button_frame, text="Browse File", command=self.browse_file)
+        self.browse_button.pack(side=tk.LEFT, padx=10, pady=5)
+
+        self.rewrite_button = tk.Button(button_frame, text="Preprocess File", command=self.rewrite_file)
+        self.rewrite_button.pack(side=tk.LEFT, padx=10, pady=5)
 
         self.analyze_button = tk.Button(button_frame, text="Analyze", command=self.analyze_program)
-        self.analyze_button.pack(side=tk.LEFT, padx=6, pady=6)  # 设置按键的位置以及与周围的间距
+        self.analyze_button.pack(side=tk.LEFT, padx=10, pady=5)
+
+        # 添加哈希算法选项
+        hash_algorithm_frame = tk.Frame(master)
+        hash_algorithm_frame.pack(pady=10)
+
+        self.hash_algorithm_label = tk.Label(hash_algorithm_frame, text="Hash Algorithm:")
+        self.hash_algorithm_label.pack(side=tk.LEFT, padx=10)
+
+        self.hash_algorithm_var = tk.StringVar()
+        self.hash_algorithm_optionmenu = tk.OptionMenu(hash_algorithm_frame, self.hash_algorithm_var,
+                                                    "MD5", "SHA-1", "SHA-256", "SHA-512")
+        self.hash_algorithm_optionmenu.pack(side=tk.LEFT, padx=10)
+
+        # 添加结果长度选项
+        result_length_frame = tk.Frame(master)
+        result_length_frame.pack(pady=10)
+
+        self.result_length_label = tk.Label(result_length_frame, text="Hash Value Length:")
+        self.result_length_label.pack(side=tk.LEFT, padx=10)
+
+        self.result_length_var = tk.StringVar()
+        self.result_length_combobox = ttk.Combobox(result_length_frame, textvariable=self.result_length_var)
+        self.result_length_combobox['values'] = ["8", "16", "32"]
+        self.result_length_combobox.pack(side=tk.LEFT, padx=10)
 
         # 添加进度条
-        self.progress_bar = ttk.Progressbar(master, length=250, mode='determinate')
-        self.progress_bar.pack(pady=20)  # 设置进度条与周围的间距
+        self.progress_bar = ttk.Progressbar(master, length=400, mode='determinate')
+        self.progress_bar.pack(pady=20)
+
+        # 添加状态标签
+        self.status_label = tk.Label(master, text="", font=("Arial", 10))
+        self.status_label.pack(pady=6)
 
         # 添加帮助按钮
         self.help_button = tk.Button(master, text="Help", command=self.show_help)
         self.help_button.pack(pady=10)
-        
+
         # 添加自定义文本
-        self.custom_text = tk.Label(master, text="Github @Taurus052", anchor="s")
+        self.custom_text = tk.Label(master, text="Github @Taurus052", font=("Arial", 12), anchor="s")
         self.custom_text.pack(side=tk.BOTTOM, pady=10)
-        
-        # 添加状态标签
-        self.status_label = tk.Label(master, text="")
-        self.status_label.pack(pady=6)
+
 
     def rewrite_file(self):
-        input_file = filedialog.askopenfilename()
-        file_name = os.path.basename(input_file)
-        file_directory = os.path.dirname(input_file)
-        output_file = os.path.join(file_directory, os.path.splitext(file_name)[0] + '_rewrite.txt')
-        self.file_path_var.set(input_file)
+        objdump_file = self.file_path_var.get()
+        file_name = os.path.basename(objdump_file)
+        file_directory = os.path.dirname(objdump_file)
+        output_file = os.path.join(file_directory, os.path.splitext(file_name)[0] + '_preprocessed.txt')
+        self.output_file_path_var.set(output_file)
         self.master.update()
         
         self.progress_bar['value'] = 0 
         self.progress_bar.start()  # startup progress bar
-        subprocess.run(['python', 'objdump_file_rewrite.py',input_file, output_file])
+        subprocess.run(['python', 'objdump_file_rewrite.py', objdump_file, output_file])
         self.master.after(100, lambda: self.status_label.config(text="Objdump file has been rewrited!\n \
-File path: imput_file_path\ xxxxx_rewrite.txt\nPlease click 'Browse file' to select the file."))
+    File path: {0}\nPlease click 'Analyze' to start the analysis.".format(output_file)))
         self.progress_bar.stop()
         self.progress_bar['value'] = 100 
         self.master.update()
-    
+
     def browse_file(self):
         objdump_file = filedialog.askopenfilename()
+        if not objdump_file:
+            self.status_label.config(text="No file selected")
+            return
+
         self.file_path_var.set(objdump_file)
-        
+        self.output_file_path_var.set("")  # 重置输出文件路径
         self.status_label.config(text="Objdump file selected")
 
-    def analyze_program(self):
-<<<<<<< HEAD:src/CFG_Analyze.py
-        # 创建线程运行分析程序，防止界面阻塞
-        t = threading.Thread(target=self.run_analyze_program)
-        t.start()
 
-    def run_analyze_program(self):
-=======
+    def analyze_program(self):
         input_file = self.file_path_var.get()
         rewrite_file = self.output_file_path_var.get()
         # if not os.path.exists(input_file):
@@ -1110,17 +1139,9 @@ File path: imput_file_path\ xxxxx_rewrite.txt\nPlease click 'Browse file' to sel
 
 
     def run_analyze_program(self, input_file, rewrite_file):
->>>>>>> de146bf (dev second commit):src/Analyze.py
         try:
             self.progress_bar['value'] = 0 
-            self.progress_bar.start()  # startup progress bar
             
-<<<<<<< HEAD:src/CFG_Analyze.py
-            self.status_label.config(text="Analyzing...")
-
-            # Execute analysis program
-            main(self.file_path_var.get())
-=======
             hash_algorithm = self.hash_algorithm_var.get()
             result_length = self.result_length_var.get()
 
@@ -1137,7 +1158,6 @@ File path: imput_file_path\ xxxxx_rewrite.txt\nPlease click 'Browse file' to sel
                 self.status_label.config(text="Analyzing...")
                 # Execute analysis program
                 main(rewrite_file, hash_algorithm, result_length)
->>>>>>> de146bf (dev second commit):src/Analyze.py
 
             self.progress_bar.stop()
             self.progress_bar['value'] = 100 
@@ -1150,9 +1170,11 @@ File path: imput_file_path\ xxxxx_rewrite.txt\nPlease click 'Browse file' to sel
     def show_help(self):
         try:
             # Open .md files with the default application associated with the system
-            subprocess.Popen(['start', '', 'Readme.md'], shell=True)
+            readme_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'Readme.md'))
+            subprocess.Popen(['start', '', readme_path], shell=True)
         except FileNotFoundError:
             print("Unable to find a default application to open the .md file.")
+
 
 root = tk.Tk()
 program_analyzer_ui = ProgramAnalyzerUI(root)

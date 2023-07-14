@@ -5,10 +5,10 @@
 &nbsp; &nbsp;&nbsp; &nbsp;This program is used to analyze RISC-V ELF file and extract CFG related information (excluding the control flow graph in the form of picture).
 
 ### Program Input
-&nbsp; &nbsp;&nbsp; &nbsp;The program requires an ELF disassemble file(.txt) as input, which can be generated using the RISC-V toolchain.We have prepared several disassembly files in the "objdump_files" folder, which you can use for software functionality testing.
+&nbsp; &nbsp;&nbsp; &nbsp;The program requires an ELF disassemble file(.txt) as input, which can be generated using the RISC-V toolchain.
 
 ### Program Output
-
+All files will be stored in "output_files" directory.
 #### 1.  'basic_block.txt': 
 &nbsp; &nbsp;&nbsp; &nbsp; This file contains all Basic block information obtained by Program analysis. The number of each Basic block, the start and end addresses (and instructions), the length of the Basic block, the jump target address (and instructions) of the Basic block, and the instructions in the Basic block are all reflected in the file.
 #### 2. 'may_used_control_transfers.txt':
@@ -21,9 +21,9 @@
 &nbsp; &nbsp;&nbsp; &nbsp;This program can be used via the command line, with the following usage:
 
 	python CFG_Analyze.py
-&nbsp; &nbsp;&nbsp; &nbsp; In the pop-up window, you can click the' Browse' button to select the disassembled .txt file. Then click the' Analyze' button to start the analysis.
+	
+&nbsp; &nbsp;&nbsp; &nbsp; In the pop-up window, you can click the **"Browse"** button to select the disassembled .txt file. Then click the **"Preprocess file"** button. After the preprocessing, please select the hash algorithm and the length of the hash value according to your needs. The length of the hash value can be selected in the menu, or you can enter a custom value (it needs to be within the range of the result length supported by the hash function). At last, you can click the **"Analyze"** button to  startup analysis.
 
-&nbsp; &nbsp;&nbsp; &nbsp; What's more, in order to ensure the stability of program analysis as much as possible, we suggest that you click the "Rewrite file" button first, and select your disassembly file in the pop-up window. disassembled .txt file. The program will preprocess your disassembly file. After the preprocessing is complete, please continue to follow the above steps.
 
 ### Notice
 
