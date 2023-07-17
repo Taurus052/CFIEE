@@ -5,7 +5,7 @@
 
 ### Program dependencies
 
- - riscv64-unknown-elf toolchain
+ - riscv64-unknown-elf toolchain (If you need to disassemble .elf file)
  - Python modules:
 	 - os
 	 - re
@@ -17,7 +17,7 @@
 	 - matplotlib
 
 ### Program Function
-&nbsp; &nbsp;&nbsp; &nbsp;This program is used to analyze RISC-V ELF file and extract CFG related information (excluding the control flow graph in the form of picture).
+&nbsp; &nbsp;&nbsp; &nbsp;This program is used to analyze RISC-V ELF file and extract control flow information.
 
 ### Program Input
 &nbsp; &nbsp;&nbsp; &nbsp;The program requires an ELF disassemble file(.txt) as input, which can be generated using the RISC-V toolchain.
@@ -44,10 +44,11 @@ All files will be stored in "output_files" directory.
 	python Analyze.py
 	
 &nbsp; &nbsp;&nbsp; &nbsp; In the pop-up window, you can click the **"Browse"** button to select the disassembled .txt file. Then click the **"Preprocess file"** button. After the preprocessing, please select the hash algorithm and the length of the hash value according to your needs. The length of the hash value can be selected in the menu, or you can enter a custom value (it needs to be within the range of the result length supported by the hash function). At last, you can click the **"Analyze"** button to  startup analysis.
+&nbsp; &nbsp;&nbsp; &nbsp; By the way, if you have an. elf file compiled under the RV32IMAF( C ) instruction set, you can click the "Disassemble" button. This tool will call riscv64-unknown-elf-objdump for disassembly, and the files obtained from disassembly will be saved in the "objdump_files" folder. After that, you can continue to follow the above steps.
 
 
 ### Notice
 
- 1. All development and testing processes for this program are based on the T-Head Xuantie E906 RISC-V processor using the RV32IMAF instruction set. The selected RISC-V toolchain is Xuantie-900-gcc-elf-newlib-x86_64-V2.6.1. Its disassembly toolchain is GNU objdump (GNU Binutils) 2.35.
+ 1. All development and testing processes for this program are based on the T-Head Xuantie E906 RISC-V processor using the RV32IMAF( C ) instruction set. The selected RISC-V toolchain is Xuantie-900-gcc-elf-newlib-x86_64-V2.6.1. Its disassembly toolchain is GNU objdump (GNU Binutils) 2.35.
 We **cannot** guarantee the correctness of this program when analyzing the disassembly files of other RISC-V instruction sets.
  3. Current program **cannot** analyze information related to indirect jumps. The target addresses of all indirect jump instructions are set to "FFFF". 
