@@ -1,8 +1,9 @@
 '''
-Author: 'Taurus052' 'qq_52550864@gitcode.net'
-Date: 2023-06-30 15:47:15
-LastEditTime: 2023-07-07 14:58:36
+Author: Taurus052
+Date: 2023-07-14 15:34:43
+LastEditTime: 2023-07-17 20:00:08
 '''
+
 import re
 import sys
 
@@ -23,7 +24,7 @@ def judge_type(input_file_path):
     with open(input_file_path, 'r') as file:
         lines = file.readlines()
         for line in lines[:15]:
-            if '#' in line:
+            if line.startswith('#'):
                 type = 1
     return type
 

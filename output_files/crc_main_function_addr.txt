@@ -1,0 +1,297 @@
+<__start>:
+	start_addr: 0
+	end_addr: 24
+<L_loop0>:
+	start_addr: 28
+	end_addr: 36
+<L_loop0_done>:
+	start_addr: 3a
+	end_addr: 50
+<L_loop1>:
+	start_addr: 54
+	end_addr: 5c
+<L_loop1_done>:
+	start_addr: 60
+	end_addr: dc
+<__to_main>:
+	start_addr: e0
+	end_addr: e0
+<__exit>:
+	start_addr: e4
+	end_addr: fa
+<__fail>:
+	start_addr: fe
+	end_addr: 13c
+<trap_handler>:
+	start_addr: 140
+	end_addr: 144
+<__synchronous_exception>:
+	start_addr: 146
+	end_addr: 17c
+<vector_table>:
+	start_addr: 180
+	end_addr: 57c
+<__dummy>:
+	start_addr: 580
+	end_addr: 580
+<_out_buffer>:
+	start_addr: 5b4
+	end_addr: 5be
+<_out_null>:
+	start_addr: 5c0
+	end_addr: 5c0
+<_out_rev>:
+	start_addr: 5c2
+	end_addr: 674
+<_ntoa_format>:
+	start_addr: 676
+	end_addr: 890
+<_ntoa_long>:
+	start_addr: 892
+	end_addr: 912
+<_ntoa_long_long>:
+	start_addr: 914
+	end_addr: a06
+<_etoa>:
+	start_addr: a08
+	end_addr: e02
+<_ftoa>:
+	start_addr: e04
+	end_addr: 11f0
+<_out_char>:
+	start_addr: 11f2
+	end_addr: 11f8
+<_out_fct>:
+	start_addr: 11fc
+	end_addr: 1204
+<_vsnprintf>:
+	start_addr: 1206
+	end_addr: 1844
+<puts>:
+	start_addr: 1846
+	end_addr: 1872
+<_putchar>:
+	start_addr: 1874
+	end_addr: 1876
+<putchar>:
+	start_addr: 187a
+	end_addr: 188e
+<printf>:
+	start_addr: 1890
+	end_addr: 18bc
+<sprintf>:
+	start_addr: 18be
+	end_addr: 18e6
+<snprintf>:
+	start_addr: 18e8
+	end_addr: 190e
+<vprintf>:
+	start_addr: 1910
+	end_addr: 1928
+<vsnprintf>:
+	start_addr: 192a
+	end_addr: 1936
+<fctprintf>:
+	start_addr: 1938
+	end_addr: 1968
+<get_vtimer>:
+	start_addr: 196a
+	end_addr: 1976
+<sim_end>:
+	start_addr: 1978
+	end_addr: 1982
+<ck_uart_set_baudrate>:
+	start_addr: 1984
+	end_addr: 19c6
+<ck_uart_set_parity>:
+	start_addr: 19c8
+	end_addr: 1a32
+<ck_uart_set_wordsize>:
+	start_addr: 1a34
+	end_addr: 1ab2
+<ck_uart_set_stopbit>:
+	start_addr: 1ab4
+	end_addr: 1ae2
+<ck_uart_set_rxmode>:
+	start_addr: 1ae4
+	end_addr: 1ae6
+<ck_uart_set_txmode>:
+	start_addr: 1ae8
+	end_addr: 1aea
+<ck_uart_open>:
+	start_addr: 1aec
+	end_addr: 1afe
+<ck_uart_init>:
+	start_addr: 1b00
+	end_addr: 1baa
+<ck_uart_close>:
+	start_addr: 1bac
+	end_addr: 1bbc
+<ck_uart_putc>:
+	start_addr: 1bbe
+	end_addr: 1bd8
+<ck_uart_status>:
+	start_addr: 1bda
+	end_addr: 1bdc
+<vasprintf>:
+	start_addr: 1bde
+	end_addr: 1c80
+<asprintf>:
+	start_addr: 1c82
+	end_addr: 1ca0
+<ck_intc_init>:
+	start_addr: 1ca2
+	end_addr: 1cb6
+<__thead_vprintfsprintf>:
+	start_addr: 1cb8
+	end_addr: 1cba
+<__thead_vprintfprintf>:
+	start_addr: 1cbc
+	end_addr: 1cbe
+<stdout>:
+	start_addr: 1cc0
+	end_addr: 1cc2
+<os_critical_enter>:
+	start_addr: 1cc4
+	end_addr: 1cc4
+<os_critical_exit>:
+	start_addr: 1cc6
+	end_addr: 1cc6
+<icrc1>:
+	start_addr: 1cc8
+	end_addr: 1cf0
+<icrc>:
+	start_addr: 1cf2
+	end_addr: 1e3a
+<verify_benchmark>:
+	start_addr: 1e3c
+	end_addr: 1e3e
+<initialise_benchmark>:
+	start_addr: 1e40
+	end_addr: 1e40
+<benchmark>:
+	start_addr: 1e42
+	end_addr: 1e86
+<fputc>:
+	start_addr: 1e88
+	end_addr: 1e94
+<main>:
+	start_addr: 1e96
+	end_addr: 1ed8
+<__udivdi3>:
+	start_addr: 1eda
+	end_addr: 2238
+<__umoddi3>:
+	start_addr: 223a
+	end_addr: 2578
+<__adddf3>:
+	start_addr: 257a
+	end_addr: 2e30
+<__divdf3>:
+	start_addr: 2e32
+	end_addr: 34bc
+<__eqdf2>:
+	start_addr: 34be
+	end_addr: 3560
+<__gedf2>:
+	start_addr: 3562
+	end_addr: 3616
+<__ledf2>:
+	start_addr: 3618
+	end_addr: 36cc
+<__muldf3>:
+	start_addr: 36ce
+	end_addr: 3c6a
+<__subdf3>:
+	start_addr: 3c6c
+	end_addr: 4536
+<__fixdfsi>:
+	start_addr: 4538
+	end_addr: 45fc
+<__fixunsdfsi>:
+	start_addr: 45fe
+	end_addr: 4696
+<__floatsidf>:
+	start_addr: 4698
+	end_addr: 46fc
+<__floatunsidf>:
+	start_addr: 46fe
+	end_addr: 474a
+<__clzsi2>:
+	start_addr: 474c
+	end_addr: 4786
+<malloc>:
+	start_addr: 4788
+	end_addr: 4792
+<free>:
+	start_addr: 4794
+	end_addr: 479e
+<_malloc_r>:
+	start_addr: 47a2
+	end_addr: 4d68
+<__malloc_lock>:
+	start_addr: 4d6a
+	end_addr: 4d72
+<__malloc_unlock>:
+	start_addr: 4d74
+	end_addr: 4d7c
+<_sbrk_r>:
+	start_addr: 4d7e
+	end_addr: 4db2
+<strdup>:
+	start_addr: 4db4
+	end_addr: 4dbe
+<_strdup_r>:
+	start_addr: 4dc0
+	end_addr: 4df4
+<strlen>:
+	start_addr: 4df8
+	end_addr: 4e5a
+<_malloc_trim_r>:
+	start_addr: 4e5e
+	end_addr: 4f2a
+<_free_r>:
+	start_addr: 4f2c
+	end_addr: 5156
+<__retarget_lock_init>:
+	start_addr: 5158
+	end_addr: 5158
+<__retarget_lock_init_recursive>:
+	start_addr: 515a
+	end_addr: 515a
+<__retarget_lock_close>:
+	start_addr: 515c
+	end_addr: 515c
+<__retarget_lock_close_recursive>:
+	start_addr: 515e
+	end_addr: 515e
+<__retarget_lock_acquire>:
+	start_addr: 5160
+	end_addr: 5160
+<__retarget_lock_acquire_recursive>:
+	start_addr: 5162
+	end_addr: 5162
+<__retarget_lock_try_acquire>:
+	start_addr: 5164
+	end_addr: 5166
+<__retarget_lock_try_acquire_recursive>:
+	start_addr: 5168
+	end_addr: 516a
+<__retarget_lock_release>:
+	start_addr: 516c
+	end_addr: 516c
+<__retarget_lock_release_recursive>:
+	start_addr: 516e
+	end_addr: 516e
+<memcpy>:
+	start_addr: 5170
+	end_addr: 5228
+<cleanup_glue>:
+	start_addr: 522c
+	end_addr: 5282
+<_reclaim_reent>:
+	start_addr: 5284
+	end_addr: 5328
+<_sbrk>:
+	start_addr: 532a
+	end_addr: 5394

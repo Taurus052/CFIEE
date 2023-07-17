@@ -1,27 +1,29 @@
 '''
-Author: 'Taurus052' 'qq_52550864@gitcode.net'
-Date: 2023-05-08 14:14:15
-LastEditTime: 2023-07-14 16:40:18
+Author: Taurus052
+Date: 2023-07-14 15:34:43
+LastEditTime: 2023-07-17 20:13:55
 '''
 
-# import re
 import os
 import hashlib
+import tkinter as tk
+from tkinter import filedialog
+from tkinter import ttk
+import threading
+import subprocess
+import matplotlib.pyplot as plt
+
 # branch instructions
 branch_inst = ["beq", "bne", "blt", "bltu", "bge", "bgeu", "beqz", "bnez", "bltz", "blez", "bgtz", "bgez", "bgt", "bgtu", "ble", "bleu"]
 # jump instruction
 unconditional_jump_inst = ["jal", "j"]
 indirect_jump_inst = ["jr", "jalr"]
 
-# objdump_file = 'objdump_rewrite.txt'
-
-#获取当前脚本所在的目录路径
 current_dir = os.path.dirname(os.path.abspath(__file__))
-
-#切换到当前目录
+#Change the current working directory to the directory of the script
 os.chdir(current_dir)
 
-def main(objdump_file, Hash_algorithm, Hash_value_length):
+def main(objdump_file, Hash_algorithm, Hash_value_length, program_name):
     function_line_ranges, function_addr_ranges, function_instr =  get_func_information(objdump_file)
     
     ### find the function to visit 
@@ -58,11 +60,12 @@ def main(objdump_file, Hash_algorithm, Hash_value_length):
     sorted_basic_blocks =  sort_basic_blocks(basic_block)
     
     output_directory = os.path.join(os.path.dirname(os.getcwd()), 'output_files')
-    export_results(function_addr_ranges, 'function_information.txt',
-                all_instr, sorted_functions_with_jump_instr_addr, 'may_used_control_transfers.txt',
-                'basic_block.txt', sorted_basic_blocks,
-                'bin_basic_block_inf.txt', 'hex_basic_block_inf.txt',
-                Hash_algorithm, Hash_value_length, output_directory)
+    export_results(function_addr_ranges, program_name + '_function_addr.txt',
+                all_instr, sorted_functions_with_jump_instr_addr, program_name + '_forward_transfers.txt', \
+                    program_name + '_control_transfer.bin',\
+                program_name + '_basic_block.txt', sorted_basic_blocks,
+                program_name + '_bin_basic_block_inf.txt', program_name + '_hex_basic_block_inf.txt',
+                Hash_algorithm, Hash_value_length, output_directory, program_name)
 
 
 
@@ -201,10 +204,11 @@ def find_to_visit_function(objdump_file, function_instr, function_addr_ranges, f
         if len(function_instr[func_name]) == 1:
             if line.split()[2] == 'jal' or line.split()[2] ==  'j' :
                     operand = line.split()[3]
-                    if ',' in operand:#jal
+                    if ',' in operand:
                         jump_target = operand.split(',')[1]
-                        call_instrs.append(line)
-                    elif ',' not in operand:#j
+                        if int(jump_target,16) > int(func_addr_range[1],16) or int(jump_target,16) < int(func_addr_range[0],16):
+                            call_instrs.append(line)
+                    elif ',' not in operand:
                         jump_target = operand
                         if int(jump_target,16) > int(func_addr_range[1],16) or int(jump_target,16) < int(func_addr_range[0],16):
                             call_instrs.append(line)
@@ -235,10 +239,11 @@ def find_to_visit_function(objdump_file, function_instr, function_addr_ranges, f
         else:
             if line.split()[2] == 'jal' or line.split()[2] ==  'j' :
                 operand = line.split()[3]
-                if ',' in operand:#jal
-                    jump_target = operand.split(',')[1]
-                    call_instrs.append(line)
-                elif ',' not in operand:#j
+                if ',' in operand:
+                    jump_target = operand.split(',')[-1]
+                    if int(jump_target,16) > int(func_addr_range[1],16) or int(jump_target,16) < int(func_addr_range[0],16):
+                        call_instrs.append(line)
+                elif ',' not in operand:
                     jump_target = operand
                     if int(jump_target,16) > int(func_addr_range[1],16) or int(jump_target,16) < int(func_addr_range[0],16):
                         call_instrs.append(line)
@@ -291,22 +296,6 @@ def find_to_visit_function(objdump_file, function_instr, function_addr_ranges, f
     
     return to_visit_functions, visited_functions_id, visited_functions, function_call_instr    
 
-# def extract_function_before_xx(objdump_file, function_xx):
-#     '''
-#     The 'extract_function_before_xx' function takes in an objdump file and the name of a function as input data. 
-#     The function returns a list of the names of all functions that appear before the input function in the objdump file.
-#     '''
-    
-#     function_names = []
-#     with open (objdump_file, 'r') as file:
-#         lines = file.readlines()
-#         for line in lines:
-#             line = line.strip()
-#             if ('>:') in line and function_xx not in line:
-#                 function_names.append(line.split()[-1][:-1])
-#             elif function_xx in line:
-#                 break
-#     return function_names
 
 def find_ret_instruction(visited_functions, function_addr_ranges, function_instr):
     '''
@@ -375,7 +364,10 @@ def get_function_call_relationship(function_call_instr, function_addr_ranges):
             instr_addr = tokens[0][:-1]
             mnemonic = tokens[2]
             operand = tokens[3]
-            jump_target = operand.split(',')[-1]
+            if ',' in operand:
+                jump_target = operand.split(',')[-1]
+            else:
+                jump_target = operand
             
             # Iterate over the function address ranges
             for callee_func_name, address in function_addr_ranges.items():
@@ -476,7 +468,7 @@ def get_return_relationship(function_call_relationship, ret_instr_addr, function
                     else:
                         continue
             elif func_n in function_call_instr.keys() and ' ' in func:
-                func_n2 = func.split()[1]
+                func_n2 = func.split()[-1]
                 for jal_instr in function_call_instr[func_n]:
                     tokens = jal_instr.split()
                     instr_addr = tokens[0][:-1]
@@ -523,7 +515,7 @@ def get_all_control_transfer_instr(objdump_file, function_addr_ranges,visited_fu
     all_control_transfer_instr_addr = []   
     
     # Read the objdump file and extract instructions
-    with open(objdump_file,'r',encoding='utf-8') as file:
+    with open(objdump_file,'r') as file:
         for line in file:
             if line.startswith(" "):
                 all_instr.append(line.strip())
@@ -578,15 +570,26 @@ def get_all_control_transfer_instr(objdump_file, function_addr_ranges,visited_fu
    
     return all_instr, all_control_transfer_instr_addr, sorted_functions_with_jump_instr_addr
 
-def write_in_may_used_control_transfer_instr(all_instr, functions_with_jump_instr_addr, output_file, output_directory):
-    ct_path = os.path.join(output_directory, output_file)
+def write_in_may_used_control_transfer_instr(all_instr, functions_with_jump_instr_addr, output_file1, output_file2 ,\
+                                                output_directory, program_name):
+    ct_path = os.path.join(output_directory, output_file1)
+    bin_path = os.path.join(output_directory, output_file2)
     
-    with open (ct_path,'w',encoding='utf-8') as file:
+    with open (ct_path,'w',encoding='utf-8') as file1, open(bin_path,'wb') as file2:
         for func_name in functions_with_jump_instr_addr:
-            file.write('\n' + func_name + ':\n'+'\n')
+            file1.write('\n' + func_name + ':\n'+'\n')
+            
             for line in functions_with_jump_instr_addr[func_name]:
                 addr, taken_target = line.split(',')
                 target_line_num = None
+                
+                int_addr = int(addr, 16)
+                int_target = int(taken_target, 16)
+                bin_addr = bin(int_addr)[2:].zfill(16)
+                bin_target = bin(int_target)[2:].zfill(16)
+                addr_bytes = bin_addr.encode('utf-8')
+                target_bytes = bin_target.encode('utf-8')
+                file2.write(addr_bytes + target_bytes + b'\n')
 
                 for line_num , instr in enumerate(all_instr):
                     if instr.startswith(taken_target):
@@ -600,9 +603,38 @@ def write_in_may_used_control_transfer_instr(all_instr, functions_with_jump_inst
                             jump_instr_line_num = line_num
                             break      
                     if jump_instr_line_num is not None:
-                        file.write('j/b_instr: '+all_instr[jump_instr_line_num] + '\n')
-                        file.write('t_instr:   '+all_instr[target_line_num] + '\n')
-                        file.write('\n')
+                        file1.write('j/b_instr: '+all_instr[jump_instr_line_num] + '\n')
+                        file1.write('t_instr:   '+all_instr[target_line_num] + '\n')
+                        file1.write('\n')
+    
+    instruction_count = []
+    function_names = []
+
+    for function_name, jump_instructions in functions_with_jump_instr_addr.items():
+        instruction_count.append(len(jump_instructions))
+        function_names.append(function_name)
+
+    # Set the figure size and spacing
+    fig, ax = plt.subplots(figsize=(12, 6))
+    plt.subplots_adjust(bottom=0.3)
+
+    # Plot the bar chart
+    bars = plt.bar(function_names, instruction_count)
+    plt.xlabel('Function Name')
+    plt.ylabel('Instruction Count')
+    plt.title(program_name + ' Transfers per Function (Forward)')
+
+    # Rotate the x-axis labels to prevent overlap
+    plt.xticks(rotation=90)
+
+    # Add data labels to the bars
+    for bar in bars:
+        height = bar.get_height()
+        ax.text(bar.get_x() + bar.get_width() / 2, height, str(int(height)), ha='center', va='bottom')
+
+    # Save the figure to a file
+    plt.savefig(os.path.join(output_directory, program_name + '_forward_transfers_per_function.png'))
+
 
 def extract_used_function_instr(function_instr, visited_functions):
     used_function_instr = []
@@ -653,9 +685,12 @@ def get_the_addr_information_for_basic_block(address, mnemonic, operands, functi
         if i == 0:
             order_start_addr_list.append(address[i])
             
-        if address[i] in func_end_addr_list and i+1 < len(mnemonic):
+        if address[i] in func_end_addr_list and i+1 <= len(mnemonic):
             end_addr_list.append(address[i])
-            order_start_addr_list.append(address[i+1])
+            if i+1 < len(mnemonic):
+                order_start_addr_list.append(address[i+1])
+            elif i+1 == len(mnemonic):
+                continue
 
         # Deal with branch instructions
         if mnemonic[i] in branch_inst and i+1 < len(mnemonic):
@@ -774,6 +809,9 @@ def create_basic_blocks_in_order(order_start_addr_list, end_addr_list, used_func
     for i in range(len(order_start_addr_list)):
         basic_block[i].name = i
         basic_block[i].start = order_start_addr_list[i]
+        # if i >= len(end_addr_list) and int(basic_block[i].start,16) > int(end_addr_list[i-1],16):
+        #     basic_block[i].end = basic_block[i].start
+        # else:
         basic_block[i].end = end_addr_list[i]
         basic_block[i].length = calculate_block_length(basic_block[i].start, basic_block[i].end, used_function_instr)
         
@@ -969,7 +1007,7 @@ def convert_to_hex(basic_block, output_file, Hash_algorithm, value_length, outpu
             address, machine_code, mnemonic, operands =  get_func_machine_code(bb_instr)
         
             # Get hash value
-            hash_value = calculate_hash_value(address, Hash_algorithm, value_length)
+            hash_value = calculate_hash_value(machine_code, Hash_algorithm, value_length)
 
             # Write to file
             file.write(f'Basic_block: {basic_block[i].name}\n')
@@ -981,8 +1019,8 @@ def convert_to_hex(basic_block, output_file, Hash_algorithm, value_length, outpu
             file.write(f'hash_value: \n\t{hash_value}\n')
             file.write('\n')
             
-def calculate_hash_value(bin_data, algorithm, value_length):
-    binary_data = ''.join(bin_data)
+def calculate_hash_value(data, algorithm, value_length):
+    binary_data = ''.join(data)
     binary_data = binary_data.encode('utf-8')
 
     # Create hash object based on selected algorithm
@@ -1007,13 +1045,14 @@ def calculate_hash_value(bin_data, algorithm, value_length):
     return hash_value_spl
 
 def export_results(function_addr_ranges, function_information_file,\
-                    all_instr, functions_with_jump_instr_addr, control_transfer_file,\
+                    all_instr, functions_with_jump_instr_addr, control_transfer_file,bin_file,\
                         basicblock_file_name, basic_block,\
-                        block_binary_file_name, hex_file_name, Hash_algorithm, value_length, output_directory):
+                        block_binary_file_name, hex_file_name, Hash_algorithm, value_length, output_directory, program_name):
     
     write_functions_information(function_addr_ranges, function_information_file, output_directory)
     
-    write_in_may_used_control_transfer_instr(all_instr, functions_with_jump_instr_addr, control_transfer_file, output_directory)
+    write_in_may_used_control_transfer_instr(all_instr, functions_with_jump_instr_addr, control_transfer_file, \
+                                            bin_file, output_directory, program_name)
     
     write_basic_blocks_to_file(basicblock_file_name, basic_block, output_directory)
     
@@ -1024,14 +1063,15 @@ def export_results(function_addr_ranges, function_information_file,\
 # main(objdump_file)  
  
 ## UI
-import tkinter as tk
-from tkinter import filedialog
-from tkinter import ttk
-import threading
-import webbrowser
-import subprocess
 
-# ttk.Style().theme_names()
+def judge_file_type(input_file_path):
+    type = None
+    with open(input_file_path, 'r') as file:
+        lines = file.readlines()
+        for line in lines[:15]:
+            if line.startswith('#'):
+                type = 1
+    return type
 
 class ProgramAnalyzerUI:
     def __init__(self, master):
@@ -1041,13 +1081,18 @@ class ProgramAnalyzerUI:
 
         # Add file path label
         self.file_path_var = tk.StringVar()
-        self.output_file_path_var = tk.StringVar()
+        self.rewrite_file_path_var = tk.StringVar()
+        self.elf_file_path_var = tk.StringVar()
         self.file_path_label = tk.Label(master, textvariable=self.file_path_var)
         self.file_path_label.pack(pady=10)
 
         # Create a frame for the buttons
+        
         button_frame = tk.Frame(master)
         button_frame.pack(side=tk.TOP, pady=10)
+
+        self.disassemble_button = tk.Button(button_frame, text="Disassemble", command=self.disassemble_program)
+        self.disassemble_button.pack(side=tk.TOP, padx=10, pady=5)
 
         self.browse_button = tk.Button(button_frame, text="Browse File", command=self.browse_file)
         self.browse_button.pack(side=tk.LEFT, padx=10, pady=5)
@@ -1057,7 +1102,7 @@ class ProgramAnalyzerUI:
 
         self.analyze_button = tk.Button(button_frame, text="Analyze", command=self.analyze_program)
         self.analyze_button.pack(side=tk.LEFT, padx=10, pady=5)
-
+        
         # Add hash algorithm option
         hash_algorithm_frame = tk.Frame(master)
         hash_algorithm_frame.pack(pady=10)
@@ -1098,48 +1143,92 @@ class ProgramAnalyzerUI:
         self.custom_text = tk.Label(master, text="Github @Taurus052", font=("Arial", 12), anchor="s")
         self.custom_text.pack(side=tk.BOTTOM, pady=10)
 
+    def disassemble_program(self):
+        elf_file = filedialog.askopenfilename()
+
+        if not elf_file:
+            self.status_label.config(text="No file selected")
+            return
+        try:
+            output_directory = os.path.join(os.path.dirname(os.getcwd()), "objdump_files")
+            if not os.path.exists(output_directory):
+                os.makedirs(output_directory)
+            output_file = os.path.join(output_directory, os.path.splitext(os.path.basename(elf_file))[0] + "_disassembly.txt")
+            process = subprocess.run(["riscv64-unknown-elf-objdump", "-S", elf_file], capture_output=True, text=True)
+            with open(output_file, 'w') as file:
+                file.write(process.stdout)
+            self.status_label.config(text="Disassembly complete.")
+        
+        except subprocess.CalledProcessError as e:
+            error_window = tk.Toplevel()
+            error_window.title("Error")
+            error_window.geometry("400x300")
+
+            scrollbar = tk.Scrollbar(error_window)
+            scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
+
+            error_text = tk.Text(error_window, wrap=tk.WORD, yscrollcommand=scrollbar.set)
+            error_text.pack(fill=tk.BOTH, expand=True)
+
+            scrollbar.config(command=error_text.yview)
+
+            error_text.insert(tk.END, f"Error: {e.stderr}")
+
+            self.status_label.config(text="Error occurred. Please check the error window for details.")
+
 
     def rewrite_file(self):
         objdump_file = self.file_path_var.get()
         file_name = os.path.basename(objdump_file)
         file_directory = os.path.dirname(objdump_file)
         output_file = os.path.join(file_directory, os.path.splitext(file_name)[0] + '_preprocessed.txt')
-        self.output_file_path_var.set(output_file)
+        self.rewrite_file_path_var.set(output_file)
         self.master.update()
         
         self.progress_bar['value'] = 0 
         self.progress_bar.start()  # startup progress bar
-        subprocess.run(['python', 'objdump_file_rewrite.py', objdump_file, output_file])
+        
+        subprocess.run(['python', 'file_preprocess.py', objdump_file, output_file])
+        
         self.master.after(100, lambda: self.status_label.config(text="Objdump file has been rewrited!\n \
-    File path: {0}\nPlease click 'Analyze' to start the analysis.".format(output_file)))
+    File path: {0}\nPlease rechoose the new file and click 'Analyze' to start the analysis.".format(output_file)))
+        
         self.progress_bar.stop()
         self.progress_bar['value'] = 100 
         self.master.update()
 
     def browse_file(self):
         objdump_file = filedialog.askopenfilename()
+        
         if not objdump_file:
             self.status_label.config(text="No file selected")
             return
 
         self.file_path_var.set(objdump_file)
-        self.output_file_path_var.set("")  
+        self.rewrite_file_path_var.set("")  
         self.status_label.config(text="Objdump file selected")
-
 
     def analyze_program(self):
         input_file = self.file_path_var.get()
-        rewrite_file = self.output_file_path_var.get()
-        # if not os.path.exists(input_file):
-        #     self.status_label.config(text="Please click the 'Preprocess file' button first.")
-        #     return
+        rewrite_file = self.rewrite_file_path_var.get()
+        program_name = os.path.basename(input_file)
+        
+        # Extract program name
+        if "_objdump" in program_name:
+            program_name = program_name.split("_objdump")[0]
+        elif "_disassembly" in program_name:
+            program_name = program_name.split("_disassembly")[0]
+        
+        type = judge_file_type(input_file)
+        if type == 1:
+            self.status_label.config(text="Please click the 'preprocess' button first and rechoose the new file")
+        else:
+            t = threading.Thread(target=self.run_analyze_program, args=(input_file, rewrite_file, program_name))
+            t.start()
 
-        t = threading.Thread(target=self.run_analyze_program, args=(input_file, rewrite_file))
-        t.start()
 
-
-    def run_analyze_program(self, input_file, rewrite_file):
-        try:
+    def run_analyze_program(self, input_file, rewrite_file, program_name):
+        # try:
             self.progress_bar['value'] = 0 
             
             hash_algorithm = self.hash_algorithm_var.get()
@@ -1149,23 +1238,30 @@ class ProgramAnalyzerUI:
                 self.status_label.config(text="Please select hash algorithm and result length")
                 return
             
-            if not rewrite_file:
+            if not os.path.exists(rewrite_file) :
                 self.progress_bar.start()  # startup progress bar 
                 self.status_label.config(text="Analyzing...")
-                main(input_file, hash_algorithm, result_length)
+                main(input_file, hash_algorithm, result_length, program_name)
             else:
                 self.progress_bar.start()  # startup progress bar 
                 self.status_label.config(text="Analyzing...")
                 # Execute analysis program
-                main(rewrite_file, hash_algorithm, result_length)
+                main(rewrite_file, hash_algorithm, result_length, program_name)
 
             self.progress_bar.stop()
             self.progress_bar['value'] = 100 
             
             self.status_label.config(text="Complete!")
-        except Exception as e:
-            self.progress_bar.stop()
-            self.status_label.config(text="Error!")
+        # except Exception as e:
+        #     self.progress_bar.stop()
+        #     error_window = tk.Toplevel(self.master)
+        #     error_window.title("Error")
+        #     error_window.geometry("400x300")
+        #     error_text = tk.Text(error_window, wrap=tk.WORD)
+        #     error_text.pack(fill=tk.BOTH, expand=True)
+        #     error_text.insert(tk.END, f"Error: {e}")
+        #     error_text.config(state=tk.DISABLED)
+
 
     def show_help(self):
         try:

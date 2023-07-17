@@ -3,6 +3,19 @@
 
 #### Author: @Taurus052
 
+### Program dependencies
+
+ - riscv64-unknown-elf toolchain
+ - Python modules:
+	 - os
+	 - re
+	 - sys
+	 - hashlib
+	 - tkinter
+	 - threading
+	 - subprocess
+	 - matplotlib
+
 ### Program Function
 &nbsp; &nbsp;&nbsp; &nbsp;This program is used to analyze RISC-V ELF file and extract CFG related information (excluding the control flow graph in the form of picture).
 
@@ -11,14 +24,20 @@
 
 ### Program Output
 All files will be stored in "output_files" directory.
-#### 1.  'basic_block.txt': 
+#### 1.  'xxx_basic_block.txt': 
 &nbsp; &nbsp;&nbsp; &nbsp; This file contains all Basic block information obtained by Program analysis. The number of each Basic block, the start and end addresses (and instructions), the length of the Basic block, the jump target address (and instructions) of the Basic block, and the instructions in the Basic block are all reflected in the file.
-#### 2. 'may_used_control_transfers.txt':
+#### 2. 'xxx_forward_transfers.txt':
 &nbsp; &nbsp;&nbsp; &nbsp; This file contains all control transfer instructions and their target instructions within the analyzed functions. 
-#### 3. 'bin/hex_basic_block_inf.txt':
+#### 3. 'xxx_bin/hex_basic_block_inf.txt':
 &nbsp; &nbsp;&nbsp; &nbsp;This file contains the PC address and instructions of binary /hexadecimal instructions in the Basic block, as well as the hash value calculated based on binary /hexadecimal instructions.
-#### 4. 'function_information.txt':
+#### 4. 'xxx_function_addr.txt':
 &nbsp; &nbsp;&nbsp; &nbsp; This file contains the function's start&end addresses.
+#### 5. 'xxx_control_transfer.bin':
+&nbsp; &nbsp;&nbsp; &nbsp; This binary file contains all control transfer instructions' addresses and their target addresses. The first 16 bits of each line is the binary address of the control transfer instruction, and the last 16 bits are the address of the transfer target. 
+#### 6.'xxx_forward_transfers_per_function.png':
+&nbsp; &nbsp;&nbsp; &nbsp; This is a figure that shows the number   of forward control transfer instructions (including unconditional direct jumps and branches) in different function.
+
+
 ### Program Usage
 &nbsp; &nbsp;&nbsp; &nbsp;This program can be used via the command line, with the following usage:
 
