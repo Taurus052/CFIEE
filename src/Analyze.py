@@ -1,7 +1,7 @@
 '''
 Author: Taurus052
 Date: 2023-07-14 15:34:43
-LastEditTime: 2023-07-17 20:13:55
+LastEditTime: 2023-07-18 10:49:48
 '''
 
 import os
@@ -12,6 +12,7 @@ from tkinter import ttk
 import threading
 import subprocess
 import matplotlib.pyplot as plt
+import networkx as nx
 
 # branch instructions
 branch_inst = ["beq", "bne", "blt", "bltu", "bge", "bgeu", "beqz", "bnez", "bltz", "blez", "bgtz", "bgez", "bgt", "bgtu", "ble", "bleu"]
@@ -24,6 +25,8 @@ current_dir = os.path.dirname(os.path.abspath(__file__))
 os.chdir(current_dir)
 
 def main(objdump_file, Hash_algorithm, Hash_value_length, program_name):
+    output_directory = os.path.join(os.path.dirname(os.getcwd()), 'output_files')
+    
     function_line_ranges, function_addr_ranges, function_instr =  get_func_information(objdump_file)
     
     ### find the function to visit 
@@ -38,7 +41,7 @@ def main(objdump_file, Hash_algorithm, Hash_value_length, program_name):
 
     ret_instr_addr, function_have_ret_instr =  find_ret_instruction(visited_functions, function_addr_ranges, function_instr)
     
-    function_call_relationship = get_function_call_relationship(function_call_instr, function_addr_ranges)
+    function_call_relationship = get_function_call_relationship(function_call_instr, function_addr_ranges, output_directory, program_name)
     
     return_target = get_return_relationship(function_call_relationship, ret_instr_addr, function_call_instr, \
                                                 all_instr, function_addr_ranges)
@@ -58,8 +61,7 @@ def main(objdump_file, Hash_algorithm, Hash_value_length, program_name):
     basic_block =  create_basic_blocks_start_with_taken_target(all_taken_target_addr, basic_block, order_start_addr_list, used_function_instr)
     
     sorted_basic_blocks =  sort_basic_blocks(basic_block)
-    
-    output_directory = os.path.join(os.path.dirname(os.getcwd()), 'output_files')
+
     export_results(function_addr_ranges, program_name + '_function_addr.txt',
                 all_instr, sorted_functions_with_jump_instr_addr, program_name + '_forward_transfers.txt', \
                     program_name + '_control_transfer.bin',\
@@ -341,7 +343,7 @@ def find_ret_instruction(visited_functions, function_addr_ranges, function_instr
     # Return the dictionary of return instruction addresses and the list of functions with return instructions
     return ret_instr_addr, function_have_ret_instr
 
-def get_function_call_relationship(function_call_instr, function_addr_ranges):
+def get_function_call_relationship(function_call_instr, function_addr_ranges, output_directory, program_name):
     '''
     Get the function call relationship between functions.
 
@@ -396,6 +398,34 @@ def get_function_call_relationship(function_call_instr, function_addr_ranges):
     # Sort the function call relationship based on the start address of the caller functions
     function_call_relationship = {k: v for k, v in sorted(function_call_relationship.items(), key=lambda item: int(function_addr_ranges[item[0]][0], 16))}
     
+    # Visualize the function call relationship
+    # Create a directed graph
+    G = nx.DiGraph()
+
+    # Add nodes and edges to the graph
+    for caller_func_name, callee_func_names in function_call_relationship.items():
+        G.add_node(caller_func_name)
+        for callee_func_name in callee_func_names:
+            G.add_edge(caller_func_name, callee_func_name)
+
+    # Define the labels for the nodes
+    node_labels = {node: node for node in G.nodes}
+
+    node_label_font_size = 10
+    plt.subplots(figsize = (14,10))
+
+    pos = nx.spring_layout(G, k=1, iterations=120)
+
+    nx.draw_networkx_nodes(G, pos, node_shape='', node_color='lightblue', edgecolors='black', linewidths=1)
+    nx.draw_networkx_labels(G, pos, labels=node_labels, font_size=node_label_font_size)
+    nx.draw_networkx_edges(G, pos, arrows=True)
+    
+    plt.title(program_name + ' Function Call Relationship', fontsize=16)
+    plt.axis('off')
+   
+    output_file = os.path.join(output_directory, program_name + '_function_call_relationship.png')
+    plt.savefig(output_file, dpi=300)
+ 
     return function_call_relationship
 
 def get_return_relationship(function_call_relationship, ret_instr_addr, function_call_instr, all_instr,function_addr_ranges):

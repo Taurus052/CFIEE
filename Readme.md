@@ -15,6 +15,7 @@
 	 - threading
 	 - subprocess
 	 - matplotlib
+	 - networkx
 
 ### Program Function
 &nbsp; &nbsp;&nbsp; &nbsp;This program is used to analyze RISC-V ELF file and extract control flow information.
@@ -35,7 +36,9 @@ All files will be stored in "output_files" directory.
 #### 5. 'xxx_control_transfer.bin':
 &nbsp; &nbsp;&nbsp; &nbsp; This binary file contains all control transfer instructions' addresses and their target addresses. The first 16 bits of each line is the binary address of the control transfer instruction, and the last 16 bits are the address of the transfer target. 
 #### 6.'xxx_forward_transfers_per_function.png':
-&nbsp; &nbsp;&nbsp; &nbsp; This is a figure that shows the number   of forward control transfer instructions (including unconditional direct jumps and branches) in different function.
+&nbsp; &nbsp;&nbsp; &nbsp; This is a figure that shows the number of forward control transfer instructions (including unconditional direct jumps and branches) in different function.
+#### 7. ‘xxx_function_call_relationship.png':
+&nbsp; &nbsp;&nbsp; &nbsp; This picture shows the function call relationship of the current program. If there is a letter "j" after the function name in the figure, it means that the function is not called by the "jal" instruction, but jumps from the "j" instruction at the end of the previous function
 
 
 ### Program Usage
@@ -44,7 +47,7 @@ All files will be stored in "output_files" directory.
 	python Analyze.py
 	
 &nbsp; &nbsp;&nbsp; &nbsp; In the pop-up window, you can click the **"Browse"** button to select the disassembled .txt file. Then click the **"Preprocess file"** button. After the preprocessing, please select the hash algorithm and the length of the hash value according to your needs. The length of the hash value can be selected in the menu, or you can enter a custom value (it needs to be within the range of the result length supported by the hash function). At last, you can click the **"Analyze"** button to  startup analysis.
-&nbsp; &nbsp;&nbsp; &nbsp; By the way, if you have an. elf file compiled under the RV32IMAF( C ) instruction set, you can click the "Disassemble" button. This tool will call riscv64-unknown-elf-objdump for disassembly, and the files obtained from disassembly will be saved in the "objdump_files" folder. After that, you can continue to follow the above steps.
+&nbsp; &nbsp;&nbsp; &nbsp; By the way, if you have an. elf file compiled under the RV32IMAF( C ) instruction set, you can click the "**Disassemble"** button. This tool will call riscv64-unknown-elf-objdump for disassembly, and the files obtained from disassembly will be saved in the "objdump_files" folder. After that, you can continue to follow the above steps.
 
 
 ### Notice
