@@ -1,7 +1,7 @@
 '''
 Author: Taurus052
 Date: 2023-07-14 15:34:43
-LastEditTime: 2023-07-18 10:49:48
+LastEditTime: 2023-07-18 19:28:40
 '''
 
 import os
@@ -414,9 +414,16 @@ def get_function_call_relationship(function_call_instr, function_addr_ranges, ou
     node_label_font_size = 10
     plt.subplots(figsize = (14,10))
 
-    pos = nx.spring_layout(G, k=1, iterations=120)
+    pos = nx.spring_layout(G, k=1.5, iterations=150)
 
-    nx.draw_networkx_nodes(G, pos, node_shape='', node_color='lightblue', edgecolors='black', linewidths=1)
+    # # Calculate the maximum label length
+    # max_label_length = max(len(label) for label in node_labels.values())
+
+    # # Calculate the desired node size based on the maximum label length
+    # node_size = 200 * max_label_length
+    
+    
+    # nx.draw_networkx_nodes(G, pos, node_shape='o', node_color='none', edgecolors='black', linewidths=1)
     nx.draw_networkx_labels(G, pos, labels=node_labels, font_size=node_label_font_size)
     nx.draw_networkx_edges(G, pos, arrows=True)
     
