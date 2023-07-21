@@ -1,7 +1,7 @@
 '''
 Author: Taurus052
 Date: 2023-07-14 15:34:43
-LastEditTime: 2023-07-21 11:01:56
+LastEditTime: 2023-07-21 15:26:11
 '''
 
 import os
@@ -661,7 +661,7 @@ def write_in_may_used_control_transfer_instr(all_instr, functions_with_jump_inst
     # Plot the bar chart
     bars = plt.bar(function_names, instruction_count)
     plt.xlabel('Function Name')
-    plt.ylabel('Instruction Count')
+    plt.ylabel('Transfer Instructions')
     plt.title(program_name + ' Transfers per Function (Forward)')
 
     # Rotate the x-axis labels to prevent overlap
