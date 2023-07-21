@@ -1,7 +1,7 @@
 '''
 Author: Taurus052
 Date: 2023-07-14 15:34:43
-LastEditTime: 2023-07-18 19:28:40
+LastEditTime: 2023-07-21 11:01:56
 '''
 
 import os
@@ -13,6 +13,7 @@ import threading
 import subprocess
 import matplotlib.pyplot as plt
 import networkx as nx
+import graphviz
 
 # branch instructions
 branch_inst = ["beq", "bne", "blt", "bltu", "bge", "bgeu", "beqz", "bnez", "bltz", "blez", "bgtz", "bgez", "bgt", "bgtu", "ble", "bleu"]
@@ -61,6 +62,8 @@ def main(objdump_file, Hash_algorithm, Hash_value_length, program_name):
     basic_block =  create_basic_blocks_start_with_taken_target(all_taken_target_addr, basic_block, order_start_addr_list, used_function_instr)
     
     sorted_basic_blocks =  sort_basic_blocks(basic_block)
+    
+    generate_CFG(basic_block, program_name, output_directory)
 
     export_results(function_addr_ranges, program_name + '_function_addr.txt',
                 all_instr, sorted_functions_with_jump_instr_addr, program_name + '_forward_transfers.txt', \
@@ -893,9 +896,10 @@ def create_basic_blocks_in_order(order_start_addr_list, end_addr_list, used_func
        
         # Deal with indirect jump's target
         elif mnemonic in indirect_jump_inst:
-            # basic_block[i].taken_target = operands
-            basic_block[i].taken_target = 'FFFF'
+            basic_block[i].taken_target = 'register: ' + operands
+            # basic_block[i].taken_target = 'FFFF'
             basic_block[i].taken_target_instr = 'FFFFFFFF'
+
         
         # Deal with 'ret' target
         elif mnemonic == 'ret':
@@ -989,6 +993,63 @@ def write_basic_blocks_to_file(file_name, basic_block, output_directory):
             for line in bb.instr:
                 file.write(f'\t{line.strip()}\n')
             file.write('\n\n')
+
+def generate_CFG(basic_block, program_name, output_directory):
+    # Create a new Graphviz graph
+    graph = graphviz.Digraph(format='svg')
+    # Create a mapping of basic block names to their respective nodes
+    bb_nodes = {}
+
+    # Add nodes to the graph
+    for bb in basic_block:
+        label = f'Basic_block Name: {bb.name}\nIn Function: {bb.func}\nStart address: {bb.start}\nEnd address: {bb.end}\nLength: {bb.length}\nTaken_Target: {bb.taken_target}'
+        if bb.not_taken_target is not None:
+            label += f'\nNot_Taken_Target address: {bb.not_taken_target}'
+
+        node_name = str(bb.name)
+        graph.node(node_name, label=label, shape='box')
+        bb_nodes[bb.name] = node_name 
+
+    # Add edges to the graph
+    for bb in basic_block:
+        if bb.taken_target is not None:
+            if isinstance(bb.taken_target, list):
+                for target_str in bb.taken_target:
+                    target = target_str.split()[1]
+                    for b_num, node_name in bb_nodes.items():
+                        if isinstance(b_num, str):
+                            num = int(b_num.split()[0])
+                            if target == basic_block[num].start:
+                                graph.edge(bb_nodes[bb.name], node_name)
+                        else:
+                            if target == basic_block[b_num].start:
+                                graph.edge(bb_nodes[bb.name], node_name)
+
+            else:
+                for b_num, node_name in bb_nodes.items():
+                    if isinstance(b_num, str):
+                        num = int(b_num.split()[0])
+                        if bb.taken_target == basic_block[num].start:
+                            graph.edge(bb_nodes[bb.name], node_name)
+                    else:
+                        if bb.taken_target == basic_block[b_num].start:
+                            graph.edge(bb_nodes[bb.name], node_name)
+
+        if bb.not_taken_target is not None:
+            for b_num, node_name in bb_nodes.items():
+                if isinstance(b_num, str):
+                    num = int(b_num.split()[0])
+                    if bb.not_taken_target == basic_block[num].start:
+                        graph.edge(bb_nodes[bb.name], node_name,style='dashed',color = 'red')
+                else:
+                    if bb.not_taken_target == basic_block[b_num].start:
+                        graph.edge(bb_nodes[bb.name], node_name, style='dashed',color = 'red')
+                        
+    # Set the output file path
+    output_file = os.path.join(output_directory, f'{program_name}_CFG')
+
+    # Render the graph and save it to a file
+    graph.render(filename=output_file, cleanup=True, view=False)
 
 def convert_to_binary(basic_block, output_file_name, Hash_algorithm, value_length, output_directory):
     '''
@@ -1114,77 +1175,176 @@ class ProgramAnalyzerUI:
     def __init__(self, master):
         self.master = master
         master.title("CFIEE")
-        master.geometry("600x400") 
+        # master.geometry("800x600") 
+        
+        # Column 1: Select .elf file and Disassemble
+        elf_file_frame = tk.Frame(master)
+        elf_file_frame.grid(row=0, column=0, padx=70, pady=150, sticky="nw")
+        elf_file_label = tk.Label(elf_file_frame, text="STEP1: Disassemble ELF File", font=("Arial", 10, "bold"))
+        elf_file_label.pack(side=tk.TOP, anchor="n", pady=20)
 
-        # Add file path label
-        self.file_path_var = tk.StringVar()
-        self.rewrite_file_path_var = tk.StringVar()
+        # File Selection Row
+        file_select_frame = tk.Frame(elf_file_frame)
+        file_select_frame.pack(side=tk.TOP, anchor="n")
+        self.elf_file_select_button = tk.Button(file_select_frame, text="Select ELF file", command=self.select_elf_file, padx=10, pady=5, bd=1, relief="raised")
+        self.elf_file_select_button.pack(side=tk.TOP, padx=10, anchor="n")
         self.elf_file_path_var = tk.StringVar()
-        self.file_path_label = tk.Label(master, textvariable=self.file_path_var)
-        self.file_path_label.pack(pady=10)
+        self.elf_file_path_label = tk.Label(file_select_frame, textvariable=self.elf_file_path_var, wraplength=150, anchor="w", bg="white", bd=1,\
+                                            relief="groove", padx=5)
+        self.elf_file_path_label.pack(side=tk.TOP, fill=tk.X, anchor="n", padx=10, pady=20)
 
-        # Create a frame for the buttons
-        
-        button_frame = tk.Frame(master)
-        button_frame.pack(side=tk.TOP, pady=10)
 
-        self.disassemble_button = tk.Button(button_frame, text="Disassemble", command=self.disassemble_program)
-        self.disassemble_button.pack(side=tk.TOP, padx=10, pady=5)
+        # Disassemble Row
+        disassemble_frame = tk.Frame(elf_file_frame)
+        disassemble_frame.pack(side=tk.TOP, anchor="n", pady=10)
+        self.disassemble_button = tk.Button(disassemble_frame, text="Disassemble", command=self.disassemble_program, font=("Arial", 10, "bold"), bg="lightgray",\
+                                                    padx=10, pady=5, bd=1, relief="raised", state=tk.DISABLED)
+        self.disassemble_button.pack(side=tk.TOP, anchor="n")
+        self.disassemble_label = tk.Label(disassemble_frame, wraplength=200, anchor="w", font=("Arial", 10), justify=tk.LEFT)
+        self.disassemble_label.pack(side=tk.TOP, padx=10, fill=tk.X, expand=True)
 
-        self.browse_button = tk.Button(button_frame, text="Browse File", command=self.browse_file)
-        self.browse_button.pack(side=tk.LEFT, padx=10, pady=5)
+        # Column 2: Browse file, Preprocess, Analyze, Hash algorithm selection, and Data length selection
+        section2_frame = tk.Frame(master)
+        section2_frame.grid(row=0, column=2, padx=20, pady=10, sticky="nw")
 
-        self.rewrite_button = tk.Button(button_frame, text="Preprocess File", command=self.rewrite_file)
-        self.rewrite_button.pack(side=tk.LEFT, padx=10, pady=5)
+        # Browse file section
+        browse_frame = tk.Frame(section2_frame)
+        browse_frame.pack(side=tk.TOP, anchor="n", padx=10, pady=10)
 
-        self.analyze_button = tk.Button(button_frame, text="Analyze", command=self.analyze_program)
-        self.analyze_button.pack(side=tk.LEFT, padx=10, pady=5)
-        
-        # Add hash algorithm option
-        hash_algorithm_frame = tk.Frame(master)
-        hash_algorithm_frame.pack(pady=10)
+        self.browse_section_label = tk.Label(browse_frame, text="STEP2: Select disassembly file(.txt)", font=("Arial", 10, "bold"))
+        self.browse_section_label.pack(side=tk.TOP, anchor="n", pady=10)
 
-        self.hash_algorithm_label = tk.Label(hash_algorithm_frame, text="Hash Algorithm:")
-        self.hash_algorithm_label.pack(side=tk.LEFT, padx=10)
+        self.browse_button = tk.Button(browse_frame, text="Browse File", command=self.browse_file, bg="white", padx=10, pady=5, bd=1, relief="raised")
+        self.browse_button.pack(side=tk.TOP, anchor="n", padx=10, pady=10)
+
+        self.file_path_var = tk.StringVar()
+        self.file_path_label = tk.Label(browse_frame, textvariable=self.file_path_var, wraplength=150, anchor="n", bg="white", bd=1, relief="groove", padx=5)
+        self.file_path_label.pack(side=tk.TOP, fill=tk.X, anchor="n", padx=10, pady=10)
+
+        self.browse_label = tk.Label(browse_frame, wraplength=200, anchor="w", font=("Arial", 8), justify=tk.LEFT)
+        self.browse_label.pack(side=tk.TOP, anchor="n", pady=5)
+
+        # Preprocess section
+        preprocess_frame = tk.Frame(section2_frame)
+        preprocess_frame.pack(side=tk.TOP, anchor="n", padx=10, pady=10)
+
+        self.preprocess_section_label = tk.Label(preprocess_frame, text="STEP3: Data Preprocess", font=("Arial", 10, "bold"))
+        self.preprocess_section_label.pack(side=tk.TOP, anchor="n", padx= 10, pady=10)
+
+        self.preprocess_button = tk.Button(preprocess_frame, text="Preprocess", command=self.rewrite_file, state=tk.DISABLED, bg="lightgray", \
+                                                    padx=10, pady=5, bd=1, relief="raised")
+        self.preprocess_button.pack(side=tk.TOP, padx=10, pady=10, anchor="n")
+
+        self.rewrite_label = tk.Label(preprocess_frame, wraplength=200, anchor="center", font=("Arial", 8), justify=tk.CENTER)
+        self.rewrite_label.pack(side=tk.TOP, fill=tk.X, pady=5)
+
+        self.rewrite_file_path_var = tk.StringVar()
+
+        # Analyze section
+        analyze_frame = tk.Frame(section2_frame)
+        analyze_frame.pack(side=tk.TOP, anchor='n', padx=10, pady=10)
+
+        self.analyze_section_label = tk.Label(analyze_frame, text="STEP4: File Analyze", font=("Arial", 10, "bold"))
+        self.analyze_section_label.pack(side=tk.TOP, anchor="n", pady=10)
+
+        self.analyze_button = tk.Button(analyze_frame, text="Analyze", command=self.analyze_program, state=tk.DISABLED, bg="lightgray", \
+                                            padx=10, pady=5, bd=1, relief="raised")
+        self.analyze_button.pack(side=tk.BOTTOM, padx=10, pady=5, anchor="n")
+
+        self.analyze_label = tk.Label(analyze_frame, wraplength=200, anchor="center", font=("Arial", 8), justify=tk.CENTER)
+        self.analyze_label.pack(side=tk.BOTTOM, fill=tk.X, padx=10, pady=5)
+
+
+        hash_algorithm_label = tk.Label(analyze_frame, text="Hash:", font=("Arial", 10))
+        hash_algorithm_label.pack(side=tk.LEFT, anchor="w",padx=10,pady = 5)
 
         self.hash_algorithm_var = tk.StringVar()
-        self.hash_algorithm_optionmenu = tk.OptionMenu(hash_algorithm_frame, self.hash_algorithm_var,
-                                                    "MD5", "SHA-1", "SHA-256", "SHA-512")
-        self.hash_algorithm_optionmenu.pack(side=tk.LEFT, padx=10)
+        hash_algorithm_options = ["MD5", "SHA-1", "SHA-256", "SHA-512"]
+        self.hash_algorithm_menu = tk.OptionMenu(analyze_frame, self.hash_algorithm_var, *hash_algorithm_options)
+        self.hash_algorithm_menu.pack(side=tk.LEFT, anchor="w", padx = 10, pady = 5)
 
-        # Add hash value length option
-        result_length_frame = tk.Frame(master)
-        result_length_frame.pack(pady=10)
+        data_length_label = tk.Label(analyze_frame, text="Data Length:", font=("Arial", 10))
+        data_length_label.pack(side=tk.LEFT, anchor="w", padx=10, pady=5)
 
-        self.result_length_label = tk.Label(result_length_frame, text="Hash Value Length:")
-        self.result_length_label.pack(side=tk.LEFT, padx=10)
+        self.data_length_var = tk.StringVar()
+        data_length_options = ["8", "16", "32"]
+        self.data_length_menu = tk.OptionMenu(analyze_frame, self.data_length_var, *data_length_options)
+        self.data_length_menu.pack(side=tk.LEFT, anchor="w", padx=10, pady=5)
+        
+        # Column 3: Result output
+        section3_frame = tk.Frame(master)
+        section3_frame.grid(row=0, column=4, padx=10, pady=150, sticky="nw")
 
-        self.result_length_var = tk.StringVar()
-        self.result_length_combobox = ttk.Combobox(result_length_frame, textvariable=self.result_length_var)
-        self.result_length_combobox['values'] = ["8", "16", "32"]
-        self.result_length_combobox.pack(side=tk.LEFT, padx=10)
+        self.output_section_label = tk.Label(section3_frame, text="STEP5: Output Files", font=("Arial", 10, "bold"))
+        self.output_section_label.pack(side=tk.TOP, anchor="n", pady=20)
 
-        # Add progress bar
-        self.progress_bar = ttk.Progressbar(master, length=400, mode='determinate')
-        self.progress_bar.pack(pady=20)
+        left_frame = tk.Frame(section3_frame)
+        left_frame.pack(side=tk.LEFT, padx=10)
 
-        # Add status label
-        self.status_label = tk.Label(master, text="", font=("Arial", 10))
-        self.status_label.pack(pady=6)
+        right_frame = tk.Frame(section3_frame)
+        right_frame.pack(side=tk.LEFT, padx=30)
+        
+        button_width = 15
 
-        # Add help button
-        self.help_button = tk.Button(master, text="Help", command=self.show_help)
-        self.help_button.pack(pady=10)
+        basic_block_info_button = tk.Button(left_frame, text="Basic Block Info", command=self.show_basic_block_info, width=button_width)
+        basic_block_info_button.pack(side=tk.TOP, pady=5)
+        
+        bin_bb_button = tk.Button(left_frame, text="Binary Basic Block", command=self.show_bin_bb, width=button_width)
+        bin_bb_button.pack(side=tk.TOP, pady=5)
 
-        # Set custom text
-        self.custom_text = tk.Label(master, text="Github @Taurus052", font=("Arial", 12), anchor="s")
-        self.custom_text.pack(side=tk.BOTTOM, pady=10)
+        hex_bb_button = tk.Button(left_frame, text="Hex Basic Block", command=self.show_hex_bb, width=button_width)
+        hex_bb_button.pack(side=tk.TOP, pady=5)
+
+        binary_data_button = tk.Button(left_frame, text="Binary Data", command=self.show_binary_data, width=button_width)
+        binary_data_button.pack(side=tk.TOP, pady=5)
+
+        transfers_info_button = tk.Button(right_frame, text="Transfers Info", command=self.show_transfers_info, width=button_width)
+        transfers_info_button.pack(side=tk.TOP, pady=5)
+
+        cfg_button = tk.Button(right_frame, text="CFG", command=self.show_cfg, width=button_width)
+        cfg_button.pack(side=tk.TOP, pady=5)
+
+        transfers_number_button = tk.Button(right_frame, text="Transfers Number", command=self.show_transfers_number, width=button_width)
+        transfers_number_button.pack(side=tk.TOP, pady=5)
+
+        function_call_button = tk.Button(right_frame, text="Function Call", command=self.show_function_call, width=button_width)
+        function_call_button.pack(side=tk.TOP, pady=5)
+
+
+
+        # Add padding between columns
+        separator1 = ttk.Separator(master, orient='vertical')
+        separator1.grid(row=0, column=1, sticky="ns", padx=20, pady=10)
+
+        separator2 = ttk.Separator(master, orient='vertical')
+        separator2.grid(row=0, column=3, sticky="ns", padx=20, pady=10) 
+
+        # Help button
+        self.help_button = tk.Button(master, text="Help", command=self.show_help, padx=10, pady=5, bd=1, relief="raised")
+        self.help_button.grid(row=1, column=0, padx=20, pady=5,columnspan=1, sticky="s")
+        
+        # Progress bar (placed at the bottom)
+        self.progress_bar = ttk.Progressbar(master, length=300, mode='determinate', orient=tk.HORIZONTAL)
+        self.progress_bar.grid(row=1, column=2, padx=10, pady=10, columnspan=1, sticky="s")
+        
+
+
+    def select_elf_file(self):
+        
+        current_directory = os.getcwd()
+        parent_directory = os.path.dirname(current_directory)
+        elf_files_directory = os.path.join(parent_directory, "elf_files")
+
+        filetypes = [("ELF Files", "*.elf")]
+        file_path = filedialog.askopenfilename(initialdir=elf_files_directory, filetypes=filetypes)
+        if file_path:
+            self.elf_file_path_var.set(file_path)
+            self.disassemble_button.config(state=tk.NORMAL)
 
     def disassemble_program(self):
-        elf_file = filedialog.askopenfilename()
-
+        elf_file = self.elf_file_path_var.get()
         if not elf_file:
-            self.status_label.config(text="No file selected")
+            self.disassemble_label.config(text="No file selected")
             return
         try:
             output_directory = os.path.join(os.path.dirname(os.getcwd()), "objdump_files")
@@ -1194,24 +1354,35 @@ class ProgramAnalyzerUI:
             process = subprocess.run(["riscv64-unknown-elf-objdump", "-S", elf_file], capture_output=True, text=True)
             with open(output_file, 'w') as file:
                 file.write(process.stdout)
-            self.status_label.config(text="Disassembly complete.")
+            self.disassemble_label.config(text="Disassembly complete.")
+            
+            self.file_path_var.set(output_file)
+            
+            self.preprocess_button.config(state=tk.NORMAL)
+            self.analyze_button.config(state=tk.NORMAL)
+            return output_file
         
         except subprocess.CalledProcessError as e:
-            error_window = tk.Toplevel()
-            error_window.title("Error")
-            error_window.geometry("400x300")
+            error_message = f"Error: {e.stderr}"
+            self.show_error_message(error_message)
 
-            scrollbar = tk.Scrollbar(error_window)
-            scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
+    def browse_file(self):
+        
+        current_directory = os.getcwd()
+        parent_directory = os.path.dirname(current_directory)
+        elf_files_directory = os.path.join(parent_directory, "objdump_files")
 
-            error_text = tk.Text(error_window, wrap=tk.WORD, yscrollcommand=scrollbar.set)
-            error_text.pack(fill=tk.BOTH, expand=True)
+        filetypes = [("TXT Files", "*.txt")]
+        objdump_file = filedialog.askopenfilename(initialdir=elf_files_directory, filetypes=filetypes)
 
-            scrollbar.config(command=error_text.yview)
+        if not objdump_file:
+            self.browse_label.config(text="No file selected")
+            return
 
-            error_text.insert(tk.END, f"Error: {e.stderr}")
-
-            self.status_label.config(text="Error occurred. Please check the error window for details.")
+        self.file_path_var.set(objdump_file)
+        self.browse_label.config(text="Objdump file selected")
+        self.preprocess_button.config(state=tk.NORMAL)
+        self.analyze_button.config(state=tk.NORMAL)
 
 
     def rewrite_file(self):
@@ -1227,78 +1398,62 @@ class ProgramAnalyzerUI:
         
         subprocess.run(['python', 'file_preprocess.py', objdump_file, output_file])
         
-        self.master.after(100, lambda: self.status_label.config(text="Objdump file has been rewrited!\n \
-    File path: {0}\nPlease rechoose the new file and click 'Analyze' to start the analysis.".format(output_file)))
+        self.master.after(100, lambda: self.rewrite_label.config(text="Objdump file has been rewrited!\n \
+    File path: {0}\n".format(output_file)))
         
         self.progress_bar.stop()
         self.progress_bar['value'] = 100 
         self.master.update()
 
-    def browse_file(self):
-        objdump_file = filedialog.askopenfilename()
-        
-        if not objdump_file:
-            self.status_label.config(text="No file selected")
-            return
-
-        self.file_path_var.set(objdump_file)
-        self.rewrite_file_path_var.set("")  
-        self.status_label.config(text="Objdump file selected")
 
     def analyze_program(self):
         input_file = self.file_path_var.get()
         rewrite_file = self.rewrite_file_path_var.get()
         program_name = os.path.basename(input_file)
-        
+
         # Extract program name
         if "_objdump" in program_name:
             program_name = program_name.split("_objdump")[0]
         elif "_disassembly" in program_name:
             program_name = program_name.split("_disassembly")[0]
-        
+
         type = judge_file_type(input_file)
         if type == 1:
-            self.status_label.config(text="Please click the 'preprocess' button first and rechoose the new file")
+            self.analyze_label.config(
+                text="Please click the 'preprocess' button first and rechoose the new file")
         else:
             t = threading.Thread(target=self.run_analyze_program, args=(input_file, rewrite_file, program_name))
             t.start()
 
 
     def run_analyze_program(self, input_file, rewrite_file, program_name):
-        # try:
-            self.progress_bar['value'] = 0 
-            
+        try:
+            self.progress_bar['value'] = 0
+
             hash_algorithm = self.hash_algorithm_var.get()
-            result_length = self.result_length_var.get()
+            result_length = self.data_length_var.get()
 
             if not hash_algorithm or not result_length:
-                self.status_label.config(text="Please select hash algorithm and result length")
+                self.analyze_label.config(
+                    text="Please select hash algorithm and result length")
                 return
-            
-            if not os.path.exists(rewrite_file) :
-                self.progress_bar.start()  # startup progress bar 
-                self.status_label.config(text="Analyzing...")
-                main(input_file, hash_algorithm, result_length, program_name)
-            else:
-                self.progress_bar.start()  # startup progress bar 
-                self.status_label.config(text="Analyzing...")
-                # Execute analysis program
-                main(rewrite_file, hash_algorithm, result_length, program_name)
+
+            file_to_analyze = rewrite_file if os.path.exists(
+                rewrite_file) else input_file
+            self.progress_bar.start()  # startup progress bar
+            self.analyze_label.config(text="Analyzing...")
+
+            # Execute analysis program
+            main(file_to_analyze, hash_algorithm, result_length, program_name)
 
             self.progress_bar.stop()
-            self.progress_bar['value'] = 100 
-            
-            self.status_label.config(text="Complete!")
-        # except Exception as e:
-        #     self.progress_bar.stop()
-        #     error_window = tk.Toplevel(self.master)
-        #     error_window.title("Error")
-        #     error_window.geometry("400x300")
-        #     error_text = tk.Text(error_window, wrap=tk.WORD)
-        #     error_text.pack(fill=tk.BOTH, expand=True)
-        #     error_text.insert(tk.END, f"Error: {e}")
-        #     error_text.config(state=tk.DISABLED)
+            self.progress_bar['value'] = 100
 
+            self.analyze_label.config(text="Complete!")
+        
+        except Exception as e:
+            error_message = f"Error: {e}"
+            self.show_error_message(error_message)
 
     def show_help(self):
         try:
@@ -1308,6 +1463,179 @@ class ProgramAnalyzerUI:
         except FileNotFoundError:
             print("Unable to find a default application to open the .md file.")
 
+    def show_basic_block_info(self):
+        output_files_dir = os.path.join(os.path.dirname(os.getcwd()), "output_files")
+        
+        bb_info_file_path = None
+        for filename in os.listdir(output_files_dir):
+            if filename.endswith("basic_block.txt"):
+                bb_info_file_path = os.path.join(output_files_dir, filename)
+                break
+        
+        if bb_info_file_path is None:
+            error_message = "Error: File not found"
+            self.show_error_message(error_message)
+        
+        else:
+            try:
+                os.startfile(bb_info_file_path)
+            except Exception as e:
+                error_message = f"Error: {e}"
+                self.show_error_message(error_message)
+    
+    def show_binary_data(self):
+        output_files_dir = os.path.join(os.path.dirname(os.getcwd()), "output_files")
+        
+        bin_file_path = None
+        for filename in os.listdir(output_files_dir):
+            if filename.endswith(".bin"):
+                bin_file_path = os.path.join(output_files_dir, filename)
+                break
+            
+        if bin_file_path is None:
+            error_message = "Error: File not found"
+            self.show_error_message(error_message)
+        
+        else:
+            try:
+                subprocess.Popen(["notepad.exe", bin_file_path])
+            except Exception as e:
+                error_message = f"Error: {e}"
+                self.show_error_message(error_message)
+    
+    def show_transfers_info(self):
+        output_files_dir = os.path.join(os.path.dirname(os.getcwd()), "output_files")
+        
+        transfers_info_file_path = None
+        for filename in os.listdir(output_files_dir):
+            if filename.endswith("transfers.txt"):
+                transfers_info_file_path = os.path.join(output_files_dir, filename)
+                break
+        
+        if transfers_info_file_path is None:
+            error_message = "Error: File not found"
+            self.show_error_message(error_message)
+            
+        else:
+            try:
+                os.startfile(transfers_info_file_path)
+            except Exception as e:
+                error_message = f"Error: {e}"
+                self.show_error_message(error_message)
+    
+    def show_cfg(self):
+        output_files_dir = os.path.join(os.path.dirname(os.getcwd()), "output_files")
+        
+        cfg_file_path = None
+        for filename in os.listdir(output_files_dir):
+            if filename.endswith(".svg"):
+                cfg_file_path = os.path.join(output_files_dir, filename)
+                break
+        
+        if cfg_file_path is None:
+            error_message = "Error: File not found"
+            self.show_error_message(error_message)
+        
+        else:
+            try:
+                os.startfile(cfg_file_path)
+            except Exception as e:
+                error_message = f"Error: {e}"
+                self.show_error_message(error_message)
+        
+    def show_transfers_number(self):
+        output_files_dir = os.path.join(os.path.dirname(os.getcwd()), "output_files")
+        
+        transfers_number_file_path = None
+        for filename in os.listdir(output_files_dir):
+            if filename.endswith("per_function.png"):
+                transfers_number_file_path = os.path.join(output_files_dir, filename)
+                break
+            
+        if transfers_number_file_path is None:
+            error_message = "Error: File not found"
+            self.show_error_message(error_message)
+        
+        else:    
+            try:
+                os.startfile(transfers_number_file_path)
+            except Exception as e:
+                error_message = f"Error: {e}"
+                self.show_error_message(error_message)
+        
+    def show_function_call(self):
+        output_files_dir = os.path.join(os.path.dirname(os.getcwd()), "output_files")
+        
+        function_call_file_path = None
+        for filename in os.listdir(output_files_dir):
+            if filename.endswith("call_relationship.png"):
+                function_call_file_path = os.path.join(output_files_dir, filename)
+                break
+            
+        if function_call_file_path is None:
+            error_message = "Error: File not found"
+            self.show_error_message(error_message)
+        
+        else:    
+            try:
+                os.startfile(function_call_file_path)
+            except Exception as e:
+                error_message = f"Error: {e}"
+                self.show_error_message(error_message)
+    
+    def show_bin_bb(self):
+        output_files_dir = os.path.join(os.path.dirname(os.getcwd()), "output_files")
+        
+        bin_bb_file_path = None
+        for filename in os.listdir(output_files_dir):
+            if filename.endswith("bin_basic_block_inf.txt"):
+                bin_bb_file_path = os.path.join(output_files_dir, filename)
+                break
+        
+        if bin_bb_file_path is None:
+            error_message = "Error: File not found"
+            self.show_error_message(error_message)
+        
+        else:
+            try:  
+                os.startfile(bin_bb_file_path)
+            except Exception as e:
+                error_message = f"Error: {e}"
+                self.show_error_message(error_message)
+    
+    def show_hex_bb(self):
+        output_files_dir = os.path.join(os.path.dirname(os.getcwd()), "output_files")
+        
+        hex_bb_file_path = None
+        for filename in os.listdir(output_files_dir):
+            if filename.endswith("hex_basic_block_inf.txt"):
+                hex_bb_file_path = os.path.join(output_files_dir, filename)
+                break
+        
+        if hex_bb_file_path is None:
+            error_message = "Error:File not found"
+            self.show_error_message(error_message)
+        else:
+            try:
+                os.startfile(hex_bb_file_path)
+            except Exception as e:
+                error_message = f"Error: {e}"
+                self.show_error_message(error_message)
+        
+    def show_error_message(self, error_message):
+        error_window = tk.Toplevel(self.master)
+        error_window.title("Error")
+        error_window.geometry("400x300")
+
+        scrollbar = tk.Scrollbar(error_window)
+        scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
+
+        error_text = tk.Text(error_window, wrap=tk.WORD, yscrollcommand=scrollbar.set)
+        error_text.pack(fill=tk.BOTH, expand=True)
+
+        scrollbar.config(command=error_text.yview)
+
+        error_text.insert(tk.END, error_message)
 
 root = tk.Tk()
 program_analyzer_ui = ProgramAnalyzerUI(root)

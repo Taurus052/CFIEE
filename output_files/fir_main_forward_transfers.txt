@@ -1,0 +1,126 @@
+
+<__start>:
+
+j/b_instr: 24:	00028b63          	beqz	t0,3a <L_loop0_done>
+t_instr:   3a:	20001197          	auipc	gp,0x20001
+
+
+<L_loop0>:
+
+j/b_instr: 36:	fe0299e3          	bnez	t0,28 <L_loop0>
+t_instr:   28:	0001a303          	lw	t1,0(gp)
+
+
+<L_loop0_done>:
+
+j/b_instr: 50:	00020863          	beqz	tp,60 <L_loop1_done>
+t_instr:   60:	00000197          	auipc	gp,0x0
+
+
+<L_loop1_done>:
+
+
+<__to_main>:
+
+j/b_instr: e0:	489010ef          	jal	ra,1d68 <main>
+t_instr:   1d68:	6795                	lui	a5,0x5
+
+
+<puts>:
+
+j/b_instr: 1852:	c519                	beqz	a0,1860 <puts+0x1a>
+t_instr:   1860:	55fd                	li	a1,-1
+
+j/b_instr: 1858:	2309                	jal	1d5a <fputc>
+t_instr:   1d5a:	0ff57593          	andi	a1,a0,255
+
+j/b_instr: 185e:	f97d                	bnez	a0,1854 <puts+0xe>
+t_instr:   1854:	55fd                	li	a1,-1
+
+j/b_instr: 1864:	29dd                	jal	1d5a <fputc>
+t_instr:   1d5a:	0ff57593          	andi	a1,a0,255
+
+
+<ck_uart_set_parity>:
+
+j/b_instr: 19c4:	04f58363          	beq	a1,a5,1a0a <ck_uart_set_parity+0x4a>
+t_instr:   1a0a:	4158                	lw	a4,4(a0)
+
+j/b_instr: 19ca:	00f58d63          	beq	a1,a5,19e4 <ck_uart_set_parity+0x24>
+t_instr:   19e4:	4158                	lw	a4,4(a0)
+
+j/b_instr: 19ce:	00058363          	beqz	a1,19d4 <ck_uart_set_parity+0x14>
+t_instr:   19d4:	4158                	lw	a4,4(a0)
+
+
+<ck_uart_set_wordsize>:
+
+j/b_instr: 1a30:	04f58d63          	beq	a1,a5,1a8a <ck_uart_set_wordsize+0x5e>
+t_instr:   1a8a:	4158                	lw	a4,4(a0)
+
+j/b_instr: 1a34:	02b7e563          	bltu	a5,a1,1a5e <ck_uart_set_wordsize+0x32>
+t_instr:   1a5e:	478d                	li	a5,3
+
+j/b_instr: 1a38:	04058163          	beqz	a1,1a7a <ck_uart_set_wordsize+0x4e>
+t_instr:   1a7a:	4158                	lw	a4,4(a0)
+
+j/b_instr: 1a60:	00f59c63          	bne	a1,a5,1a78 <ck_uart_set_wordsize+0x4c>
+t_instr:   1a78:	8082                	ret
+
+
+<ck_uart_open>:
+
+j/b_instr: 1ae4:	e981                	bnez	a1,1af4 <ck_uart_open+0x10>
+t_instr:   1af4:	4505                	li	a0,1
+
+
+<ck_uart_init>:
+
+j/b_instr: 1afe:	0af70163          	beq	a4,a5,1ba0 <ck_uart_init+0xa8>
+t_instr:   1ba0:	4505                	li	a0,1
+
+j/b_instr: 1b54:	35b5                	jal	19c0 <ck_uart_set_parity>
+t_instr:   19c0:	c54c                	sw	a1,12(a0)
+
+j/b_instr: 1b5a:	3dc9                	jal	1a2c <ck_uart_set_wordsize>
+t_instr:   1a2c:	c94c                	sw	a1,20(a0)
+
+j/b_instr: 1b60:	cb85                	beqz	a5,1b90 <ck_uart_init+0x98>
+t_instr:   1b90:	4058                	lw	a4,4(s0)
+
+j/b_instr: 1b64:	00e78c63          	beq	a5,a4,1b7c <ck_uart_init+0x84>
+t_instr:   1b7c:	4058                	lw	a4,4(s0)
+
+j/b_instr: 1b8e:	bfe9                	j	1b68 <ck_uart_init+0x70>
+t_instr:   1b68:	4898                	lw	a4,16(s1)
+
+j/b_instr: 1b9e:	b7e9                	j	1b68 <ck_uart_init+0x70>
+t_instr:   1b68:	4898                	lw	a4,16(s1)
+
+
+<ck_uart_putc>:
+
+j/b_instr: 1bb8:	cb99                	beqz	a5,1bce <ck_uart_putc+0x18>
+t_instr:   1bce:	4505                	li	a0,1
+
+j/b_instr: 1bc4:	dfe5                	beqz	a5,1bbc <ck_uart_putc+0x6>
+t_instr:   1bbc:	01474783          	lbu	a5,20(a4)
+
+
+<fputc>:
+
+j/b_instr: 1d66:	bd81                	j	1bb6 <ck_uart_putc>
+t_instr:   1bb6:	4d5c                	lw	a5,28(a0)
+
+
+<main>:
+
+j/b_instr: 1d8c:	3ba1                	jal	1ae4 <ck_uart_open>
+t_instr:   1ae4:	e981                	bnez	a1,1af4 <ck_uart_open+0x10>
+
+j/b_instr: 1d94:	3395                	jal	1af8 <ck_uart_init>
+t_instr:   1af8:	4118                	lw	a4,0(a0)
+
+j/b_instr: 1d9c:	346d                	jal	1846 <puts>
+t_instr:   1846:	1141                	addi	sp,sp,-16
+

@@ -1,4 +1,4 @@
-# CFIEE： A Control Flow Information Extraction Engine for RISC-V
+# CFIEE：A Critical Metadata Extraction Engine for RISC-V Runtime CFI
 
 
 #### Author: @Taurus052
@@ -16,15 +16,16 @@
 	 - subprocess
 	 - matplotlib
 	 - networkx
+	 - graphviz
 
 ### Program Function
 &nbsp; &nbsp;&nbsp; &nbsp;This program is used to analyze RISC-V ELF file and extract control flow information.
 
 ### Program Input
-&nbsp; &nbsp;&nbsp; &nbsp;The program requires an ELF disassemble file(.txt) as input, which can be generated using the RISC-V toolchain.
+&nbsp; &nbsp;&nbsp; &nbsp;The program requires an RISC-V executable file(.elf) as input, which can be generated using the RISC-V toolchain.
 
 ### Program Output
-All files will be stored in "output_files" directory.
+All files will be stored in **"output_files"** directory.
 #### 1.  'xxx_basic_block.txt': 
 &nbsp; &nbsp;&nbsp; &nbsp; This file contains all Basic block information obtained by Program analysis. The number of each Basic block, the start and end addresses (and instructions), the length of the Basic block, the jump target address (and instructions) of the Basic block, and the instructions in the Basic block are all reflected in the file.
 #### 2. 'xxx_forward_transfers.txt':
@@ -39,16 +40,16 @@ All files will be stored in "output_files" directory.
 &nbsp; &nbsp;&nbsp; &nbsp; This is a figure that shows the number of forward control transfer instructions (including unconditional direct jumps and branches) in different function.
 #### 7. ‘xxx_function_call_relationship.png':
 &nbsp; &nbsp;&nbsp; &nbsp; This picture shows the function call relationship of the current program. If there is a letter "j" after the function name in the figure, it means that the function is not called by the "jal" instruction, but jumps from the "j" instruction at the end of the previous function
+#### 8. 'xxx_CFG.svg':
+&nbsp; &nbsp;&nbsp; &nbsp; This is a control flow graph of the entire program flow in svg format.
 
 
 ### Program Usage
 &nbsp; &nbsp;&nbsp; &nbsp;This program can be used via the command line, with the following usage:
 
-	python Analyze.py
+	python CFIEE.py
 	
-&nbsp; &nbsp;&nbsp; &nbsp; In the pop-up window, you can click the **"Browse"** button to select the disassembled .txt file. Then click the **"Preprocess file"** button. After the preprocessing, please select the hash algorithm and the length of the hash value according to your needs. The length of the hash value can be selected in the menu, or you can enter a custom value (it needs to be within the range of the result length supported by the hash function). At last, you can click the **"Analyze"** button to  startup analysis.
-&nbsp; &nbsp;&nbsp; &nbsp; By the way, if you have an. elf file compiled under the RV32IMAF( C ) instruction set, you can click the "**Disassemble"** button. This tool will call riscv64-unknown-elf-objdump for disassembly, and the files obtained from disassembly will be saved in the "objdump_files" folder. After that, you can continue to follow the above steps.
-
+&nbsp; &nbsp;&nbsp; &nbsp; In the interface of CFIEE, we have marked the usage steps for you, and you only need to follow the steps to perform corresponding operations. It should be noted that we do not force you to use the disassembly function here, you can complete the disassembly of your executable file in advance and start directly from STEP2. CFIEE invokes the riscv64-unknown-elf-objdump toolchain on your computer.
 
 ### Notice
 
