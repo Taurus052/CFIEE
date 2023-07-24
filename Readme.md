@@ -15,7 +15,6 @@
 	 - threading
 	 - subprocess
 	 - matplotlib
-	 - networkx
 	 - graphviz
 
 ### Program Function
@@ -39,7 +38,7 @@ All files will be stored in **"output_files"** directory.
 #### 6.'xxx_forward_transfers_per_function.png':
 &nbsp; &nbsp;&nbsp; &nbsp; This is a figure that shows the number of forward control transfer instructions (including unconditional direct jumps and branches) in different function.
 #### 7. ‘xxx_function_call_relationship.png':
-&nbsp; &nbsp;&nbsp; &nbsp; This picture shows the function call relationship of the current program. If there is a letter "j" after the function name in the figure, it means that the function is not called by the "jal" instruction, but jumps from the "j" instruction at the end of the previous function
+&nbsp; &nbsp;&nbsp; &nbsp; This picture shows the function call relationship of the current program. If there is a label "*" after the function name in the figure, it means that the function is not called by the "jal" instruction, but jumps from the "j" instruction at the end of the previous function
 #### 8. 'xxx_CFG.svg':
 &nbsp; &nbsp;&nbsp; &nbsp; This is a control flow graph of the entire program flow in svg format.
 
@@ -53,6 +52,6 @@ All files will be stored in **"output_files"** directory.
 
 ### Notice
 
- 1. All development and testing processes for this program are based on the T-Head Xuantie E906 RISC-V processor using the RV32IMAF( C ) instruction set. The selected RISC-V toolchain is Xuantie-900-gcc-elf-newlib-x86_64-V2.6.1. Its disassembly toolchain is GNU objdump (GNU Binutils) 2.35.
+ 1. All development and testing processes for this program are based on the T-Head Xuantie E906 RISC-V processor using the RV32IMAFC instruction set. The selected RISC-V toolchain is Xuantie-900-gcc-elf-newlib-x86_64-V2.6.1. Its disassembly toolchain is GNU objdump (GNU Binutils) 2.35.
 We **cannot** guarantee the correctness of this program when analyzing the disassembly files of other RISC-V instruction sets.
- 3. Current program **cannot** analyze information related to indirect jumps. The target addresses of all indirect jump instructions are set to "FFFF". 
+ 3. Current program **cannot** analyze information related to indirect jumps. The target addresses of all indirect jump instructions are set to the name of their target registers.

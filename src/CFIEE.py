@@ -1,7 +1,7 @@
 '''
 Author: Taurus052
 Date: 2023-07-14 15:34:43
-LastEditTime: 2023-07-21 15:26:11
+LastEditTime: 2023-07-24 20:24:32
 '''
 
 import os
@@ -12,7 +12,6 @@ from tkinter import ttk
 import threading
 import subprocess
 import matplotlib.pyplot as plt
-import networkx as nx
 import graphviz
 
 # branch instructions
@@ -392,7 +391,7 @@ def get_function_call_relationship(function_call_instr, function_addr_ranges, ou
                         if caller_func_name in function_call_relationship:
                             function_call_relationship[caller_func_name].append(callee_func_name)
                         else:
-                            function_call_relationship[caller_func_name] = [callee_func_name + ' j']
+                            function_call_relationship[caller_func_name] = [callee_func_name + ' *']
                         break 
 
     # Remove duplicates from the function call relationship
@@ -401,40 +400,20 @@ def get_function_call_relationship(function_call_instr, function_addr_ranges, ou
     # Sort the function call relationship based on the start address of the caller functions
     function_call_relationship = {k: v for k, v in sorted(function_call_relationship.items(), key=lambda item: int(function_addr_ranges[item[0]][0], 16))}
     
-    # Visualize the function call relationship
-    # Create a directed graph
-    G = nx.DiGraph()
+    G = graphviz.Digraph(format='png')
 
     # Add nodes and edges to the graph
     for caller_func_name, callee_func_names in function_call_relationship.items():
-        G.add_node(caller_func_name)
+        G.node(caller_func_name)
         for callee_func_name in callee_func_names:
-            G.add_edge(caller_func_name, callee_func_name)
+            G.node(callee_func_name)
+            G.edge(caller_func_name, callee_func_name)
 
-    # Define the labels for the nodes
-    node_labels = {node: node for node in G.nodes}
+    # Set the output file path
+    output_file = os.path.join(output_directory, f'{program_name}_function_call_relationship')
 
-    node_label_font_size = 10
-    plt.subplots(figsize = (14,10))
-
-    pos = nx.spring_layout(G, k=1.5, iterations=150)
-
-    # # Calculate the maximum label length
-    # max_label_length = max(len(label) for label in node_labels.values())
-
-    # # Calculate the desired node size based on the maximum label length
-    # node_size = 200 * max_label_length
-    
-    
-    # nx.draw_networkx_nodes(G, pos, node_shape='o', node_color='none', edgecolors='black', linewidths=1)
-    nx.draw_networkx_labels(G, pos, labels=node_labels, font_size=node_label_font_size)
-    nx.draw_networkx_edges(G, pos, arrows=True)
-    
-    plt.title(program_name + ' Function Call Relationship', fontsize=16)
-    plt.axis('off')
-   
-    output_file = os.path.join(output_directory, program_name + '_function_call_relationship.png')
-    plt.savefig(output_file, dpi=300)
+    # Render the graph and save it to a file
+    G.render(filename=output_file, cleanup=True, view=False)
  
     return function_call_relationship
 
@@ -464,7 +443,7 @@ def get_return_relationship(function_call_relationship, ret_instr_addr, function
             try:
                 callee_func_name = func_name.split()[0]
                  # The function where the ret instruction is located is the jump target function of the j instruction
-                if len(func_name.split()) != 1 and func_name.split()[1] == 'j':
+                if len(func_name.split()) != 1 and func_name.split()[1] == '*':
                     last_func = [key for key, names in function_call_relationship.items() if caller_func_name.strip('<>').strip() in [name.strip('<>').strip() for name in names]]
                     last_func_str =  ' '.join(last_func)
                     if callee_func_name in ret_instr_addr.keys():
@@ -996,7 +975,8 @@ def write_basic_blocks_to_file(file_name, basic_block, output_directory):
 
 def generate_CFG(basic_block, program_name, output_directory):
     # Create a new Graphviz graph
-    graph = graphviz.Digraph(format='svg')
+    graph1 = graphviz.Digraph(format='svg')
+    graph2 = graphviz.Digraph(format='svg')
     # Create a mapping of basic block names to their respective nodes
     bb_nodes = {}
 
@@ -1007,7 +987,7 @@ def generate_CFG(basic_block, program_name, output_directory):
             label += f'\nNot_Taken_Target address: {bb.not_taken_target}'
 
         node_name = str(bb.name)
-        graph.node(node_name, label=label, shape='box')
+        graph1.node(node_name, label=label, shape='box')
         bb_nodes[bb.name] = node_name 
 
     # Add edges to the graph
@@ -1020,36 +1000,37 @@ def generate_CFG(basic_block, program_name, output_directory):
                         if isinstance(b_num, str):
                             num = int(b_num.split()[0])
                             if target == basic_block[num].start:
-                                graph.edge(bb_nodes[bb.name], node_name)
+                                graph1.edge(bb_nodes[bb.name], node_name)
                         else:
                             if target == basic_block[b_num].start:
-                                graph.edge(bb_nodes[bb.name], node_name)
+                                graph1.edge(bb_nodes[bb.name], node_name)
 
             else:
                 for b_num, node_name in bb_nodes.items():
                     if isinstance(b_num, str):
                         num = int(b_num.split()[0])
                         if bb.taken_target == basic_block[num].start:
-                            graph.edge(bb_nodes[bb.name], node_name)
+                            graph1.edge(bb_nodes[bb.name], node_name)
                     else:
                         if bb.taken_target == basic_block[b_num].start:
-                            graph.edge(bb_nodes[bb.name], node_name)
+                            graph1.edge(bb_nodes[bb.name], node_name)
 
         if bb.not_taken_target is not None:
             for b_num, node_name in bb_nodes.items():
                 if isinstance(b_num, str):
                     num = int(b_num.split()[0])
                     if bb.not_taken_target == basic_block[num].start:
-                        graph.edge(bb_nodes[bb.name], node_name,style='dashed',color = 'red')
+                        graph1.edge(bb_nodes[bb.name], node_name,style='dashed',color = 'red')
                 else:
                     if bb.not_taken_target == basic_block[b_num].start:
-                        graph.edge(bb_nodes[bb.name], node_name, style='dashed',color = 'red')
+                        graph1.edge(bb_nodes[bb.name], node_name, style='dashed',color = 'red')
                         
     # Set the output file path
     output_file = os.path.join(output_directory, f'{program_name}_CFG')
 
     # Render the graph and save it to a file
-    graph.render(filename=output_file, cleanup=True, view=False)
+    graph1.render(filename=output_file, cleanup=True, view=False)
+
 
 def convert_to_binary(basic_block, output_file_name, Hash_algorithm, value_length, output_directory):
     '''
@@ -1147,7 +1128,7 @@ def export_results(function_addr_ranges, function_information_file,\
                         basicblock_file_name, basic_block,\
                         block_binary_file_name, hex_file_name, Hash_algorithm, value_length, output_directory, program_name):
     
-    write_functions_information(function_addr_ranges, function_information_file, output_directory)
+    # write_functions_information(function_addr_ranges, function_information_file, output_directory)
     
     write_in_may_used_control_transfer_instr(all_instr, functions_with_jump_instr_addr, control_transfer_file, \
                                             bin_file, output_directory, program_name)
