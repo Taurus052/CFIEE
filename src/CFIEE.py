@@ -1,7 +1,7 @@
 '''
 Author: Taurus052
 Date: 2023-07-14 15:34:43
-LastEditTime: 2023-07-24 20:24:32
+LastEditTime: 2023-07-27 15:26:45
 '''
 
 import os
@@ -62,7 +62,6 @@ def main(objdump_file, Hash_algorithm, Hash_value_length, program_name):
     
     sorted_basic_blocks =  sort_basic_blocks(basic_block)
     
-    generate_CFG(basic_block, program_name, output_directory)
 
     export_results(function_addr_ranges, program_name + '_function_addr.txt',
                 all_instr, sorted_functions_with_jump_instr_addr, program_name + '_forward_transfers.txt', \
@@ -70,6 +69,10 @@ def main(objdump_file, Hash_algorithm, Hash_value_length, program_name):
                 program_name + '_basic_block.txt', sorted_basic_blocks,
                 program_name + '_bin_basic_block_inf.txt', program_name + '_hex_basic_block_inf.txt',
                 Hash_algorithm, Hash_value_length, output_directory, program_name)
+    
+    generate_CFG(basic_block, program_name, output_directory)
+    
+    # generate_main_CFG(basic_block, program_name, output_directory, function_addr_ranges)
 
 
 
@@ -400,7 +403,7 @@ def get_function_call_relationship(function_call_instr, function_addr_ranges, ou
     # Sort the function call relationship based on the start address of the caller functions
     function_call_relationship = {k: v for k, v in sorted(function_call_relationship.items(), key=lambda item: int(function_addr_ranges[item[0]][0], 16))}
     
-    G = graphviz.Digraph(format='png')
+    G = graphviz.Digraph(format='svg')
 
     # Add nodes and edges to the graph
     for caller_func_name, callee_func_names in function_call_relationship.items():
@@ -652,7 +655,7 @@ def write_in_may_used_control_transfer_instr(all_instr, functions_with_jump_inst
         ax.text(bar.get_x() + bar.get_width() / 2, height, str(int(height)), ha='center', va='bottom')
 
     # Save the figure to a file
-    plt.savefig(os.path.join(output_directory, program_name + '_forward_transfers_per_function.png'))
+    plt.savefig(os.path.join(output_directory, program_name + '_forward_transfers_per_function.svg'))
 
 
 def extract_used_function_instr(function_instr, visited_functions):
@@ -703,11 +706,13 @@ def get_the_addr_information_for_basic_block(address, mnemonic, operands, functi
     for i in range(len(mnemonic)):
         if i == 0:
             order_start_addr_list.append(address[i])
-            
+        
+        # function without transfer instruction     
         if address[i] in func_end_addr_list and i+1 <= len(mnemonic):
             end_addr_list.append(address[i])
             if i+1 < len(mnemonic):
                 order_start_addr_list.append(address[i+1])
+                # all_taken_target_addr.append(address[i] + ',' + address[i+1])
             elif i+1 == len(mnemonic):
                 continue
 
@@ -748,8 +753,9 @@ def get_the_addr_information_for_basic_block(address, mnemonic, operands, functi
                 all_taken_target_addr.append(address[i] + ',' + operand[-1])
                 
             elif ',' not in  operands[i]:
-                branch_or_jump_target_addr.append(operand[0]+' j')   
-                all_taken_target_addr.append(address[i] + ',' + operand[-1])
+                operand = operands[i]
+                branch_or_jump_target_addr.append(operand+' j')   
+                all_taken_target_addr.append(address[i] + ',' + operand)
 
     # Deal with indirect jump instructions
     for i in range(len(mnemonic)):
@@ -890,7 +896,8 @@ def create_basic_blocks_in_order(order_start_addr_list, end_addr_list, used_func
                             break
                     else:
                         continue
-                    
+        
+        #branch not taken target            
         if i+1 < len(order_start_addr_list) and mnemonic in branch_inst:
             basic_block[i].not_taken_target = order_start_addr_list[i+1]
     
@@ -911,6 +918,9 @@ def create_basic_blocks_start_with_taken_target(all_taken_target_addr, basic_blo
     The function returns the updated list of basic blocks.
     '''
     
+    # Create a set to store encountered parameters
+    encountered_params = set()
+    
     # Iterate through all_taken_target_addr to handle new basic block creation
     for addr_pair in all_taken_target_addr:
         jump_addr, target_addr = addr_pair.split(",")
@@ -920,32 +930,40 @@ def create_basic_blocks_start_with_taken_target(all_taken_target_addr, basic_blo
             # Find the basic block that contains the target address
             for bb in basic_block:
                 if int(bb.start,16) <= int(target_addr,16) <= int(bb.end,16):
-                    # Create a new basic block with the target address as start and bb.end as end
-                    new_bb_name = str(len(basic_block)) + ' start_with_taken_target'
-                    new_bb_start = target_addr
-                    new_bb_end = bb.end
-                    new_bb_length = calculate_block_length(new_bb_start, new_bb_end, used_function_instr)
-                    new_bb_func = bb.func
-                    block_instr_list = []
-                    for instr in used_function_instr:
-                        if int(new_bb_start,16) == int(instr[:instr.index(':')],16):
-                            new_bb_start_instr = instr
-                        if int(new_bb_start,16) <= int(instr[:instr.index(':')],16) <= int(new_bb_end,16):
-                            block_instr_list.append(instr)
-                        if int(new_bb_end,16) == int(instr[:instr.index(':')],16):
-                            new_bb_end_instr = instr
-                        if int(new_bb_end,16) == int(bb.end,16):
-                            new_bb_taken_target = bb.taken_target
-                            new_bb_not_taken_target = bb.not_taken_target
-                            new_bb_taken_target_instr = bb.taken_target_instr
-                            new_bb_not_taken_target_instr = bb.not_taken_target_instr
+                    # Create a string representation of the basic block parameters
+                    bb_params_str = f"{bb.start}_{bb.end}_{bb.taken_target}_{bb.not_taken_target}"
+                    
+                    # Check if the parameters are encountered before
+                    if bb_params_str not in encountered_params:
+                        # Add the parameters to the set
+                        encountered_params.add(bb_params_str)
+                        
+                        # Create a new basic block with the target address as start and bb.end as end
+                        new_bb_name = str(len(basic_block)) + ' start_with_taken_target'
+                        new_bb_start = target_addr
+                        new_bb_end = bb.end
+                        new_bb_length = calculate_block_length(new_bb_start, new_bb_end, used_function_instr)
+                        new_bb_func = bb.func
+                        block_instr_list = []
+                        for instr in used_function_instr:
+                            if int(new_bb_start,16) == int(instr[:instr.index(':')],16):
+                                new_bb_start_instr = instr
+                            if int(new_bb_start,16) <= int(instr[:instr.index(':')],16) <= int(new_bb_end,16):
+                                block_instr_list.append(instr)
+                            if int(new_bb_end,16) == int(instr[:instr.index(':')],16):
+                                new_bb_end_instr = instr
+                            if int(new_bb_end,16) == int(bb.end,16):
+                                new_bb_taken_target = bb.taken_target
+                                new_bb_not_taken_target = bb.not_taken_target
+                                new_bb_taken_target_instr = bb.taken_target_instr
+                                new_bb_not_taken_target_instr = bb.not_taken_target_instr
 
-                    new_bb_instr = block_instr_list
+                        new_bb_instr = block_instr_list
    
-                    new_bb = BasicBlock(new_bb_name, new_bb_func, new_bb_start, new_bb_end,\
-                        new_bb_length, new_bb_taken_target, new_bb_not_taken_target, new_bb_start_instr, \
-                            new_bb_end_instr, new_bb_taken_target_instr, new_bb_not_taken_target_instr, new_bb_instr)
-                    basic_block.append(new_bb)
+                        new_bb = BasicBlock(new_bb_name, new_bb_func, new_bb_start, new_bb_end,\
+                            new_bb_length, new_bb_taken_target, new_bb_not_taken_target, new_bb_start_instr, \
+                                new_bb_end_instr, new_bb_taken_target_instr, new_bb_not_taken_target_instr, new_bb_instr)
+                        basic_block.append(new_bb)
                     break
     return basic_block
 
@@ -976,7 +994,7 @@ def write_basic_blocks_to_file(file_name, basic_block, output_directory):
 def generate_CFG(basic_block, program_name, output_directory):
     # Create a new Graphviz graph
     graph1 = graphviz.Digraph(format='svg')
-    graph2 = graphviz.Digraph(format='svg')
+    
     # Create a mapping of basic block names to their respective nodes
     bb_nodes = {}
 
@@ -991,8 +1009,8 @@ def generate_CFG(basic_block, program_name, output_directory):
         bb_nodes[bb.name] = node_name 
 
     # Add edges to the graph
-    for bb in basic_block:
-        if bb.taken_target is not None:
+    for i, bb in enumerate (basic_block):
+        if bb.taken_target is not '':
             if isinstance(bb.taken_target, list):
                 for target_str in bb.taken_target:
                     target = target_str.split()[1]
@@ -1014,8 +1032,12 @@ def generate_CFG(basic_block, program_name, output_directory):
                     else:
                         if bb.taken_target == basic_block[b_num].start:
                             graph1.edge(bb_nodes[bb.name], node_name)
+        
+        elif bb.taken_target is '' and i+1 < len(basic_block):
+            next_bb = basic_block[i+1]
+            graph1.edge(bb_nodes[bb.name], bb_nodes[next_bb.name])
 
-        if bb.not_taken_target is not None:
+        if bb.not_taken_target is not '':
             for b_num, node_name in bb_nodes.items():
                 if isinstance(b_num, str):
                     num = int(b_num.split()[0])
@@ -1031,6 +1053,105 @@ def generate_CFG(basic_block, program_name, output_directory):
     # Render the graph and save it to a file
     graph1.render(filename=output_file, cleanup=True, view=False)
 
+# def generate_main_CFG(basic_block, program_name, output_directory, funcntion_addr_ranges):
+#     graph2 = graphviz.Digraph(format='svg')
+    
+#     main_bb_nodes = {}
+#     ext_func_bb_nodes = {}
+#     main_start_addr = funcntion_addr_ranges['<main>'][0]
+#     main_end_addr = funcntion_addr_ranges['<main>'][1]
+    
+#     # Add nodes to the graph for the main function
+#     for main_bb in basic_block:
+#         if main_bb.func == '<main>':
+#             label = f'Basic_block Name: {main_bb.name}\nIn Function: {main_bb.func}\nStart address: {main_bb.start}\nEnd address: {main_bb.end}\nLength: {main_bb.length}\nTaken_Target: {main_bb.taken_target}'
+#             if main_bb.not_taken_target is not None:
+#                 label += f'\nNot_Taken_Target address: {main_bb.not_taken_target}'
+
+#             m_node_name = str(main_bb.name)
+#             graph2.node(m_node_name, label=label, shape='box')
+#             main_bb_nodes[main_bb.name] = m_node_name
+
+#     # Identify basic blocks from external functions called by the main function
+#     for main_bb in basic_block:
+#         if main_bb.func == '<main>' and main_bb.taken_target is not None:
+#             if isinstance(main_bb.taken_target, list):
+#                 for target_str in main_bb.taken_target:
+#                     target = target_str.split()[1]
+#                     for bb in basic_block:
+#                         if bb.start == target and bb.func != '<main>':
+#                             label = f'Basic_block Name: {bb.name}\nIn Function: {bb.func}\nStart address: {bb.start}\nEnd address: {bb.end}\nLength: {bb.length}\nTaken_Target: {bb.taken_target}'
+#                             if bb.not_taken_target is not None:
+#                                 label += f'\nNot_Taken_Target address: {bb.not_taken_target}'
+
+#                             e_node_name = str(bb.name)
+#                             graph2.node(e_node_name, label=label, shape='box')
+#                             ext_func_bb_nodes[bb.name] = e_node_name
+#             else:
+#                 target = main_bb.taken_target
+#                 for bb in basic_block:
+#                     if bb.start == target and bb.func != '<main>':
+#                         label = f'Basic_block Name: {bb.name}\nIn Function: {bb.func}\nStart address: {bb.start}\nEnd address: {bb.end}\nLength: {bb.length}\nTaken_Target: {bb.taken_target}'
+#                         if bb.not_taken_target is not None:
+#                             label += f'\nNot_Taken_Target address: {bb.not_taken_target}'
+
+#                         e_node_name = str(bb.name)
+#                         graph2.node(e_node_name, label=label, shape='box')
+#                         ext_func_bb_nodes[bb.name] = e_node_name
+
+#     # Add edges to the graph for the main function's outgoing branches
+#     for main_bb in basic_block:
+#         if main_bb.func == '<main>':
+#             if main_bb.taken_target is not None:
+#                 if isinstance(main_bb.taken_target, list):
+#                     for target_str in main_bb.taken_target:
+#                         target = target_str.split()[-1]  # Correctly extract the target address
+#                         for b_num, m_node_name in main_bb_nodes.items():
+#                             if isinstance(b_num, str):
+#                                 num = int(b_num.split()[0])
+#                                 if target == basic_block[int(num)].start:
+#                                     graph2.edge(main_bb_nodes[main_bb.name], m_node_name)
+#                                 elif num in ext_func_bb_nodes and target == basic_block[int(num)].start:
+#                                     graph2.edge(main_bb_nodes[main_bb.name], ext_func_bb_nodes[num])
+#                             else:
+#                                 if target == basic_block[b_num].start:
+#                                     graph2.edge(main_bb_nodes[main_bb.name], m_node_name)
+#                                 elif b_num in ext_func_bb_nodes and target == basic_block[b_num].start:
+#                                     graph2.edge(main_bb_nodes[main_bb.name], ext_func_bb_nodes[b_num])
+#                 else:
+#                     target = main_bb.taken_target.split()[-1]  # Correctly extract the target address
+#                     for b_num, m_node_name in main_bb_nodes.items():
+#                         if isinstance(b_num, str):
+#                             num = int(b_num.split()[0])
+#                             if target == basic_block[int(num)].start:
+#                                 graph2.edge(main_bb_nodes[main_bb.name], m_node_name)
+#                             elif num in ext_func_bb_nodes and target == basic_block[int(num)].start:
+#                                 graph2.edge(main_bb_nodes[main_bb.name], ext_func_bb_nodes[num])
+#                         else:
+#                             if target == basic_block[b_num].start:
+#                                 graph2.edge(main_bb_nodes[main_bb.name], m_node_name)
+#                             elif b_num in ext_func_bb_nodes and target == basic_block[b_num].start:
+#                                 graph2.edge(main_bb_nodes[main_bb.name], ext_func_bb_nodes[b_num])
+
+#             if main_bb.not_taken_target is not None:
+#                 for b_num, m_node_name in main_bb_nodes.items():
+#                     if isinstance(b_num, str):
+#                         num = int(b_num.split()[0])
+#                         if main_bb.not_taken_target == basic_block[num].start:
+#                             graph2.edge(main_bb_nodes[main_bb.name], m_node_name, style='dashed', color='red')
+#                     else:
+#                         if main_bb.not_taken_target == basic_block[b_num].start:
+#                             graph2.edge(main_bb_nodes[main_bb.name], m_node_name, style='dashed', color='red')
+
+
+
+#     # Set the output file path
+#     output_file = os.path.join(output_directory, f'{program_name}_main_CFG')
+
+#     # Render the graph and save it to a file
+#     graph2.render(filename=output_file, cleanup=True, view=False)
+
+        
 
 def convert_to_binary(basic_block, output_file_name, Hash_algorithm, value_length, output_directory):
     '''
@@ -1408,7 +1529,7 @@ class ProgramAnalyzerUI:
 
 
     def run_analyze_program(self, input_file, rewrite_file, program_name):
-        try:
+        # try:
             self.progress_bar['value'] = 0
 
             hash_algorithm = self.hash_algorithm_var.get()
@@ -1432,9 +1553,9 @@ class ProgramAnalyzerUI:
 
             self.analyze_label.config(text="Complete!")
         
-        except Exception as e:
-            error_message = f"Error: {e}"
-            self.show_error_message(error_message)
+        # except Exception as e:
+        #     error_message = f"Error: {e}"
+        #     self.show_error_message(error_message)
 
     def show_help(self):
         try:

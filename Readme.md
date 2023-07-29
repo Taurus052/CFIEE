@@ -37,7 +37,7 @@ All files will be stored in **"output_files"** directory.
 &nbsp; &nbsp;&nbsp; &nbsp; This binary file contains all control transfer instructions' addresses and their target addresses. The first 16 bits of each line is the binary address of the control transfer instruction, and the last 16 bits are the address of the transfer target. 
 #### 6.'xxx_forward_transfers_per_function.png':
 &nbsp; &nbsp;&nbsp; &nbsp; This is a figure that shows the number of forward control transfer instructions (including unconditional direct jumps and branches) in different function.
-#### 7. ‘xxx_function_call_relationship.png':
+#### 7. ‘xxx_function_call_relationship.svg':
 &nbsp; &nbsp;&nbsp; &nbsp; This picture shows the function call relationship of the current program. If there is a label "*" after the function name in the figure, it means that the function is not called by the "jal" instruction, but jumps from the "j" instruction at the end of the previous function
 #### 8. 'xxx_CFG.svg':
 &nbsp; &nbsp;&nbsp; &nbsp; This is a control flow graph of the entire program flow in svg format.
