@@ -481,7 +481,7 @@ Start instruction:
 End instruction: 
 	674:	8082                	ret
 Length:           15
-Taken_Target address:       ['<_ntoa_long> 900', '<_ntoa_format> 722', '<_ntoa_format> 7d6', '<_ftoa> fec', '<_ftoa> 106a']
+Taken_Target address:       ['<_ntoa_format> 722', '<_ntoa_format> 7d6', '<_ntoa_long> 900', '<_ftoa> fec', '<_ftoa> 106a']
 Taken_Target instruction: 
 	
 Not_Taken_Target address:   
@@ -5585,7 +5585,7 @@ Instruction:
 	1066:	d5cff0ef          	jal	ra,5c2 <_out_rev>
 
 
-Basic_block Name: 1396 start_with_taken_target
+Basic_block Name: 1397 start_with_taken_target
 In Function:      <_ftoa>
 Start address:    1058
 End address:      1066
@@ -5815,6 +5815,25 @@ Not_Taken_Target instruction:
 Instruction: 
 	10ca:	02000593          	li	a1,32
 	10ce:	46a9                	li	a3,10
+	10d0:	f6bd8de3          	beq	s11,a1,104a <_ftoa+0x246>
+
+
+Basic_block Name: 1395 start_with_taken_target
+In Function:      <_ftoa>
+Start address:    10d0
+End address:      10d0
+Start instruction: 
+	10d0:	f6bd8de3          	beq	s11,a1,104a <_ftoa+0x246>
+End instruction: 
+	10d0:	f6bd8de3          	beq	s11,a1,104a <_ftoa+0x246>
+Length:           1
+Taken_Target address:       104a
+Taken_Target instruction: 
+	104a:	003cf793          	andi	a5,s9,3
+Not_Taken_Target address:   10d4
+Not_Taken_Target instruction: 
+	10d4:	02dd67b3          	rem	a5,s10,a3
+Instruction: 
 	10d0:	f6bd8de3          	beq	s11,a1,104a <_ftoa+0x246>
 
 
@@ -6050,7 +6069,7 @@ Instruction:
 	113c:	fa090fe3          	beqz	s2,10fa <_ftoa+0x2f6>
 
 
-Basic_block Name: 1395 start_with_taken_target
+Basic_block Name: 1396 start_with_taken_target
 In Function:      <_ftoa>
 Start address:    113c
 End address:      113c
@@ -6645,7 +6664,7 @@ Instruction:
 	1282:	00f5e663          	bltu	a1,a5,128e <_vsnprintf+0x88>
 
 
-Basic_block Name: 1398 start_with_taken_target
+Basic_block Name: 1399 start_with_taken_target
 In Function:      <_vsnprintf>
 Start address:    1270
 End address:      1282
@@ -6757,7 +6776,7 @@ Instruction:
 	12b0:	08f50e63          	beq	a0,a5,134c <_vsnprintf+0x146>
 
 
-Basic_block Name: 1401 start_with_taken_target
+Basic_block Name: 1402 start_with_taken_target
 In Function:      <_vsnprintf>
 Start address:    12aa
 End address:      12b0
@@ -6848,7 +6867,31 @@ Instruction:
 	12e2:	f6f76ae3          	bltu	a4,a5,1256 <_vsnprintf+0x50>
 
 
-Basic_block Name: 1397 start_with_taken_target
+Basic_block Name: 1403 start_with_taken_target
+In Function:      <_vsnprintf>
+Start address:    12d0
+End address:      12e2
+Start instruction: 
+	12d0:	1006e693          	ori	a3,a3,256
+End instruction: 
+	12e2:	f6f76ae3          	bltu	a4,a5,1256 <_vsnprintf+0x50>
+Length:           6
+Taken_Target address:       1256
+Taken_Target instruction: 
+	1256:	866e                	mv	a2,s11
+Not_Taken_Target address:   12e6
+Not_Taken_Target instruction: 
+	12e6:	5712                	lw	a4,36(sp)
+Instruction: 
+	12d0:	1006e693          	ori	a3,a3,256
+	12d4:	0b85                	addi	s7,s7,1
+	12d6:	fdb50793          	addi	a5,a0,-37
+	12da:	0ff7f793          	andi	a5,a5,255
+	12de:	05300713          	li	a4,83
+	12e2:	f6f76ae3          	bltu	a4,a5,1256 <_vsnprintf+0x50>
+
+
+Basic_block Name: 1398 start_with_taken_target
 In Function:      <_vsnprintf>
 Start address:    12d6
 End address:      12e2
@@ -7042,7 +7085,7 @@ Instruction:
 	132a:	9982                	jalr	s3
 
 
-Basic_block Name: 1399 start_with_taken_target
+Basic_block Name: 1400 start_with_taken_target
 In Function:      <_vsnprintf>
 Start address:    1322
 End address:      132a
@@ -7265,7 +7308,7 @@ Instruction:
 	13c4:	fcf67fe3          	bgeu	a2,a5,13a2 <_vsnprintf+0x19c>
 
 
-Basic_block Name: 1400 start_with_taken_target
+Basic_block Name: 1401 start_with_taken_target
 In Function:      <_vsnprintf>
 Start address:    13a4
 End address:      13c4
@@ -7522,7 +7565,7 @@ Instruction:
 	142c:	32069663          	bnez	a3,1758 <_vsnprintf+0x552>
 
 
-Basic_block Name: 1408 start_with_taken_target
+Basic_block Name: 1410 start_with_taken_target
 In Function:      <_vsnprintf>
 Start address:    142c
 End address:      142c
@@ -7635,7 +7678,34 @@ Instruction:
 	146e:	c24ff0ef          	jal	ra,892 <_ntoa_long>
 
 
-Basic_block Name: 1409 start_with_taken_target
+Basic_block Name: 1415 start_with_taken_target
+In Function:      <_vsnprintf>
+Start address:    145e
+End address:      146e
+Start instruction: 
+	145e:	866e                	mv	a2,s11
+End instruction: 
+	146e:	c24ff0ef          	jal	ra,892 <_ntoa_long>
+Length:           9
+Taken_Target address:       892
+Taken_Target instruction: 
+	892:	7139                	addi	sp,sp,-64
+Not_Taken_Target address:   
+Not_Taken_Target instruction: 
+	
+Instruction: 
+	145e:	866e                	mv	a2,s11
+	1460:	c22e                	sw	a1,4(sp)
+	1462:	c062                	sw	s8,0(sp)
+	1464:	88da                	mv	a7,s6
+	1466:	83fd                	srli	a5,a5,0x1f
+	1468:	86a6                	mv	a3,s1
+	146a:	85ca                	mv	a1,s2
+	146c:	854e                	mv	a0,s3
+	146e:	c24ff0ef          	jal	ra,892 <_ntoa_long>
+
+
+Basic_block Name: 1411 start_with_taken_target
 In Function:      <_vsnprintf>
 Start address:    1468
 End address:      146e
@@ -8157,7 +8227,7 @@ Instruction:
 	155a:	c789                	beqz	a5,1564 <_vsnprintf+0x35e>
 
 
-Basic_block Name: 1407 start_with_taken_target
+Basic_block Name: 1409 start_with_taken_target
 In Function:      <_vsnprintf>
 Start address:    1554
 End address:      155a
@@ -8219,7 +8289,7 @@ Instruction:
 	1568:	1a040d63          	beqz	s0,1722 <_vsnprintf+0x51c>
 
 
-Basic_block Name: 1402 start_with_taken_target
+Basic_block Name: 1404 start_with_taken_target
 In Function:      <_vsnprintf>
 Start address:    1564
 End address:      1568
@@ -8299,7 +8369,7 @@ Instruction:
 	1578:	c791                	beqz	a5,1584 <_vsnprintf+0x37e>
 
 
-Basic_block Name: 1404 start_with_taken_target
+Basic_block Name: 1406 start_with_taken_target
 In Function:      <_vsnprintf>
 Start address:    1576
 End address:      1578
@@ -8362,7 +8432,7 @@ Instruction:
 	158c:	9982                	jalr	s3
 
 
-Basic_block Name: 1405 start_with_taken_target
+Basic_block Name: 1407 start_with_taken_target
 In Function:      <_vsnprintf>
 Start address:    1584
 End address:      158c
@@ -8758,7 +8828,7 @@ Instruction:
 	1642:	1187f963          	bgeu	a5,s8,1754 <_vsnprintf+0x54e>
 
 
-Basic_block Name: 1403 start_with_taken_target
+Basic_block Name: 1405 start_with_taken_target
 In Function:      <_vsnprintf>
 Start address:    1640
 End address:      1642
@@ -8804,7 +8874,7 @@ Instruction:
 	165a:	9982                	jalr	s3
 
 
-Basic_block Name: 1406 start_with_taken_target
+Basic_block Name: 1408 start_with_taken_target
 In Function:      <_vsnprintf>
 Start address:    164e
 End address:      165a
@@ -8998,7 +9068,7 @@ Instruction:
 	16ae:	d6f50fe3          	beq	a0,a5,142c <_vsnprintf+0x226>
 
 
-Basic_block Name: 1412 start_with_taken_target
+Basic_block Name: 1414 start_with_taken_target
 In Function:      <_vsnprintf>
 Start address:    16a6
 End address:      16ae
@@ -9144,7 +9214,7 @@ Instruction:
 	16e6:	b349                	j	1468 <_vsnprintf+0x262>
 
 
-Basic_block Name: 1413 start_with_taken_target
+Basic_block Name: 1416 start_with_taken_target
 In Function:      <_vsnprintf>
 Start address:    16dc
 End address:      16e6
@@ -9254,7 +9324,7 @@ Instruction:
 	1708:	9982                	jalr	s3
 
 
-Basic_block Name: 1410 start_with_taken_target
+Basic_block Name: 1412 start_with_taken_target
 In Function:      <_vsnprintf>
 Start address:    16fc
 End address:      1708
@@ -9321,7 +9391,7 @@ Instruction:
 	171c:	9982                	jalr	s3
 
 
-Basic_block Name: 1416 start_with_taken_target
+Basic_block Name: 1419 start_with_taken_target
 In Function:      <_vsnprintf>
 Start address:    1712
 End address:      171c
@@ -9411,7 +9481,7 @@ Instruction:
 	1740:	9982                	jalr	s3
 
 
-Basic_block Name: 1411 start_with_taken_target
+Basic_block Name: 1413 start_with_taken_target
 In Function:      <_vsnprintf>
 Start address:    1734
 End address:      1740
@@ -9536,7 +9606,7 @@ Instruction:
 	1792:	982ff0ef          	jal	ra,914 <_ntoa_long_long>
 
 
-Basic_block Name: 1414 start_with_taken_target
+Basic_block Name: 1417 start_with_taken_target
 In Function:      <_vsnprintf>
 Start address:    178c
 End address:      1792
@@ -9601,7 +9671,7 @@ Instruction:
 	17a6:	f00780e3          	beqz	a5,16a6 <_vsnprintf+0x4a0>
 
 
-Basic_block Name: 1417 start_with_taken_target
+Basic_block Name: 1420 start_with_taken_target
 In Function:      <_vsnprintf>
 Start address:    17a2
 End address:      17a6
@@ -9765,7 +9835,7 @@ Instruction:
 	17d6:	06e51463          	bne	a0,a4,183e <_vsnprintf+0x638>
 
 
-Basic_block Name: 1415 start_with_taken_target
+Basic_block Name: 1418 start_with_taken_target
 In Function:      <_vsnprintf>
 Start address:    17cc
 End address:      17d6
@@ -9782,6 +9852,27 @@ Not_Taken_Target instruction:
 	17da:	2005f693          	andi	a3,a1,512
 Instruction: 
 	17cc:	85b6                	mv	a1,a3
+	17ce:	06400713          	li	a4,100
+	17d2:	4005f793          	andi	a5,a1,1024
+	17d6:	06e51463          	bne	a0,a4,183e <_vsnprintf+0x638>
+
+
+Basic_block Name: 1421 start_with_taken_target
+In Function:      <_vsnprintf>
+Start address:    17ce
+End address:      17d6
+Start instruction: 
+	17ce:	06400713          	li	a4,100
+End instruction: 
+	17d6:	06e51463          	bne	a0,a4,183e <_vsnprintf+0x638>
+Length:           3
+Taken_Target address:       183e
+Taken_Target instruction: 
+	183e:	86ae                	mv	a3,a1
+Not_Taken_Target address:   17da
+Not_Taken_Target instruction: 
+	17da:	2005f693          	andi	a3,a1,512
+Instruction: 
 	17ce:	06400713          	li	a4,100
 	17d2:	4005f793          	andi	a5,a1,1024
 	17d6:	06e51463          	bne	a0,a4,183e <_vsnprintf+0x638>
@@ -10921,7 +11012,7 @@ Instruction:
 	1bcc:	dfe5                	beqz	a5,1bc4 <ck_uart_putc+0x6>
 
 
-Basic_block Name: 1418 start_with_taken_target
+Basic_block Name: 1422 start_with_taken_target
 In Function:      <ck_uart_putc>
 Start address:    1bc4
 End address:      1bcc
@@ -11045,7 +11136,36 @@ Instruction:
 	1d3e:	02084e63          	bltz	a6,1d7a <icrc+0x88>
 
 
-Basic_block Name: 1419 start_with_taken_target
+Basic_block Name: 1424 start_with_taken_target
+In Function:      <icrc>
+Start address:    1d24
+End address:      1d3e
+Start instruction: 
+	1d24:	00889793          	slli	a5,a7,0x8
+End instruction: 
+	1d3e:	02084e63          	bltz	a6,1d7a <icrc+0x88>
+Length:           11
+Taken_Target address:       1d7a
+Taken_Target instruction: 
+	1d7a:	01d7c7b3          	xor	a5,a5,t4
+Not_Taken_Target address:   1d42
+Not_Taken_Target instruction: 
+	1d42:	fe0716e3          	bnez	a4,1d2e <icrc+0x3c>
+Instruction: 
+	1d24:	00889793          	slli	a5,a7,0x8
+	1d28:	07c2                	slli	a5,a5,0x10
+	1d2a:	83c1                	srli	a5,a5,0x10
+	1d2c:	4721                	li	a4,8
+	1d2e:	01079813          	slli	a6,a5,0x10
+	1d32:	0786                	slli	a5,a5,0x1
+	1d34:	07c2                	slli	a5,a5,0x10
+	1d36:	41085813          	srai	a6,a6,0x10
+	1d3a:	177d                	addi	a4,a4,-1
+	1d3c:	83c1                	srli	a5,a5,0x10
+	1d3e:	02084e63          	bltz	a6,1d7a <icrc+0x88>
+
+
+Basic_block Name: 1423 start_with_taken_target
 In Function:      <icrc>
 Start address:    1d2e
 End address:      1d3e
@@ -11277,7 +11397,7 @@ Instruction:
 	1dca:	0006d563          	bgez	a3,1dd4 <icrc+0xe2>
 
 
-Basic_block Name: 1420 start_with_taken_target
+Basic_block Name: 1425 start_with_taken_target
 In Function:      <icrc>
 Start address:    1dae
 End address:      1dca
@@ -11330,7 +11450,7 @@ Instruction:
 	1dde:	fce5f6e3          	bgeu	a1,a4,1daa <icrc+0xb8>
 
 
-Basic_block Name: 1421 start_with_taken_target
+Basic_block Name: 1426 start_with_taken_target
 In Function:      <icrc>
 Start address:    1dd4
 End address:      1dde
@@ -11420,7 +11540,7 @@ Instruction:
 	1e06:	8082                	ret
 
 
-Basic_block Name: 1422 start_with_taken_target
+Basic_block Name: 1427 start_with_taken_target
 In Function:      <icrc>
 Start address:    1df0
 End address:      1e06
@@ -11906,7 +12026,7 @@ Instruction:
 	1f18:	00e50b63          	beq	a0,a4,1f2e <__udivdi3+0x54>
 
 
-Basic_block Name: 1427 start_with_taken_target
+Basic_block Name: 1432 start_with_taken_target
 In Function:      <__udivdi3>
 Start address:    1f04
 End address:      1f18
@@ -11965,7 +12085,7 @@ Instruction:
 	1f4e:	00b7fc63          	bgeu	a5,a1,1f66 <__udivdi3+0x8c>
 
 
-Basic_block Name: 1423 start_with_taken_target
+Basic_block Name: 1428 start_with_taken_target
 In Function:      <__udivdi3>
 Start address:    1f2e
 End address:      1f4e
@@ -12064,7 +12184,7 @@ Instruction:
 	1f82:	00d37b63          	bgeu	t1,a3,1f98 <__udivdi3+0xbe>
 
 
-Basic_block Name: 1424 start_with_taken_target
+Basic_block Name: 1429 start_with_taken_target
 In Function:      <__udivdi3>
 Start address:    1f66
 End address:      1f82
@@ -12155,7 +12275,7 @@ Instruction:
 	1f9e:	a85d                	j	2054 <__udivdi3+0x17a>
 
 
-Basic_block Name: 1425 start_with_taken_target
+Basic_block Name: 1430 start_with_taken_target
 In Function:      <__udivdi3>
 Start address:    1f98
 End address:      1f9e
@@ -12173,6 +12293,26 @@ Not_Taken_Target instruction:
 Instruction: 
 	1f98:	0542                	slli	a0,a0,0x10
 	1f9a:	8d51                	or	a0,a0,a2
+	1f9c:	4581                	li	a1,0
+	1f9e:	a85d                	j	2054 <__udivdi3+0x17a>
+
+
+Basic_block Name: 1444 start_with_taken_target
+In Function:      <__udivdi3>
+Start address:    1f9c
+End address:      1f9e
+Start instruction: 
+	1f9c:	4581                	li	a1,0
+End instruction: 
+	1f9e:	a85d                	j	2054 <__udivdi3+0x17a>
+Length:           2
+Taken_Target address:       2054
+Taken_Target instruction: 
+	2054:	8082                	ret
+Not_Taken_Target address:   
+Not_Taken_Target instruction: 
+	
+Instruction: 
 	1f9c:	4581                	li	a1,0
 	1f9e:	a85d                	j	2054 <__udivdi3+0x17a>
 
@@ -12259,7 +12399,7 @@ Instruction:
 	1fb8:	08e87f63          	bgeu	a6,a4,2056 <__udivdi3+0x17c>
 
 
-Basic_block Name: 1428 start_with_taken_target
+Basic_block Name: 1433 start_with_taken_target
 In Function:      <__udivdi3>
 Start address:    1fb6
 End address:      1fb8
@@ -12325,7 +12465,7 @@ Instruction:
 	1fda:	08e61563          	bne	a2,a4,2064 <__udivdi3+0x18a>
 
 
-Basic_block Name: 1429 start_with_taken_target
+Basic_block Name: 1434 start_with_taken_target
 In Function:      <__udivdi3>
 Start address:    1fc6
 End address:      1fda
@@ -12381,7 +12521,7 @@ Instruction:
 	2004:	01c77c63          	bgeu	a4,t3,201c <__udivdi3+0x142>
 
 
-Basic_block Name: 1433 start_with_taken_target
+Basic_block Name: 1439 start_with_taken_target
 In Function:      <__udivdi3>
 Start address:    1fe4
 End address:      2004
@@ -12480,7 +12620,7 @@ Instruction:
 	203a:	00d37b63          	bgeu	t1,a3,2050 <__udivdi3+0x176>
 
 
-Basic_block Name: 1430 start_with_taken_target
+Basic_block Name: 1435 start_with_taken_target
 In Function:      <__udivdi3>
 Start address:    201c
 End address:      203a
@@ -12570,7 +12710,28 @@ Instruction:
 	2054:	8082                	ret
 
 
-Basic_block Name: 1426 start_with_taken_target
+Basic_block Name: 1436 start_with_taken_target
+In Function:      <__udivdi3>
+Start address:    2050
+End address:      2054
+Start instruction: 
+	2050:	0542                	slli	a0,a0,0x10
+End instruction: 
+	2054:	8082                	ret
+Length:           3
+Taken_Target address:       ['<_ntoa_long_long> 9aa']
+Taken_Target instruction: 
+	
+Not_Taken_Target address:   
+Not_Taken_Target instruction: 
+	
+Instruction: 
+	2050:	0542                	slli	a0,a0,0x10
+	2052:	8d51                	or	a0,a0,a2
+	2054:	8082                	ret
+
+
+Basic_block Name: 1431 start_with_taken_target
 In Function:      <__udivdi3>
 Start address:    2054
 End address:      2054
@@ -12735,7 +12896,7 @@ Instruction:
 	20d0:	00a7fc63          	bgeu	a5,a0,20e8 <__udivdi3+0x20e>
 
 
-Basic_block Name: 1431 start_with_taken_target
+Basic_block Name: 1437 start_with_taken_target
 In Function:      <__udivdi3>
 Start address:    20b4
 End address:      20d0
@@ -12827,7 +12988,7 @@ Instruction:
 	20ee:	bddd                	j	1fe4 <__udivdi3+0x10a>
 
 
-Basic_block Name: 1432 start_with_taken_target
+Basic_block Name: 1438 start_with_taken_target
 In Function:      <__udivdi3>
 Start address:    20e8
 End address:      20ee
@@ -12918,7 +13079,7 @@ Instruction:
 	2120:	02e51163          	bne	a0,a4,2142 <__udivdi3+0x268>
 
 
-Basic_block Name: 1434 start_with_taken_target
+Basic_block Name: 1440 start_with_taken_target
 In Function:      <__udivdi3>
 Start address:    2104
 End address:      2120
@@ -13134,7 +13295,7 @@ Instruction:
 	21b6:	0067fc63          	bgeu	a5,t1,21ce <__udivdi3+0x2f4>
 
 
-Basic_block Name: 1435 start_with_taken_target
+Basic_block Name: 1441 start_with_taken_target
 In Function:      <__udivdi3>
 Start address:    219a
 End address:      21b6
@@ -13239,7 +13400,7 @@ Instruction:
 	2204:	00d77363          	bgeu	a4,a3,220a <__udivdi3+0x330>
 
 
-Basic_block Name: 1436 start_with_taken_target
+Basic_block Name: 1442 start_with_taken_target
 In Function:      <__udivdi3>
 Start address:    21ce
 End address:      2204
@@ -13296,7 +13457,7 @@ Instruction:
 	2210:	0307e063          	bltu	a5,a6,2230 <__udivdi3+0x356>
 
 
-Basic_block Name: 1437 start_with_taken_target
+Basic_block Name: 1443 start_with_taken_target
 In Function:      <__udivdi3>
 Start address:    220a
 End address:      2210
@@ -13514,7 +13675,7 @@ Instruction:
 	2276:	00f68c63          	beq	a3,a5,228e <__umoddi3+0x54>
 
 
-Basic_block Name: 1438 start_with_taken_target
+Basic_block Name: 1445 start_with_taken_target
 In Function:      <__umoddi3>
 Start address:    2262
 End address:      2276
@@ -13572,7 +13733,7 @@ Instruction:
 	22ac:	00e6f863          	bgeu	a3,a4,22bc <__umoddi3+0x82>
 
 
-Basic_block Name: 1439 start_with_taken_target
+Basic_block Name: 1446 start_with_taken_target
 In Function:      <__umoddi3>
 Start address:    228e
 End address:      22ac
@@ -13667,7 +13828,7 @@ Instruction:
 	22d2:	00d57863          	bgeu	a0,a3,22e2 <__umoddi3+0xa8>
 
 
-Basic_block Name: 1440 start_with_taken_target
+Basic_block Name: 1447 start_with_taken_target
 In Function:      <__umoddi3>
 Start address:    22bc
 End address:      22d2
@@ -13756,7 +13917,7 @@ Instruction:
 	22ea:	8082                	ret
 
 
-Basic_block Name: 1441 start_with_taken_target
+Basic_block Name: 1448 start_with_taken_target
 In Function:      <__umoddi3>
 Start address:    22e2
 End address:      22ea
@@ -13775,6 +13936,46 @@ Instruction:
 	22e2:	8d15                	sub	a0,a0,a3
 	22e4:	01155533          	srl	a0,a0,a7
 	22e8:	4581                	li	a1,0
+	22ea:	8082                	ret
+
+
+Basic_block Name: 1453 start_with_taken_target
+In Function:      <__umoddi3>
+Start address:    22e4
+End address:      22ea
+Start instruction: 
+	22e4:	01155533          	srl	a0,a0,a7
+End instruction: 
+	22ea:	8082                	ret
+Length:           3
+Taken_Target address:       ['<_ntoa_long_long> 97c']
+Taken_Target instruction: 
+	
+Not_Taken_Target address:   
+Not_Taken_Target instruction: 
+	
+Instruction: 
+	22e4:	01155533          	srl	a0,a0,a7
+	22e8:	4581                	li	a1,0
+	22ea:	8082                	ret
+
+
+Basic_block Name: 1457 start_with_taken_target
+In Function:      <__umoddi3>
+Start address:    22ea
+End address:      22ea
+Start instruction: 
+	22ea:	8082                	ret
+End instruction: 
+	22ea:	8082                	ret
+Length:           1
+Taken_Target address:       ['<_ntoa_long_long> 97c']
+Taken_Target instruction: 
+	
+Not_Taken_Target address:   
+Not_Taken_Target instruction: 
+	
+Instruction: 
 	22ea:	8082                	ret
 
 
@@ -13860,7 +14061,7 @@ Instruction:
 	2304:	08e87363          	bgeu	a6,a4,238a <__umoddi3+0x150>
 
 
-Basic_block Name: 1442 start_with_taken_target
+Basic_block Name: 1449 start_with_taken_target
 In Function:      <__umoddi3>
 Start address:    2302
 End address:      2304
@@ -13926,7 +14127,7 @@ Instruction:
 	2326:	06c79963          	bne	a5,a2,2398 <__umoddi3+0x15e>
 
 
-Basic_block Name: 1443 start_with_taken_target
+Basic_block Name: 1450 start_with_taken_target
 In Function:      <__umoddi3>
 Start address:    2312
 End address:      2326
@@ -13980,7 +14181,7 @@ Instruction:
 	234c:	00b77863          	bgeu	a4,a1,235c <__umoddi3+0x122>
 
 
-Basic_block Name: 1448 start_with_taken_target
+Basic_block Name: 1456 start_with_taken_target
 In Function:      <__umoddi3>
 Start address:    232e
 End address:      234c
@@ -14075,7 +14276,7 @@ Instruction:
 	2376:	00b57863          	bgeu	a0,a1,2386 <__umoddi3+0x14c>
 
 
-Basic_block Name: 1444 start_with_taken_target
+Basic_block Name: 1451 start_with_taken_target
 In Function:      <__umoddi3>
 Start address:    235c
 End address:      2376
@@ -14162,7 +14363,7 @@ Instruction:
 	2388:	bfb1                	j	22e4 <__umoddi3+0xaa>
 
 
-Basic_block Name: 1445 start_with_taken_target
+Basic_block Name: 1452 start_with_taken_target
 In Function:      <__umoddi3>
 Start address:    2386
 End address:      2388
@@ -14324,7 +14525,7 @@ Instruction:
 	23f8:	00d5f863          	bgeu	a1,a3,2408 <__umoddi3+0x1ce>
 
 
-Basic_block Name: 1446 start_with_taken_target
+Basic_block Name: 1454 start_with_taken_target
 In Function:      <__umoddi3>
 Start address:    23de
 End address:      23f8
@@ -14411,7 +14612,7 @@ Instruction:
 	240a:	b715                	j	232e <__umoddi3+0xf4>
 
 
-Basic_block Name: 1447 start_with_taken_target
+Basic_block Name: 1455 start_with_taken_target
 In Function:      <__umoddi3>
 Start address:    2408
 End address:      240a
@@ -14500,7 +14701,7 @@ Instruction:
 	243c:	03179663          	bne	a5,a7,2468 <__umoddi3+0x22e>
 
 
-Basic_block Name: 1450 start_with_taken_target
+Basic_block Name: 1459 start_with_taken_target
 In Function:      <__umoddi3>
 Start address:    2420
 End address:      243c
@@ -14589,7 +14790,7 @@ Instruction:
 	2458:	bd49                	j	22ea <__umoddi3+0xb0>
 
 
-Basic_block Name: 1449 start_with_taken_target
+Basic_block Name: 1458 start_with_taken_target
 In Function:      <__umoddi3>
 Start address:    2456
 End address:      2458
@@ -14758,7 +14959,7 @@ Instruction:
 	24e0:	00e5fc63          	bgeu	a1,a4,24f8 <__umoddi3+0x2be>
 
 
-Basic_block Name: 1451 start_with_taken_target
+Basic_block Name: 1460 start_with_taken_target
 In Function:      <__umoddi3>
 Start address:    24c2
 End address:      24e0
@@ -14863,7 +15064,7 @@ Instruction:
 	252a:	00d77363          	bgeu	a4,a3,2530 <__umoddi3+0x2f6>
 
 
-Basic_block Name: 1452 start_with_taken_target
+Basic_block Name: 1461 start_with_taken_target
 In Function:      <__umoddi3>
 Start address:    24f8
 End address:      252a
@@ -14926,7 +15127,7 @@ Instruction:
 	2542:	00d5e663          	bltu	a1,a3,254e <__umoddi3+0x314>
 
 
-Basic_block Name: 1453 start_with_taken_target
+Basic_block Name: 1462 start_with_taken_target
 In Function:      <__umoddi3>
 Start address:    2530
 End address:      2542
@@ -15023,7 +15224,7 @@ Instruction:
 	2578:	bb8d                	j	22ea <__umoddi3+0xb0>
 
 
-Basic_block Name: 1454 start_with_taken_target
+Basic_block Name: 1463 start_with_taken_target
 In Function:      <__umoddi3>
 Start address:    255c
 End address:      2578
@@ -15238,7 +15439,7 @@ Instruction:
 	2602:	a059                	j	2688 <__adddf3+0x10e>
 
 
-Basic_block Name: 1462 start_with_taken_target
+Basic_block Name: 1474 start_with_taken_target
 In Function:      <__adddf3>
 Start address:    2600
 End address:      2602
@@ -15443,7 +15644,7 @@ Instruction:
 	264e:	08a64a63          	blt	a2,a0,26e2 <__adddf3+0x168>
 
 
-Basic_block Name: 1457 start_with_taken_target
+Basic_block Name: 1466 start_with_taken_target
 In Function:      <__adddf3>
 Start address:    264a
 End address:      264e
@@ -15518,7 +15719,33 @@ Instruction:
 	268e:	cbb5                	beqz	a5,2702 <__adddf3+0x188>
 
 
-Basic_block Name: 1456 start_with_taken_target
+Basic_block Name: 1471 start_with_taken_target
+In Function:      <__adddf3>
+Start address:    267a
+End address:      268e
+Start instruction: 
+	267a:	983e                	add	a6,a6,a5
+End instruction: 
+	268e:	cbb5                	beqz	a5,2702 <__adddf3+0x188>
+Length:           8
+Taken_Target address:       2702
+Taken_Target instruction: 
+	2702:	8736                	mv	a4,a3
+Not_Taken_Target address:   2690
+Not_Taken_Target instruction: 
+	2690:	0605                	addi	a2,a2,1
+Instruction: 
+	267a:	983e                	add	a6,a6,a5
+	267c:	953a                	add	a0,a0,a4
+	267e:	00f837b3          	sltu	a5,a6,a5
+	2682:	00f506b3          	add	a3,a0,a5
+	2686:	8622                	mv	a2,s0
+	2688:	008007b7          	lui	a5,0x800
+	268c:	8ff5                	and	a5,a5,a3
+	268e:	cbb5                	beqz	a5,2702 <__adddf3+0x188>
+
+
+Basic_block Name: 1465 start_with_taken_target
 In Function:      <__adddf3>
 Start address:    2688
 End address:      268e
@@ -15635,7 +15862,7 @@ Instruction:
 	26e0:	bf69                	j	267a <__adddf3+0x100>
 
 
-Basic_block Name: 1460 start_with_taken_target
+Basic_block Name: 1470 start_with_taken_target
 In Function:      <__adddf3>
 Start address:    26d2
 End address:      26e0
@@ -15654,6 +15881,26 @@ Instruction:
 	26d2:	01066833          	or	a6,a2,a6
 	26d6:	01003833          	snez	a6,a6
 	26da:	0105e833          	or	a6,a1,a6
+	26de:	4501                	li	a0,0
+	26e0:	bf69                	j	267a <__adddf3+0x100>
+
+
+Basic_block Name: 1472 start_with_taken_target
+In Function:      <__adddf3>
+Start address:    26de
+End address:      26e0
+Start instruction: 
+	26de:	4501                	li	a0,0
+End instruction: 
+	26e0:	bf69                	j	267a <__adddf3+0x100>
+Length:           2
+Taken_Target address:       267a
+Taken_Target instruction: 
+	267a:	983e                	add	a6,a6,a5
+Not_Taken_Target address:   
+Not_Taken_Target instruction: 
+	
+Instruction: 
 	26de:	4501                	li	a0,0
 	26e0:	bf69                	j	267a <__adddf3+0x100>
 
@@ -15758,7 +16005,7 @@ Instruction:
 	26fe:	02f60663          	beq	a2,a5,272a <__adddf3+0x1b0>
 
 
-Basic_block Name: 1476 start_with_taken_target
+Basic_block Name: 1491 start_with_taken_target
 In Function:      <__adddf3>
 Start address:    26fe
 End address:      26fe
@@ -16027,7 +16274,7 @@ Instruction:
 	2766:	bd6d                	j	2620 <__adddf3+0xa6>
 
 
-Basic_block Name: 1459 start_with_taken_target
+Basic_block Name: 1468 start_with_taken_target
 In Function:      <__adddf3>
 Start address:    2764
 End address:      2766
@@ -16070,7 +16317,7 @@ Instruction:
 	2774:	07164363          	blt	a2,a7,27da <__adddf3+0x260>
 
 
-Basic_block Name: 1463 start_with_taken_target
+Basic_block Name: 1475 start_with_taken_target
 In Function:      <__adddf3>
 Start address:    2770
 End address:      2774
@@ -16144,7 +16391,7 @@ Instruction:
 	27ae:	bde9                	j	2688 <__adddf3+0x10e>
 
 
-Basic_block Name: 1465 start_with_taken_target
+Basic_block Name: 1477 start_with_taken_target
 In Function:      <__adddf3>
 Start address:    27a0
 End address:      27ae
@@ -16218,7 +16465,7 @@ Instruction:
 	27d8:	b7e1                	j	27a0 <__adddf3+0x226>
 
 
-Basic_block Name: 1464 start_with_taken_target
+Basic_block Name: 1476 start_with_taken_target
 In Function:      <__adddf3>
 Start address:    27ce
 End address:      27d8
@@ -16237,6 +16484,26 @@ Instruction:
 	27ce:	8fc9                	or	a5,a5,a0
 	27d0:	00f037b3          	snez	a5,a5
 	27d4:	8fd1                	or	a5,a5,a2
+	27d6:	4701                	li	a4,0
+	27d8:	b7e1                	j	27a0 <__adddf3+0x226>
+
+
+Basic_block Name: 1478 start_with_taken_target
+In Function:      <__adddf3>
+Start address:    27d6
+End address:      27d8
+Start instruction: 
+	27d6:	4701                	li	a4,0
+End instruction: 
+	27d8:	b7e1                	j	27a0 <__adddf3+0x226>
+Length:           2
+Taken_Target address:       27a0
+Taken_Target instruction: 
+	27a0:	97c2                	add	a5,a5,a6
+Not_Taken_Target address:   
+Not_Taken_Target instruction: 
+	
+Instruction: 
 	27d6:	4701                	li	a4,0
 	27d8:	b7e1                	j	27a0 <__adddf3+0x226>
 
@@ -16393,7 +16660,7 @@ Instruction:
 	2824:	e6d5                	bnez	a3,28d0 <__adddf3+0x356>
 
 
-Basic_block Name: 1458 start_with_taken_target
+Basic_block Name: 1467 start_with_taken_target
 In Function:      <__adddf3>
 Start address:    2820
 End address:      2824
@@ -16555,7 +16822,7 @@ Instruction:
 	285a:	c611                	beqz	a2,2866 <__adddf3+0x2ec>
 
 
-Basic_block Name: 1471 start_with_taken_target
+Basic_block Name: 1484 start_with_taken_target
 In Function:      <__adddf3>
 Start address:    2856
 End address:      285a
@@ -16616,7 +16883,7 @@ Instruction:
 	2866:	52051963          	bnez	a0,2d98 <__adddf3+0x81e>
 
 
-Basic_block Name: 1469 start_with_taken_target
+Basic_block Name: 1482 start_with_taken_target
 In Function:      <__adddf3>
 Start address:    2866
 End address:      2866
@@ -16658,7 +16925,7 @@ Instruction:
 	2874:	b775                	j	2820 <__adddf3+0x2a6>
 
 
-Basic_block Name: 1485 start_with_taken_target
+Basic_block Name: 1501 start_with_taken_target
 In Function:      <__adddf3>
 Start address:    286e
 End address:      2874
@@ -16786,7 +17053,29 @@ Instruction:
 	28a4:	a9bd                	j	2d22 <__adddf3+0x7a8>
 
 
-Basic_block Name: 1455 start_with_taken_target
+Basic_block Name: 1469 start_with_taken_target
+In Function:      <__adddf3>
+Start address:    289c
+End address:      28a4
+Start instruction: 
+	289c:	0107e7b3          	or	a5,a5,a6
+End instruction: 
+	28a4:	a9bd                	j	2d22 <__adddf3+0x7a8>
+Length:           4
+Taken_Target address:       2d22
+Taken_Target instruction: 
+	2d22:	4581                	li	a1,0
+Not_Taken_Target address:   
+Not_Taken_Target instruction: 
+	
+Instruction: 
+	289c:	0107e7b3          	or	a5,a5,a6
+	28a0:	8305                	srli	a4,a4,0x1
+	28a2:	4401                	li	s0,0
+	28a4:	a9bd                	j	2d22 <__adddf3+0x7a8>
+
+
+Basic_block Name: 1464 start_with_taken_target
 In Function:      <__adddf3>
 Start address:    28a2
 End address:      28a4
@@ -16949,7 +17238,29 @@ Instruction:
 	28d6:	48d98763          	beq	s3,a3,2d64 <__adddf3+0x7ea>
 
 
-Basic_block Name: 1467 start_with_taken_target
+Basic_block Name: 1506 start_with_taken_target
+In Function:      <__adddf3>
+Start address:    28ce
+End address:      28d6
+Start instruction: 
+	28ce:	4595                	li	a1,5
+End instruction: 
+	28d6:	48d98763          	beq	s3,a3,2d64 <__adddf3+0x7ea>
+Length:           4
+Taken_Target address:       2d64
+Taken_Target instruction: 
+	2d64:	fced                	bnez	s1,2d5e <__adddf3+0x7e4>
+Not_Taken_Target address:   28da
+Not_Taken_Target instruction: 
+	28da:	468d                	li	a3,3
+Instruction: 
+	28ce:	4595                	li	a1,5
+	28d0:	4689                	li	a3,2
+	28d2:	0015e593          	ori	a1,a1,1
+	28d6:	48d98763          	beq	s3,a3,2d64 <__adddf3+0x7ea>
+
+
+Basic_block Name: 1480 start_with_taken_target
 In Function:      <__adddf3>
 Start address:    28d0
 End address:      28d6
@@ -17053,7 +17364,7 @@ Instruction:
 	28fa:	a1b5                	j	2d66 <__adddf3+0x7ec>
 
 
-Basic_block Name: 1492 start_with_taken_target
+Basic_block Name: 1510 start_with_taken_target
 In Function:      <__adddf3>
 Start address:    28f2
 End address:      28fa
@@ -17315,7 +17626,7 @@ Instruction:
 	2944:	a0a9                	j	298e <__adddf3+0x414>
 
 
-Basic_block Name: 1477 start_with_taken_target
+Basic_block Name: 1492 start_with_taken_target
 In Function:      <__adddf3>
 Start address:    2942
 End address:      2944
@@ -17430,7 +17741,33 @@ Instruction:
 	2996:	d60786e3          	beqz	a5,2702 <__adddf3+0x188>
 
 
-Basic_block Name: 1473 start_with_taken_target
+Basic_block Name: 1489 start_with_taken_target
+In Function:      <__adddf3>
+Start address:    297e
+End address:      2996
+Start instruction: 
+	297e:	41078833          	sub	a6,a5,a6
+End instruction: 
+	2996:	d60786e3          	beqz	a5,2702 <__adddf3+0x188>
+Length:           8
+Taken_Target address:       2702
+Taken_Target instruction: 
+	2702:	8736                	mv	a4,a3
+Not_Taken_Target address:   299a
+Not_Taken_Target instruction: 
+	299a:	197d                	addi	s2,s2,-1
+Instruction: 
+	297e:	41078833          	sub	a6,a5,a6
+	2982:	40d706b3          	sub	a3,a4,a3
+	2986:	0107b7b3          	sltu	a5,a5,a6
+	298a:	8e9d                	sub	a3,a3,a5
+	298c:	8622                	mv	a2,s0
+	298e:	00800937          	lui	s2,0x800
+	2992:	0126f7b3          	and	a5,a3,s2
+	2996:	d60786e3          	beqz	a5,2702 <__adddf3+0x188>
+
+
+Basic_block Name: 1486 start_with_taken_target
 In Function:      <__adddf3>
 Start address:    298e
 End address:      2996
@@ -17564,7 +17901,7 @@ Instruction:
 	29e0:	bf79                	j	297e <__adddf3+0x404>
 
 
-Basic_block Name: 1475 start_with_taken_target
+Basic_block Name: 1488 start_with_taken_target
 In Function:      <__adddf3>
 Start address:    29d2
 End address:      29e0
@@ -17583,6 +17920,26 @@ Instruction:
 	29d2:	01066833          	or	a6,a2,a6
 	29d6:	01003833          	snez	a6,a6
 	29da:	0105e833          	or	a6,a1,a6
+	29de:	4681                	li	a3,0
+	29e0:	bf79                	j	297e <__adddf3+0x404>
+
+
+Basic_block Name: 1490 start_with_taken_target
+In Function:      <__adddf3>
+Start address:    29de
+End address:      29e0
+Start instruction: 
+	29de:	4681                	li	a3,0
+End instruction: 
+	29e0:	bf79                	j	297e <__adddf3+0x404>
+Length:           2
+Taken_Target address:       297e
+Taken_Target instruction: 
+	297e:	41078833          	sub	a6,a5,a6
+Not_Taken_Target address:   
+Not_Taken_Target instruction: 
+	
+Instruction: 
 	29de:	4681                	li	a3,0
 	29e0:	bf79                	j	297e <__adddf3+0x404>
 
@@ -17923,7 +18280,7 @@ Instruction:
 	2a72:	07164763          	blt	a2,a7,2ae0 <__adddf3+0x566>
 
 
-Basic_block Name: 1478 start_with_taken_target
+Basic_block Name: 1493 start_with_taken_target
 In Function:      <__adddf3>
 Start address:    2a6e
 End address:      2a72
@@ -17998,7 +18355,7 @@ Instruction:
 	2ab4:	bde9                	j	298e <__adddf3+0x414>
 
 
-Basic_block Name: 1480 start_with_taken_target
+Basic_block Name: 1495 start_with_taken_target
 In Function:      <__adddf3>
 Start address:    2a9e
 End address:      2ab4
@@ -18073,7 +18430,7 @@ Instruction:
 	2ade:	b7c1                	j	2a9e <__adddf3+0x524>
 
 
-Basic_block Name: 1479 start_with_taken_target
+Basic_block Name: 1494 start_with_taken_target
 In Function:      <__adddf3>
 Start address:    2ad4
 End address:      2ade
@@ -18092,6 +18449,26 @@ Instruction:
 	2ad4:	8fc9                	or	a5,a5,a0
 	2ad6:	00f037b3          	snez	a5,a5
 	2ada:	8fd1                	or	a5,a5,a2
+	2adc:	4701                	li	a4,0
+	2ade:	b7c1                	j	2a9e <__adddf3+0x524>
+
+
+Basic_block Name: 1496 start_with_taken_target
+In Function:      <__adddf3>
+Start address:    2adc
+End address:      2ade
+Start instruction: 
+	2adc:	4701                	li	a4,0
+End instruction: 
+	2ade:	b7c1                	j	2a9e <__adddf3+0x524>
+Length:           2
+Taken_Target address:       2a9e
+Taken_Target instruction: 
+	2a9e:	40f807b3          	sub	a5,a6,a5
+Not_Taken_Target address:   
+Not_Taken_Target instruction: 
+	
+Instruction: 
 	2adc:	4701                	li	a4,0
 	2ade:	b7c1                	j	2a9e <__adddf3+0x524>
 
@@ -18221,7 +18598,7 @@ Instruction:
 	2b14:	24068063          	beqz	a3,2d54 <__adddf3+0x7da>
 
 
-Basic_block Name: 1461 start_with_taken_target
+Basic_block Name: 1473 start_with_taken_target
 In Function:      <__adddf3>
 Start address:    2b10
 End address:      2b14
@@ -18373,7 +18750,7 @@ Instruction:
 	2b5e:	b1c9                	j	2820 <__adddf3+0x2a6>
 
 
-Basic_block Name: 1481 start_with_taken_target
+Basic_block Name: 1497 start_with_taken_target
 In Function:      <__adddf3>
 Start address:    2b54
 End address:      2b5e
@@ -18464,7 +18841,7 @@ Instruction:
 	2b8a:	b759                	j	2b10 <__adddf3+0x596>
 
 
-Basic_block Name: 1489 start_with_taken_target
+Basic_block Name: 1505 start_with_taken_target
 In Function:      <__adddf3>
 Start address:    2b88
 End address:      2b8a
@@ -18526,7 +18903,7 @@ Instruction:
 	2b9e:	bf8d                	j	2b10 <__adddf3+0x596>
 
 
-Basic_block Name: 1488 start_with_taken_target
+Basic_block Name: 1504 start_with_taken_target
 In Function:      <__adddf3>
 Start address:    2b9c
 End address:      2b9e
@@ -18667,7 +19044,7 @@ Instruction:
 	2bc6:	c511                	beqz	a0,2bd2 <__adddf3+0x658>
 
 
-Basic_block Name: 1482 start_with_taken_target
+Basic_block Name: 1498 start_with_taken_target
 In Function:      <__adddf3>
 Start address:    2bc6
 End address:      2bc6
@@ -18727,7 +19104,7 @@ Instruction:
 	2bd2:	24089963          	bnez	a7,2e24 <__adddf3+0x8aa>
 
 
-Basic_block Name: 1483 start_with_taken_target
+Basic_block Name: 1499 start_with_taken_target
 In Function:      <__adddf3>
 Start address:    2bd2
 End address:      2bd2
@@ -18856,7 +19233,7 @@ Instruction:
 	2c10:	06090063          	beqz	s2,2c70 <__adddf3+0x6f6>
 
 
-Basic_block Name: 1474 start_with_taken_target
+Basic_block Name: 1487 start_with_taken_target
 In Function:      <__adddf3>
 Start address:    2c10
 End address:      2c10
@@ -18941,7 +19318,7 @@ Instruction:
 	2c38:	06864b63          	blt	a2,s0,2cae <__adddf3+0x734>
 
 
-Basic_block Name: 1486 start_with_taken_target
+Basic_block Name: 1502 start_with_taken_target
 In Function:      <__adddf3>
 Start address:    2c38
 End address:      2c38
@@ -19159,7 +19536,7 @@ Instruction:
 	2cac:	bdc5                	j	2b9c <__adddf3+0x622>
 
 
-Basic_block Name: 1487 start_with_taken_target
+Basic_block Name: 1503 start_with_taken_target
 In Function:      <__adddf3>
 Start address:    2ca2
 End address:      2cac
@@ -19225,7 +19602,7 @@ Instruction:
 	2cc0:	bd81                	j	2b10 <__adddf3+0x596>
 
 
-Basic_block Name: 1466 start_with_taken_target
+Basic_block Name: 1479 start_with_taken_target
 In Function:      <__adddf3>
 Start address:    2cbe
 End address:      2cc0
@@ -19395,7 +19772,7 @@ Instruction:
 	2cfe:	a07d                	j	2dac <__adddf3+0x832>
 
 
-Basic_block Name: 1490 start_with_taken_target
+Basic_block Name: 1507 start_with_taken_target
 In Function:      <__adddf3>
 Start address:    2cf8
 End address:      2cfe
@@ -19412,6 +19789,26 @@ Not_Taken_Target instruction:
 	
 Instruction: 
 	2cf8:	7ff00613          	li	a2,2047
+	2cfc:	4581                	li	a1,0
+	2cfe:	a07d                	j	2dac <__adddf3+0x832>
+
+
+Basic_block Name: 1508 start_with_taken_target
+In Function:      <__adddf3>
+Start address:    2cfc
+End address:      2cfe
+Start instruction: 
+	2cfc:	4581                	li	a1,0
+End instruction: 
+	2cfe:	a07d                	j	2dac <__adddf3+0x832>
+Length:           2
+Taken_Target address:       2dac
+Taken_Target instruction: 
+	2dac:	008006b7          	lui	a3,0x800
+Not_Taken_Target address:   
+Not_Taken_Target instruction: 
+	
+Instruction: 
 	2cfc:	4581                	li	a1,0
 	2cfe:	a07d                	j	2dac <__adddf3+0x832>
 
@@ -19542,7 +19939,7 @@ Instruction:
 	2d24:	bcf5                	j	2820 <__adddf3+0x2a6>
 
 
-Basic_block Name: 1472 start_with_taken_target
+Basic_block Name: 1485 start_with_taken_target
 In Function:      <__adddf3>
 Start address:    2d22
 End address:      2d24
@@ -19583,7 +19980,7 @@ Instruction:
 	2d2a:	bfc9                	j	2cfc <__adddf3+0x782>
 
 
-Basic_block Name: 1491 start_with_taken_target
+Basic_block Name: 1509 start_with_taken_target
 In Function:      <__adddf3>
 Start address:    2d28
 End address:      2d2a
@@ -19970,7 +20367,7 @@ Instruction:
 	2d9c:	ac0689e3          	beqz	a3,286e <__adddf3+0x2f4>
 
 
-Basic_block Name: 1470 start_with_taken_target
+Basic_block Name: 1483 start_with_taken_target
 In Function:      <__adddf3>
 Start address:    2d98
 End address:      2d9c
@@ -20015,7 +20412,7 @@ Instruction:
 	2db2:	ca91                	beqz	a3,2dc6 <__adddf3+0x84c>
 
 
-Basic_block Name: 1468 start_with_taken_target
+Basic_block Name: 1481 start_with_taken_target
 In Function:      <__adddf3>
 Start address:    2dac
 End address:      2db2
@@ -20084,7 +20481,7 @@ Instruction:
 	2dd6:	00d61963          	bne	a2,a3,2de8 <__adddf3+0x86e>
 
 
-Basic_block Name: 1493 start_with_taken_target
+Basic_block Name: 1511 start_with_taken_target
 In Function:      <__adddf3>
 Start address:    2dc6
 End address:      2dd6
@@ -20161,7 +20558,7 @@ Instruction:
 	2e00:	c199                	beqz	a1,2e06 <__adddf3+0x88c>
 
 
-Basic_block Name: 1494 start_with_taken_target
+Basic_block Name: 1512 start_with_taken_target
 In Function:      <__adddf3>
 Start address:    2de8
 End address:      2e00
@@ -20219,7 +20616,7 @@ Instruction:
 	2e18:	8082                	ret
 
 
-Basic_block Name: 1495 start_with_taken_target
+Basic_block Name: 1513 start_with_taken_target
 In Function:      <__adddf3>
 Start address:    2e06
 End address:      2e18
@@ -20306,7 +20703,7 @@ Instruction:
 	2e24:	a40505e3          	beqz	a0,286e <__adddf3+0x2f4>
 
 
-Basic_block Name: 1484 start_with_taken_target
+Basic_block Name: 1500 start_with_taken_target
 In Function:      <__adddf3>
 Start address:    2e24
 End address:      2e24
@@ -20471,7 +20868,7 @@ Instruction:
 	2e92:	a0bd                	j	2f00 <__divdf3+0xce>
 
 
-Basic_block Name: 1496 start_with_taken_target
+Basic_block Name: 1514 start_with_taken_target
 In Function:      <__divdf3>
 Start address:    2e8e
 End address:      2e92
@@ -20488,6 +20885,26 @@ Not_Taken_Target instruction:
 	
 Instruction: 
 	2e8e:	4c01                	li	s8,0
+	2e90:	4481                	li	s1,0
+	2e92:	a0bd                	j	2f00 <__divdf3+0xce>
+
+
+Basic_block Name: 1516 start_with_taken_target
+In Function:      <__divdf3>
+Start address:    2e90
+End address:      2e92
+Start instruction: 
+	2e90:	4481                	li	s1,0
+End instruction: 
+	2e92:	a0bd                	j	2f00 <__divdf3+0xce>
+Length:           2
+Taken_Target address:       2f00
+Taken_Target instruction: 
+	2f00:	00ca9513          	slli	a0,s5,0xc
+Not_Taken_Target address:   
+Not_Taken_Target instruction: 
+	
+Instruction: 
 	2e90:	4481                	li	s1,0
 	2e92:	a0bd                	j	2f00 <__divdf3+0xce>
 
@@ -20600,7 +21017,7 @@ Instruction:
 	2ece:	b7c1                	j	2e8e <__divdf3+0x5c>
 
 
-Basic_block Name: 1497 start_with_taken_target
+Basic_block Name: 1515 start_with_taken_target
 In Function:      <__divdf3>
 Start address:    2ec6
 End address:      2ece
@@ -20805,7 +21222,7 @@ Instruction:
 	2f4c:	0ad56a63          	bltu	a0,a3,3000 <__divdf3+0x1ce>
 
 
-Basic_block Name: 1498 start_with_taken_target
+Basic_block Name: 1517 start_with_taken_target
 In Function:      <__divdf3>
 Start address:    2f38
 End address:      2f4c
@@ -20822,6 +21239,31 @@ Not_Taken_Target instruction:
 	2f50:	00002517          	auipc	a0,0x2
 Instruction: 
 	2f38:	4701                	li	a4,0
+	2f3a:	002c1693          	slli	a3,s8,0x2
+	2f3e:	8ed9                	or	a3,a3,a4
+	2f40:	40ab05b3          	sub	a1,s6,a0
+	2f44:	16fd                	addi	a3,a3,-1
+	2f46:	4539                	li	a0,14
+	2f48:	015a4633          	xor	a2,s4,s5
+	2f4c:	0ad56a63          	bltu	a0,a3,3000 <__divdf3+0x1ce>
+
+
+Basic_block Name: 1520 start_with_taken_target
+In Function:      <__divdf3>
+Start address:    2f3a
+End address:      2f4c
+Start instruction: 
+	2f3a:	002c1693          	slli	a3,s8,0x2
+End instruction: 
+	2f4c:	0ad56a63          	bltu	a0,a3,3000 <__divdf3+0x1ce>
+Length:           7
+Taken_Target address:       3000
+Taken_Target instruction: 
+	3000:	01746663          	bltu	s0,s7,300c <__divdf3+0x1da>
+Not_Taken_Target address:   2f50
+Not_Taken_Target instruction: 
+	2f50:	00002517          	auipc	a0,0x2
+Instruction: 
 	2f3a:	002c1693          	slli	a3,s8,0x2
 	2f3e:	8ed9                	or	a3,a3,a4
 	2f40:	40ab05b3          	sub	a1,s6,a0
@@ -20983,7 +21425,7 @@ Instruction:
 	2f90:	02d7c963          	blt	a5,a3,2fc2 <__divdf3+0x190>
 
 
-Basic_block Name: 1499 start_with_taken_target
+Basic_block Name: 1518 start_with_taken_target
 In Function:      <__divdf3>
 Start address:    2f8a
 End address:      2f90
@@ -21032,7 +21474,7 @@ Instruction:
 	2fb4:	b751                	j	2f38 <__divdf3+0x106>
 
 
-Basic_block Name: 1500 start_with_taken_target
+Basic_block Name: 1519 start_with_taken_target
 In Function:      <__divdf3>
 Start address:    2fac
 End address:      2fb4
@@ -21339,7 +21781,7 @@ Instruction:
 	3052:	00e7fc63          	bgeu	a5,a4,306a <__divdf3+0x238>
 
 
-Basic_block Name: 1511 start_with_taken_target
+Basic_block Name: 1531 start_with_taken_target
 In Function:      <__divdf3>
 Start address:    3020
 End address:      3052
@@ -21442,7 +21884,7 @@ Instruction:
 	3084:	01c77c63          	bgeu	a4,t3,309c <__divdf3+0x26a>
 
 
-Basic_block Name: 1501 start_with_taken_target
+Basic_block Name: 1521 start_with_taken_target
 In Function:      <__divdf3>
 Start address:    306a
 End address:      3084
@@ -21547,7 +21989,7 @@ Instruction:
 	30d6:	008e7363          	bgeu	t3,s0,30dc <__divdf3+0x2aa>
 
 
-Basic_block Name: 1502 start_with_taken_target
+Basic_block Name: 1522 start_with_taken_target
 In Function:      <__divdf3>
 Start address:    309c
 End address:      30d6
@@ -21610,7 +22052,7 @@ Instruction:
 	30f2:	00576763          	bltu	a4,t0,3100 <__divdf3+0x2ce>
 
 
-Basic_block Name: 1503 start_with_taken_target
+Basic_block Name: 1523 start_with_taken_target
 In Function:      <__divdf3>
 Start address:    30dc
 End address:      30f2
@@ -21824,7 +22266,7 @@ Instruction:
 	3144:	0ee80763          	beq	a6,a4,3232 <__divdf3+0x400>
 
 
-Basic_block Name: 1504 start_with_taken_target
+Basic_block Name: 1524 start_with_taken_target
 In Function:      <__divdf3>
 Start address:    3134
 End address:      3144
@@ -21944,7 +22386,7 @@ Instruction:
 	3192:	01e77c63          	bgeu	a4,t5,31aa <__divdf3+0x378>
 
 
-Basic_block Name: 1506 start_with_taken_target
+Basic_block Name: 1526 start_with_taken_target
 In Function:      <__divdf3>
 Start address:    3176
 End address:      3192
@@ -22046,7 +22488,7 @@ Instruction:
 	31d4:	01d7f463          	bgeu	a5,t4,31dc <__divdf3+0x3aa>
 
 
-Basic_block Name: 1507 start_with_taken_target
+Basic_block Name: 1527 start_with_taken_target
 In Function:      <__divdf3>
 Start address:    31aa
 End address:      31d4
@@ -22107,7 +22549,7 @@ Instruction:
 	31f2:	00676663          	bltu	a4,t1,31fe <__divdf3+0x3cc>
 
 
-Basic_block Name: 1508 start_with_taken_target
+Basic_block Name: 1528 start_with_taken_target
 In Function:      <__divdf3>
 Start address:    31dc
 End address:      31f2
@@ -22276,7 +22718,7 @@ Instruction:
 	3226:	00671463          	bne	a4,t1,322e <__divdf3+0x3fc>
 
 
-Basic_block Name: 1510 start_with_taken_target
+Basic_block Name: 1530 start_with_taken_target
 In Function:      <__divdf3>
 Start address:    3226
 End address:      3226
@@ -22335,7 +22777,7 @@ Instruction:
 	3236:	11005863          	blez	a6,3346 <__divdf3+0x514>
 
 
-Basic_block Name: 1505 start_with_taken_target
+Basic_block Name: 1525 start_with_taken_target
 In Function:      <__divdf3>
 Start address:    3232
 End address:      3236
@@ -22479,7 +22921,7 @@ Instruction:
 	326a:	a0b1                	j	32b6 <__divdf3+0x484>
 
 
-Basic_block Name: 1515 start_with_taken_target
+Basic_block Name: 1535 start_with_taken_target
 In Function:      <__divdf3>
 Start address:    3262
 End address:      326a
@@ -22546,7 +22988,7 @@ Instruction:
 	327c:	22d70763          	beq	a4,a3,34aa <__divdf3+0x678>
 
 
-Basic_block Name: 1513 start_with_taken_target
+Basic_block Name: 1533 start_with_taken_target
 In Function:      <__divdf3>
 Start address:    327a
 End address:      327c
@@ -22668,7 +23110,7 @@ Instruction:
 	329e:	a091                	j	32e2 <__divdf3+0x4b0>
 
 
-Basic_block Name: 1512 start_with_taken_target
+Basic_block Name: 1532 start_with_taken_target
 In Function:      <__divdf3>
 Start address:    3296
 End address:      329e
@@ -22816,7 +23258,7 @@ Instruction:
 	32ce:	05074663          	blt	a4,a6,331a <__divdf3+0x4e8>
 
 
-Basic_block Name: 1516 start_with_taken_target
+Basic_block Name: 1536 start_with_taken_target
 In Function:      <__divdf3>
 Start address:    32ca
 End address:      32ce
@@ -22870,7 +23312,7 @@ Instruction:
 	32fa:	c099                	beqz	s1,3300 <__divdf3+0x4ce>
 
 
-Basic_block Name: 1514 start_with_taken_target
+Basic_block Name: 1534 start_with_taken_target
 In Function:      <__divdf3>
 Start address:    32e2
 End address:      32fa
@@ -22931,7 +23373,7 @@ Instruction:
 	3318:	8082                	ret
 
 
-Basic_block Name: 1517 start_with_taken_target
+Basic_block Name: 1537 start_with_taken_target
 In Function:      <__divdf3>
 Start address:    3300
 End address:      3318
@@ -23084,7 +23526,7 @@ Instruction:
 	3340:	b74d                	j	32e2 <__divdf3+0x4b0>
 
 
-Basic_block Name: 1518 start_with_taken_target
+Basic_block Name: 1538 start_with_taken_target
 In Function:      <__divdf3>
 Start address:    333a
 End address:      3340
@@ -23287,7 +23729,7 @@ Instruction:
 	337c:	a031                	j	3388 <__divdf3+0x556>
 
 
-Basic_block Name: 1520 start_with_taken_target
+Basic_block Name: 1540 start_with_taken_target
 In Function:      <__divdf3>
 Start address:    3376
 End address:      337c
@@ -23391,7 +23833,7 @@ Instruction:
 	339a:	0ca6c263          	blt	a3,a0,345e <__divdf3+0x62c>
 
 
-Basic_block Name: 1519 start_with_taken_target
+Basic_block Name: 1539 start_with_taken_target
 In Function:      <__divdf3>
 Start address:    3390
 End address:      339a
@@ -23461,7 +23903,7 @@ Instruction:
 	33c6:	c2ad                	beqz	a3,3428 <__divdf3+0x5f6>
 
 
-Basic_block Name: 1522 start_with_taken_target
+Basic_block Name: 1542 start_with_taken_target
 In Function:      <__divdf3>
 Start address:    33c2
 End address:      33c6
@@ -23585,7 +24027,7 @@ Instruction:
 	33f2:	a81d                	j	3428 <__divdf3+0x5f6>
 
 
-Basic_block Name: 1523 start_with_taken_target
+Basic_block Name: 1543 start_with_taken_target
 In Function:      <__divdf3>
 Start address:    33ea
 End address:      33f2
@@ -23656,7 +24098,7 @@ Instruction:
 	341c:	b75d                	j	33c2 <__divdf3+0x590>
 
 
-Basic_block Name: 1521 start_with_taken_target
+Basic_block Name: 1541 start_with_taken_target
 In Function:      <__divdf3>
 Start address:    3410
 End address:      341c
@@ -23864,7 +24306,7 @@ Instruction:
 	345c:	b559                	j	32e2 <__divdf3+0x4b0>
 
 
-Basic_block Name: 1524 start_with_taken_target
+Basic_block Name: 1544 start_with_taken_target
 In Function:      <__divdf3>
 Start address:    3458
 End address:      345c
@@ -23989,7 +24431,30 @@ Instruction:
 	3484:	bdb9                	j	32e2 <__divdf3+0x4b0>
 
 
-Basic_block Name: 1525 start_with_taken_target
+Basic_block Name: 1546 start_with_taken_target
+In Function:      <__divdf3>
+Start address:    347a
+End address:      3484
+Start instruction: 
+	347a:	838d                	srli	a5,a5,0x3
+End instruction: 
+	3484:	bdb9                	j	32e2 <__divdf3+0x4b0>
+Length:           5
+Taken_Target address:       32e2
+Taken_Target instruction: 
+	32e2:	0752                	slli	a4,a4,0x14
+Not_Taken_Target address:   
+Not_Taken_Target instruction: 
+	
+Instruction: 
+	347a:	838d                	srli	a5,a5,0x3
+	347c:	0024e493          	ori	s1,s1,2
+	3480:	4501                	li	a0,0
+	3482:	4701                	li	a4,0
+	3484:	bdb9                	j	32e2 <__divdf3+0x4b0>
+
+
+Basic_block Name: 1545 start_with_taken_target
 In Function:      <__divdf3>
 Start address:    347c
 End address:      3484
@@ -24007,6 +24472,26 @@ Not_Taken_Target instruction:
 Instruction: 
 	347c:	0024e493          	ori	s1,s1,2
 	3480:	4501                	li	a0,0
+	3482:	4701                	li	a4,0
+	3484:	bdb9                	j	32e2 <__divdf3+0x4b0>
+
+
+Basic_block Name: 1547 start_with_taken_target
+In Function:      <__divdf3>
+Start address:    3482
+End address:      3484
+Start instruction: 
+	3482:	4701                	li	a4,0
+End instruction: 
+	3484:	bdb9                	j	32e2 <__divdf3+0x4b0>
+Length:           2
+Taken_Target address:       32e2
+Taken_Target instruction: 
+	32e2:	0752                	slli	a4,a4,0x14
+Not_Taken_Target address:   
+Not_Taken_Target instruction: 
+	
+Instruction: 
 	3482:	4701                	li	a4,0
 	3484:	bdb9                	j	32e2 <__divdf3+0x4b0>
 
@@ -24179,7 +24664,7 @@ Instruction:
 	34bc:	bb8d                	j	322e <__divdf3+0x3fc>
 
 
-Basic_block Name: 1509 start_with_taken_target
+Basic_block Name: 1529 start_with_taken_target
 In Function:      <__divdf3>
 Start address:    34ba
 End address:      34bc
@@ -24630,7 +25115,7 @@ Instruction:
 	3560:	8082                	ret
 
 
-Basic_block Name: 1526 start_with_taken_target
+Basic_block Name: 1548 start_with_taken_target
 In Function:      <__eqdf2>
 Start address:    3560
 End address:      3560
@@ -25971,7 +26456,7 @@ Instruction:
 	372e:	a0bd                	j	379c <__muldf3+0xce>
 
 
-Basic_block Name: 1527 start_with_taken_target
+Basic_block Name: 1549 start_with_taken_target
 In Function:      <__muldf3>
 Start address:    372a
 End address:      372e
@@ -25988,6 +26473,26 @@ Not_Taken_Target instruction:
 	
 Instruction: 
 	372a:	4c01                	li	s8,0
+	372c:	4481                	li	s1,0
+	372e:	a0bd                	j	379c <__muldf3+0xce>
+
+
+Basic_block Name: 1551 start_with_taken_target
+In Function:      <__muldf3>
+Start address:    372c
+End address:      372e
+Start instruction: 
+	372c:	4481                	li	s1,0
+End instruction: 
+	372e:	a0bd                	j	379c <__muldf3+0xce>
+Length:           2
+Taken_Target address:       379c
+Taken_Target instruction: 
+	379c:	014ad513          	srli	a0,s5,0x14
+Not_Taken_Target address:   
+Not_Taken_Target instruction: 
+	
+Instruction: 
 	372c:	4481                	li	s1,0
 	372e:	a0bd                	j	379c <__muldf3+0xce>
 
@@ -26100,7 +26605,7 @@ Instruction:
 	376a:	b7c1                	j	372a <__muldf3+0x5c>
 
 
-Basic_block Name: 1528 start_with_taken_target
+Basic_block Name: 1550 start_with_taken_target
 In Function:      <__muldf3>
 Start address:    3762
 End address:      376a
@@ -26306,7 +26811,7 @@ Instruction:
 	37e6:	0ed66b63          	bltu	a2,a3,38dc <__muldf3+0x20e>
 
 
-Basic_block Name: 1529 start_with_taken_target
+Basic_block Name: 1552 start_with_taken_target
 In Function:      <__muldf3>
 Start address:    37d0
 End address:      37e6
@@ -26323,6 +26828,32 @@ Not_Taken_Target instruction:
 	37ea:	00002617          	auipc	a2,0x2
 Instruction: 
 	37d0:	4701                	li	a4,0
+	37d2:	002c1693          	slli	a3,s8,0x2
+	37d6:	8ed9                	or	a3,a3,a4
+	37d8:	9baa                	add	s7,s7,a0
+	37da:	16fd                	addi	a3,a3,-1
+	37dc:	4639                	li	a2,14
+	37de:	015b45b3          	xor	a1,s6,s5
+	37e2:	001b8513          	addi	a0,s7,1
+	37e6:	0ed66b63          	bltu	a2,a3,38dc <__muldf3+0x20e>
+
+
+Basic_block Name: 1554 start_with_taken_target
+In Function:      <__muldf3>
+Start address:    37d2
+End address:      37e6
+Start instruction: 
+	37d2:	002c1693          	slli	a3,s8,0x2
+End instruction: 
+	37e6:	0ed66b63          	bltu	a2,a3,38dc <__muldf3+0x20e>
+Length:           8
+Taken_Target address:       38dc
+Taken_Target instruction: 
+	38dc:	6ec1                	lui	t4,0x10
+Not_Taken_Target address:   37ea
+Not_Taken_Target instruction: 
+	37ea:	00002617          	auipc	a2,0x2
+Instruction: 
 	37d2:	002c1693          	slli	a3,s8,0x2
 	37d6:	8ed9                	or	a3,a3,a4
 	37d8:	9baa                	add	s7,s7,a0
@@ -26512,7 +27043,7 @@ Instruction:
 	384a:	b759                	j	37d0 <__muldf3+0x102>
 
 
-Basic_block Name: 1530 start_with_taken_target
+Basic_block Name: 1553 start_with_taken_target
 In Function:      <__muldf3>
 Start address:    3842
 End address:      384a
@@ -26758,7 +27289,7 @@ Instruction:
 	38bc:	c099                	beqz	s1,38c2 <__muldf3+0x1f4>
 
 
-Basic_block Name: 1541 start_with_taken_target
+Basic_block Name: 1565 start_with_taken_target
 In Function:      <__muldf3>
 Start address:    38a4
 End address:      38bc
@@ -26819,7 +27350,7 @@ Instruction:
 	38da:	8082                	ret
 
 
-Basic_block Name: 1531 start_with_taken_target
+Basic_block Name: 1555 start_with_taken_target
 In Function:      <__muldf3>
 Start address:    38c2
 End address:      38da
@@ -26916,7 +27447,7 @@ Instruction:
 	3944:	01ea7463          	bgeu	s4,t5,394c <__muldf3+0x27e>
 
 
-Basic_block Name: 1532 start_with_taken_target
+Basic_block Name: 1556 start_with_taken_target
 In Function:      <__muldf3>
 Start address:    3912
 End address:      3944
@@ -26988,7 +27519,7 @@ Instruction:
 	3988:	00f6f363          	bgeu	a3,a5,398e <__muldf3+0x2c0>
 
 
-Basic_block Name: 1533 start_with_taken_target
+Basic_block Name: 1557 start_with_taken_target
 In Function:      <__muldf3>
 Start address:    394c
 End address:      3988
@@ -27060,7 +27591,7 @@ Instruction:
 	39bc:	01c9f363          	bgeu	s3,t3,39c2 <__muldf3+0x2f4>
 
 
-Basic_block Name: 1534 start_with_taken_target
+Basic_block Name: 1558 start_with_taken_target
 In Function:      <__muldf3>
 Start address:    398e
 End address:      39bc
@@ -27150,7 +27681,7 @@ Instruction:
 	3a30:	cb25                	beqz	a4,3aa0 <__muldf3+0x3d2>
 
 
-Basic_block Name: 1535 start_with_taken_target
+Basic_block Name: 1559 start_with_taken_target
 In Function:      <__muldf3>
 Start address:    39c2
 End address:      3a30
@@ -27231,7 +27762,7 @@ Instruction:
 	3a46:	0d005063          	blez	a6,3b06 <__muldf3+0x438>
 
 
-Basic_block Name: 1536 start_with_taken_target
+Basic_block Name: 1560 start_with_taken_target
 In Function:      <__muldf3>
 Start address:    3a42
 End address:      3a46
@@ -27375,7 +27906,7 @@ Instruction:
 	3a7a:	a815                	j	3aae <__muldf3+0x3e0>
 
 
-Basic_block Name: 1539 start_with_taken_target
+Basic_block Name: 1563 start_with_taken_target
 In Function:      <__muldf3>
 Start address:    3a72
 End address:      3a7a
@@ -27421,7 +27952,7 @@ Instruction:
 	3a86:	1cd70763          	beq	a4,a3,3c54 <__muldf3+0x586>
 
 
-Basic_block Name: 1538 start_with_taken_target
+Basic_block Name: 1562 start_with_taken_target
 In Function:      <__muldf3>
 Start address:    3a84
 End address:      3a86
@@ -27645,7 +28176,7 @@ Instruction:
 	3ac6:	01074a63          	blt	a4,a6,3ada <__muldf3+0x40c>
 
 
-Basic_block Name: 1540 start_with_taken_target
+Basic_block Name: 1564 start_with_taken_target
 In Function:      <__muldf3>
 Start address:    3ac2
 End address:      3ac6
@@ -27811,7 +28342,7 @@ Instruction:
 	3b00:	b355                	j	38a4 <__muldf3+0x1d6>
 
 
-Basic_block Name: 1542 start_with_taken_target
+Basic_block Name: 1566 start_with_taken_target
 In Function:      <__muldf3>
 Start address:    3afa
 End address:      3b00
@@ -28014,7 +28545,7 @@ Instruction:
 	3b3c:	a031                	j	3b48 <__muldf3+0x47a>
 
 
-Basic_block Name: 1544 start_with_taken_target
+Basic_block Name: 1568 start_with_taken_target
 In Function:      <__muldf3>
 Start address:    3b36
 End address:      3b3c
@@ -28118,7 +28649,7 @@ Instruction:
 	3b5a:	0cd64263          	blt	a2,a3,3c1e <__muldf3+0x550>
 
 
-Basic_block Name: 1543 start_with_taken_target
+Basic_block Name: 1567 start_with_taken_target
 In Function:      <__muldf3>
 Start address:    3b50
 End address:      3b5a
@@ -28188,7 +28719,7 @@ Instruction:
 	3b86:	c2ad                	beqz	a3,3be8 <__muldf3+0x51a>
 
 
-Basic_block Name: 1546 start_with_taken_target
+Basic_block Name: 1570 start_with_taken_target
 In Function:      <__muldf3>
 Start address:    3b82
 End address:      3b86
@@ -28312,7 +28843,7 @@ Instruction:
 	3bb2:	a81d                	j	3be8 <__muldf3+0x51a>
 
 
-Basic_block Name: 1547 start_with_taken_target
+Basic_block Name: 1571 start_with_taken_target
 In Function:      <__muldf3>
 Start address:    3baa
 End address:      3bb2
@@ -28383,7 +28914,7 @@ Instruction:
 	3bdc:	b75d                	j	3b82 <__muldf3+0x4b4>
 
 
-Basic_block Name: 1545 start_with_taken_target
+Basic_block Name: 1569 start_with_taken_target
 In Function:      <__muldf3>
 Start address:    3bd0
 End address:      3bdc
@@ -28591,7 +29122,7 @@ Instruction:
 	3c1c:	b161                	j	38a4 <__muldf3+0x1d6>
 
 
-Basic_block Name: 1548 start_with_taken_target
+Basic_block Name: 1572 start_with_taken_target
 In Function:      <__muldf3>
 Start address:    3c18
 End address:      3c1c
@@ -28716,7 +29247,52 @@ Instruction:
 	3c44:	b185                	j	38a4 <__muldf3+0x1d6>
 
 
-Basic_block Name: 1537 start_with_taken_target
+Basic_block Name: 1574 start_with_taken_target
+In Function:      <__muldf3>
+Start address:    3c3a
+End address:      3c44
+Start instruction: 
+	3c3a:	838d                	srli	a5,a5,0x3
+End instruction: 
+	3c44:	b185                	j	38a4 <__muldf3+0x1d6>
+Length:           5
+Taken_Target address:       38a4
+Taken_Target instruction: 
+	38a4:	0752                	slli	a4,a4,0x14
+Not_Taken_Target address:   
+Not_Taken_Target instruction: 
+	
+Instruction: 
+	3c3a:	838d                	srli	a5,a5,0x3
+	3c3c:	0024e493          	ori	s1,s1,2
+	3c40:	4401                	li	s0,0
+	3c42:	4701                	li	a4,0
+	3c44:	b185                	j	38a4 <__muldf3+0x1d6>
+
+
+Basic_block Name: 1573 start_with_taken_target
+In Function:      <__muldf3>
+Start address:    3c3c
+End address:      3c44
+Start instruction: 
+	3c3c:	0024e493          	ori	s1,s1,2
+End instruction: 
+	3c44:	b185                	j	38a4 <__muldf3+0x1d6>
+Length:           4
+Taken_Target address:       38a4
+Taken_Target instruction: 
+	38a4:	0752                	slli	a4,a4,0x14
+Not_Taken_Target address:   
+Not_Taken_Target instruction: 
+	
+Instruction: 
+	3c3c:	0024e493          	ori	s1,s1,2
+	3c40:	4401                	li	s0,0
+	3c42:	4701                	li	a4,0
+	3c44:	b185                	j	38a4 <__muldf3+0x1d6>
+
+
+Basic_block Name: 1561 start_with_taken_target
 In Function:      <__muldf3>
 Start address:    3c42
 End address:      3c44
@@ -28947,7 +29523,7 @@ Instruction:
 	3cd6:	3c931c63          	bne	t1,s1,40ae <__subdf3+0x442>
 
 
-Basic_block Name: 1549 start_with_taken_target
+Basic_block Name: 1575 start_with_taken_target
 In Function:      <__subdf3>
 Start address:    3cd2
 End address:      3cd6
@@ -29133,7 +29709,7 @@ Instruction:
 	3d1a:	a041                	j	3d9a <__subdf3+0x12e>
 
 
-Basic_block Name: 1557 start_with_taken_target
+Basic_block Name: 1587 start_with_taken_target
 In Function:      <__subdf3>
 Start address:    3d18
 End address:      3d1a
@@ -29215,7 +29791,7 @@ Instruction:
 	3d30:	ac9d                	j	3fa6 <__subdf3+0x33a>
 
 
-Basic_block Name: 1582 start_with_taken_target
+Basic_block Name: 1616 start_with_taken_target
 In Function:      <__subdf3>
 Start address:    3d2e
 End address:      3d30
@@ -29341,7 +29917,7 @@ Instruction:
 	3d62:	08a64863          	blt	a2,a0,3df2 <__subdf3+0x186>
 
 
-Basic_block Name: 1552 start_with_taken_target
+Basic_block Name: 1578 start_with_taken_target
 In Function:      <__subdf3>
 Start address:    3d5e
 End address:      3d62
@@ -29416,7 +29992,33 @@ Instruction:
 	3da0:	cbad                	beqz	a5,3e12 <__subdf3+0x1a6>
 
 
-Basic_block Name: 1551 start_with_taken_target
+Basic_block Name: 1583 start_with_taken_target
+In Function:      <__subdf3>
+Start address:    3d8e
+End address:      3da0
+Start instruction: 
+	3d8e:	983e                	add	a6,a6,a5
+End instruction: 
+	3da0:	cbad                	beqz	a5,3e12 <__subdf3+0x1a6>
+Length:           8
+Taken_Target address:       3e12
+Taken_Target instruction: 
+	3e12:	8736                	mv	a4,a3
+Not_Taken_Target address:   3da2
+Not_Taken_Target instruction: 
+	3da2:	0605                	addi	a2,a2,1
+Instruction: 
+	3d8e:	983e                	add	a6,a6,a5
+	3d90:	96ba                	add	a3,a3,a4
+	3d92:	00f837b3          	sltu	a5,a6,a5
+	3d96:	96be                	add	a3,a3,a5
+	3d98:	8622                	mv	a2,s0
+	3d9a:	008007b7          	lui	a5,0x800
+	3d9e:	8ff5                	and	a5,a5,a3
+	3da0:	cbad                	beqz	a5,3e12 <__subdf3+0x1a6>
+
+
+Basic_block Name: 1577 start_with_taken_target
 In Function:      <__subdf3>
 Start address:    3d9a
 End address:      3da0
@@ -29533,7 +30135,7 @@ Instruction:
 	3df0:	bf79                	j	3d8e <__subdf3+0x122>
 
 
-Basic_block Name: 1555 start_with_taken_target
+Basic_block Name: 1582 start_with_taken_target
 In Function:      <__subdf3>
 Start address:    3de2
 End address:      3df0
@@ -29552,6 +30154,26 @@ Instruction:
 	3de2:	01066833          	or	a6,a2,a6
 	3de6:	01003833          	snez	a6,a6
 	3dea:	0105e833          	or	a6,a1,a6
+	3dee:	4681                	li	a3,0
+	3df0:	bf79                	j	3d8e <__subdf3+0x122>
+
+
+Basic_block Name: 1584 start_with_taken_target
+In Function:      <__subdf3>
+Start address:    3dee
+End address:      3df0
+Start instruction: 
+	3dee:	4681                	li	a3,0
+End instruction: 
+	3df0:	bf79                	j	3d8e <__subdf3+0x122>
+Length:           2
+Taken_Target address:       3d8e
+Taken_Target instruction: 
+	3d8e:	983e                	add	a6,a6,a5
+Not_Taken_Target address:   
+Not_Taken_Target instruction: 
+	
+Instruction: 
 	3dee:	4681                	li	a3,0
 	3df0:	bf79                	j	3d8e <__subdf3+0x122>
 
@@ -29656,7 +30278,7 @@ Instruction:
 	3e0e:	02f60663          	beq	a2,a5,3e3a <__subdf3+0x1ce>
 
 
-Basic_block Name: 1571 start_with_taken_target
+Basic_block Name: 1604 start_with_taken_target
 In Function:      <__subdf3>
 Start address:    3e0e
 End address:      3e0e
@@ -29926,7 +30548,7 @@ Instruction:
 	3e78:	bde9                	j	3d52 <__subdf3+0xe6>
 
 
-Basic_block Name: 1559 start_with_taken_target
+Basic_block Name: 1589 start_with_taken_target
 In Function:      <__subdf3>
 Start address:    3e76
 End address:      3e78
@@ -29969,7 +30591,7 @@ Instruction:
 	3e86:	07164363          	blt	a2,a7,3eec <__subdf3+0x280>
 
 
-Basic_block Name: 1558 start_with_taken_target
+Basic_block Name: 1588 start_with_taken_target
 In Function:      <__subdf3>
 Start address:    3e82
 End address:      3e86
@@ -30043,7 +30665,7 @@ Instruction:
 	3ec0:	bde9                	j	3d9a <__subdf3+0x12e>
 
 
-Basic_block Name: 1561 start_with_taken_target
+Basic_block Name: 1591 start_with_taken_target
 In Function:      <__subdf3>
 Start address:    3eb2
 End address:      3ec0
@@ -30117,7 +30739,7 @@ Instruction:
 	3eea:	b7e1                	j	3eb2 <__subdf3+0x246>
 
 
-Basic_block Name: 1560 start_with_taken_target
+Basic_block Name: 1590 start_with_taken_target
 In Function:      <__subdf3>
 Start address:    3ee0
 End address:      3eea
@@ -30136,6 +30758,26 @@ Instruction:
 	3ee0:	8fc9                	or	a5,a5,a0
 	3ee2:	00f037b3          	snez	a5,a5
 	3ee6:	8fd1                	or	a5,a5,a2
+	3ee8:	4701                	li	a4,0
+	3eea:	b7e1                	j	3eb2 <__subdf3+0x246>
+
+
+Basic_block Name: 1592 start_with_taken_target
+In Function:      <__subdf3>
+Start address:    3ee8
+End address:      3eea
+Start instruction: 
+	3ee8:	4701                	li	a4,0
+End instruction: 
+	3eea:	b7e1                	j	3eb2 <__subdf3+0x246>
+Length:           2
+Taken_Target address:       3eb2
+Taken_Target instruction: 
+	3eb2:	97c2                	add	a5,a5,a6
+Not_Taken_Target address:   
+Not_Taken_Target instruction: 
+	
+Instruction: 
 	3ee8:	4701                	li	a4,0
 	3eea:	b7e1                	j	3eb2 <__subdf3+0x246>
 
@@ -30292,7 +30934,7 @@ Instruction:
 	3f38:	12069463          	bnez	a3,4060 <__subdf3+0x3f4>
 
 
-Basic_block Name: 1550 start_with_taken_target
+Basic_block Name: 1576 start_with_taken_target
 In Function:      <__subdf3>
 Start address:    3f34
 End address:      3f38
@@ -30556,7 +31198,7 @@ Instruction:
 	3f8e:	b75d                	j	3f34 <__subdf3+0x2c8>
 
 
-Basic_block Name: 1564 start_with_taken_target
+Basic_block Name: 1595 start_with_taken_target
 In Function:      <__subdf3>
 Start address:    3f88
 End address:      3f8e
@@ -30642,7 +31284,7 @@ Instruction:
 	3fac:	ca91                	beqz	a3,3fc0 <__subdf3+0x354>
 
 
-Basic_block Name: 1553 start_with_taken_target
+Basic_block Name: 1579 start_with_taken_target
 In Function:      <__subdf3>
 Start address:    3fa6
 End address:      3fac
@@ -30711,7 +31353,7 @@ Instruction:
 	3fd0:	00d61963          	bne	a2,a3,3fe2 <__subdf3+0x376>
 
 
-Basic_block Name: 1565 start_with_taken_target
+Basic_block Name: 1596 start_with_taken_target
 In Function:      <__subdf3>
 Start address:    3fc0
 End address:      3fd0
@@ -30788,7 +31430,7 @@ Instruction:
 	3ffa:	c019                	beqz	s0,4000 <__subdf3+0x394>
 
 
-Basic_block Name: 1566 start_with_taken_target
+Basic_block Name: 1597 start_with_taken_target
 In Function:      <__subdf3>
 Start address:    3fe2
 End address:      3ffa
@@ -30844,7 +31486,7 @@ Instruction:
 	400e:	8082                	ret
 
 
-Basic_block Name: 1567 start_with_taken_target
+Basic_block Name: 1598 start_with_taken_target
 In Function:      <__subdf3>
 Start address:    4000
 End address:      400e
@@ -30919,7 +31561,51 @@ Instruction:
 	4034:	b701                	j	3f34 <__subdf3+0x2c8>
 
 
-Basic_block Name: 1554 start_with_taken_target
+Basic_block Name: 1581 start_with_taken_target
+In Function:      <__subdf3>
+Start address:    402a
+End address:      4034
+Start instruction: 
+	402a:	0107e7b3          	or	a5,a5,a6
+End instruction: 
+	4034:	b701                	j	3f34 <__subdf3+0x2c8>
+Length:           5
+Taken_Target address:       3f34
+Taken_Target instruction: 
+	3f34:	0077f693          	andi	a3,a5,7
+Not_Taken_Target address:   
+Not_Taken_Target instruction: 
+	
+Instruction: 
+	402a:	0107e7b3          	or	a5,a5,a6
+	402e:	8305                	srli	a4,a4,0x1
+	4030:	4581                	li	a1,0
+	4032:	4401                	li	s0,0
+	4034:	b701                	j	3f34 <__subdf3+0x2c8>
+
+
+Basic_block Name: 1586 start_with_taken_target
+In Function:      <__subdf3>
+Start address:    4030
+End address:      4034
+Start instruction: 
+	4030:	4581                	li	a1,0
+End instruction: 
+	4034:	b701                	j	3f34 <__subdf3+0x2c8>
+Length:           3
+Taken_Target address:       3f34
+Taken_Target instruction: 
+	3f34:	0077f693          	andi	a3,a5,7
+Not_Taken_Target address:   
+Not_Taken_Target instruction: 
+	
+Instruction: 
+	4030:	4581                	li	a1,0
+	4032:	4401                	li	s0,0
+	4034:	b701                	j	3f34 <__subdf3+0x2c8>
+
+
+Basic_block Name: 1580 start_with_taken_target
 In Function:      <__subdf3>
 Start address:    4032
 End address:      4034
@@ -31082,7 +31768,29 @@ Instruction:
 	4066:	48d98863          	beq	s3,a3,44f6 <__subdf3+0x88a>
 
 
-Basic_block Name: 1563 start_with_taken_target
+Basic_block Name: 1617 start_with_taken_target
+In Function:      <__subdf3>
+Start address:    405e
+End address:      4066
+Start instruction: 
+	405e:	4415                	li	s0,5
+End instruction: 
+	4066:	48d98863          	beq	s3,a3,44f6 <__subdf3+0x88a>
+Length:           4
+Taken_Target address:       44f6
+Taken_Target instruction: 
+	44f6:	fced                	bnez	s1,44f0 <__subdf3+0x884>
+Not_Taken_Target address:   406a
+Not_Taken_Target instruction: 
+	406a:	468d                	li	a3,3
+Instruction: 
+	405e:	4415                	li	s0,5
+	4060:	4689                	li	a3,2
+	4062:	00146413          	ori	s0,s0,1
+	4066:	48d98863          	beq	s3,a3,44f6 <__subdf3+0x88a>
+
+
+Basic_block Name: 1594 start_with_taken_target
 In Function:      <__subdf3>
 Start address:    4060
 End address:      4066
@@ -31186,7 +31894,7 @@ Instruction:
 	408a:	a1bd                	j	44f8 <__subdf3+0x88c>
 
 
-Basic_block Name: 1585 start_with_taken_target
+Basic_block Name: 1620 start_with_taken_target
 In Function:      <__subdf3>
 Start address:    4082
 End address:      408a
@@ -31448,7 +32156,7 @@ Instruction:
 	40d4:	a0a9                	j	411e <__subdf3+0x4b2>
 
 
-Basic_block Name: 1572 start_with_taken_target
+Basic_block Name: 1605 start_with_taken_target
 In Function:      <__subdf3>
 Start address:    40d2
 End address:      40d4
@@ -31563,7 +32271,33 @@ Instruction:
 	4126:	ce0786e3          	beqz	a5,3e12 <__subdf3+0x1a6>
 
 
-Basic_block Name: 1568 start_with_taken_target
+Basic_block Name: 1602 start_with_taken_target
+In Function:      <__subdf3>
+Start address:    410e
+End address:      4126
+Start instruction: 
+	410e:	41078833          	sub	a6,a5,a6
+End instruction: 
+	4126:	ce0786e3          	beqz	a5,3e12 <__subdf3+0x1a6>
+Length:           8
+Taken_Target address:       3e12
+Taken_Target instruction: 
+	3e12:	8736                	mv	a4,a3
+Not_Taken_Target address:   412a
+Not_Taken_Target instruction: 
+	412a:	197d                	addi	s2,s2,-1
+Instruction: 
+	410e:	41078833          	sub	a6,a5,a6
+	4112:	40d706b3          	sub	a3,a4,a3
+	4116:	0107b7b3          	sltu	a5,a5,a6
+	411a:	8e9d                	sub	a3,a3,a5
+	411c:	8622                	mv	a2,s0
+	411e:	00800937          	lui	s2,0x800
+	4122:	0126f7b3          	and	a5,a3,s2
+	4126:	ce0786e3          	beqz	a5,3e12 <__subdf3+0x1a6>
+
+
+Basic_block Name: 1599 start_with_taken_target
 In Function:      <__subdf3>
 Start address:    411e
 End address:      4126
@@ -31698,7 +32432,7 @@ Instruction:
 	4172:	bf71                	j	410e <__subdf3+0x4a2>
 
 
-Basic_block Name: 1570 start_with_taken_target
+Basic_block Name: 1601 start_with_taken_target
 In Function:      <__subdf3>
 Start address:    4164
 End address:      4172
@@ -31717,6 +32451,26 @@ Instruction:
 	4164:	01066833          	or	a6,a2,a6
 	4168:	01003833          	snez	a6,a6
 	416c:	0105e833          	or	a6,a1,a6
+	4170:	4681                	li	a3,0
+	4172:	bf71                	j	410e <__subdf3+0x4a2>
+
+
+Basic_block Name: 1603 start_with_taken_target
+In Function:      <__subdf3>
+Start address:    4170
+End address:      4172
+Start instruction: 
+	4170:	4681                	li	a3,0
+End instruction: 
+	4172:	bf71                	j	410e <__subdf3+0x4a2>
+Length:           2
+Taken_Target address:       410e
+Taken_Target instruction: 
+	410e:	41078833          	sub	a6,a5,a6
+Not_Taken_Target address:   
+Not_Taken_Target instruction: 
+	
+Instruction: 
 	4170:	4681                	li	a3,0
 	4172:	bf71                	j	410e <__subdf3+0x4a2>
 
@@ -31950,7 +32704,7 @@ Instruction:
 	41d0:	b15d                	j	3e76 <__subdf3+0x20a>
 
 
-Basic_block Name: 1574 start_with_taken_target
+Basic_block Name: 1607 start_with_taken_target
 In Function:      <__subdf3>
 Start address:    41ce
 End address:      41d0
@@ -32076,7 +32830,7 @@ Instruction:
 	4202:	07164763          	blt	a2,a7,4270 <__subdf3+0x604>
 
 
-Basic_block Name: 1573 start_with_taken_target
+Basic_block Name: 1606 start_with_taken_target
 In Function:      <__subdf3>
 Start address:    41fe
 End address:      4202
@@ -32151,7 +32905,7 @@ Instruction:
 	4244:	bde9                	j	411e <__subdf3+0x4b2>
 
 
-Basic_block Name: 1576 start_with_taken_target
+Basic_block Name: 1609 start_with_taken_target
 In Function:      <__subdf3>
 Start address:    422e
 End address:      4244
@@ -32226,7 +32980,7 @@ Instruction:
 	426e:	b7c1                	j	422e <__subdf3+0x5c2>
 
 
-Basic_block Name: 1575 start_with_taken_target
+Basic_block Name: 1608 start_with_taken_target
 In Function:      <__subdf3>
 Start address:    4264
 End address:      426e
@@ -32245,6 +32999,26 @@ Instruction:
 	4264:	8fc9                	or	a5,a5,a0
 	4266:	00f037b3          	snez	a5,a5
 	426a:	8fd1                	or	a5,a5,a2
+	426c:	4701                	li	a4,0
+	426e:	b7c1                	j	422e <__subdf3+0x5c2>
+
+
+Basic_block Name: 1610 start_with_taken_target
+In Function:      <__subdf3>
+Start address:    426c
+End address:      426e
+Start instruction: 
+	426c:	4701                	li	a4,0
+End instruction: 
+	426e:	b7c1                	j	422e <__subdf3+0x5c2>
+Length:           2
+Taken_Target address:       422e
+Taken_Target instruction: 
+	422e:	40f807b3          	sub	a5,a6,a5
+Not_Taken_Target address:   
+Not_Taken_Target instruction: 
+	
+Instruction: 
 	426c:	4701                	li	a4,0
 	426e:	b7c1                	j	422e <__subdf3+0x5c2>
 
@@ -32374,7 +33148,7 @@ Instruction:
 	42a4:	24068163          	beqz	a3,44e6 <__subdf3+0x87a>
 
 
-Basic_block Name: 1556 start_with_taken_target
+Basic_block Name: 1585 start_with_taken_target
 In Function:      <__subdf3>
 Start address:    42a0
 End address:      42a4
@@ -32526,7 +33300,7 @@ Instruction:
 	42ee:	b199                	j	3f34 <__subdf3+0x2c8>
 
 
-Basic_block Name: 1577 start_with_taken_target
+Basic_block Name: 1611 start_with_taken_target
 In Function:      <__subdf3>
 Start address:    42e4
 End address:      42ee
@@ -32617,7 +33391,7 @@ Instruction:
 	431a:	b759                	j	42a0 <__subdf3+0x634>
 
 
-Basic_block Name: 1581 start_with_taken_target
+Basic_block Name: 1615 start_with_taken_target
 In Function:      <__subdf3>
 Start address:    4318
 End address:      431a
@@ -32679,7 +33453,7 @@ Instruction:
 	432e:	bf8d                	j	42a0 <__subdf3+0x634>
 
 
-Basic_block Name: 1580 start_with_taken_target
+Basic_block Name: 1614 start_with_taken_target
 In Function:      <__subdf3>
 Start address:    432c
 End address:      432e
@@ -33008,7 +33782,7 @@ Instruction:
 	43a6:	04090f63          	beqz	s2,4404 <__subdf3+0x798>
 
 
-Basic_block Name: 1569 start_with_taken_target
+Basic_block Name: 1600 start_with_taken_target
 In Function:      <__subdf3>
 Start address:    43a6
 End address:      43a6
@@ -33093,7 +33867,7 @@ Instruction:
 	43cc:	06864a63          	blt	a2,s0,4440 <__subdf3+0x7d4>
 
 
-Basic_block Name: 1578 start_with_taken_target
+Basic_block Name: 1612 start_with_taken_target
 In Function:      <__subdf3>
 Start address:    43cc
 End address:      43cc
@@ -33311,7 +34085,7 @@ Instruction:
 	443e:	b5fd                	j	432c <__subdf3+0x6c0>
 
 
-Basic_block Name: 1579 start_with_taken_target
+Basic_block Name: 1613 start_with_taken_target
 In Function:      <__subdf3>
 Start address:    4434
 End address:      443e
@@ -33377,7 +34151,7 @@ Instruction:
 	4452:	b5b9                	j	42a0 <__subdf3+0x634>
 
 
-Basic_block Name: 1562 start_with_taken_target
+Basic_block Name: 1593 start_with_taken_target
 In Function:      <__subdf3>
 Start address:    4450
 End address:      4452
@@ -33546,7 +34320,7 @@ Instruction:
 	448e:	b045                	j	3d2e <__subdf3+0xc2>
 
 
-Basic_block Name: 1583 start_with_taken_target
+Basic_block Name: 1618 start_with_taken_target
 In Function:      <__subdf3>
 Start address:    448a
 End address:      448e
@@ -33673,7 +34447,7 @@ Instruction:
 	44b4:	b441                	j	3f34 <__subdf3+0x2c8>
 
 
-Basic_block Name: 1584 start_with_taken_target
+Basic_block Name: 1619 start_with_taken_target
 In Function:      <__subdf3>
 Start address:    44b2
 End address:      44b4
@@ -34397,7 +35171,7 @@ Instruction:
 	45bc:	c199                	beqz	a1,45c2 <__fixdfsi+0x8a>
 
 
-Basic_block Name: 1589 start_with_taken_target
+Basic_block Name: 1624 start_with_taken_target
 In Function:      <__fixdfsi>
 Start address:    45bc
 End address:      45bc
@@ -34436,7 +35210,7 @@ Instruction:
 	45c2:	c319                	beqz	a4,45c8 <__fixdfsi+0x90>
 
 
-Basic_block Name: 1586 start_with_taken_target
+Basic_block Name: 1621 start_with_taken_target
 In Function:      <__fixdfsi>
 Start address:    45c2
 End address:      45c2
@@ -34475,7 +35249,7 @@ Instruction:
 	45c8:	8082                	ret
 
 
-Basic_block Name: 1587 start_with_taken_target
+Basic_block Name: 1622 start_with_taken_target
 In Function:      <__fixdfsi>
 Start address:    45c8
 End address:      45c8
@@ -34541,7 +35315,7 @@ Instruction:
 	45ee:	b7f9                	j	45bc <__fixdfsi+0x84>
 
 
-Basic_block Name: 1588 start_with_taken_target
+Basic_block Name: 1623 start_with_taken_target
 In Function:      <__fixdfsi>
 Start address:    45dc
 End address:      45ee
@@ -34841,7 +35615,28 @@ Instruction:
 	466c:	a00d                	j	468e <__fixunsdfsi+0x90>
 
 
-Basic_block Name: 1590 start_with_taken_target
+Basic_block Name: 1627 start_with_taken_target
+In Function:      <__fixunsdfsi>
+Start address:    4666
+End address:      466c
+Start instruction: 
+	4666:	47c1                	li	a5,16
+End instruction: 
+	466c:	a00d                	j	468e <__fixunsdfsi+0x90>
+Length:           3
+Taken_Target address:       468e
+Taken_Target instruction: 
+	468e:	8082                	ret
+Not_Taken_Target address:   
+Not_Taken_Target instruction: 
+	
+Instruction: 
+	4666:	47c1                	li	a5,16
+	4668:	0017a073          	csrs	fflags,a5
+	466c:	a00d                	j	468e <__fixunsdfsi+0x90>
+
+
+Basic_block Name: 1625 start_with_taken_target
 In Function:      <__fixunsdfsi>
 Start address:    4668
 End address:      466c
@@ -34907,7 +35702,7 @@ Instruction:
 	468c:	fb69                	bnez	a4,465e <__fixunsdfsi+0x60>
 
 
-Basic_block Name: 1591 start_with_taken_target
+Basic_block Name: 1626 start_with_taken_target
 In Function:      <__fixunsdfsi>
 Start address:    4680
 End address:      468c
@@ -35095,7 +35890,7 @@ Instruction:
 	46ea:	8082                	ret
 
 
-Basic_block Name: 1592 start_with_taken_target
+Basic_block Name: 1628 start_with_taken_target
 In Function:      <__floatsidf>
 Start address:    46d0
 End address:      46ea
@@ -35149,7 +35944,7 @@ Instruction:
 	46f6:	bfe9                	j	46d0 <__floatsidf+0x38>
 
 
-Basic_block Name: 1593 start_with_taken_target
+Basic_block Name: 1629 start_with_taken_target
 In Function:      <__floatsidf>
 Start address:    46f4
 End address:      46f6
@@ -35287,7 +36082,7 @@ Instruction:
 	4738:	8082                	ret
 
 
-Basic_block Name: 1594 start_with_taken_target
+Basic_block Name: 1630 start_with_taken_target
 In Function:      <__floatunsidf>
 Start address:    4724
 End address:      4738
@@ -35408,7 +36203,7 @@ Instruction:
 	4778:	8082                	ret
 
 
-Basic_block Name: 1595 start_with_taken_target
+Basic_block Name: 1631 start_with_taken_target
 In Function:      <__clzsi2>
 Start address:    475c
 End address:      4778

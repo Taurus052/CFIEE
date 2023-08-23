@@ -1,7 +1,7 @@
 '''
 Author: Taurus052
 Date: 2023-07-14 15:34:43
-LastEditTime: 2023-07-17 20:00:08
+LastEditTime: 2023-08-22 17:41:51
 '''
 
 import re
@@ -14,10 +14,9 @@ function_pattern = r"\s*([\da-f]+)\s*<(.+)>:"
 instruction_pattern = r'^\s*([\da-f]+):\s+([\da-f]+)\s+([^:]+)\s+(.+)'
 
 def main(input_file):
-    type = judge_type(input_file)
-    if type == 1:
-        instructions = extract_disassembly_instructions(input_file)
+    instructions = extract_disassembly_instructions(input_file)
     rewrite_objdump_file(output_file, instructions)
+        
     
 def judge_type(input_file_path):
     type = None
@@ -49,5 +48,6 @@ def rewrite_objdump_file(output_file, instructions):
         for instruction in instructions:
             file.write(instruction)
 
-main(input_file)
+if __name__ == '__main__':
+    main(input_file)
 

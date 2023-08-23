@@ -1,7 +1,7 @@
 '''
 Author: Taurus052
 Date: 2023-07-14 15:34:43
-LastEditTime: 2023-07-27 15:26:45
+LastEditTime: 2023-08-23 10:29:27
 '''
 
 import os
@@ -13,6 +13,7 @@ import threading
 import subprocess
 import matplotlib.pyplot as plt
 import graphviz
+from multiprocessing import Process, Queue
 
 # branch instructions
 branch_inst = ["beq", "bne", "blt", "bltu", "bge", "bgeu", "beqz", "bnez", "bltz", "blez", "bgtz", "bgez", "bgt", "bgtu", "ble", "bleu"]
@@ -918,26 +919,24 @@ def create_basic_blocks_start_with_taken_target(all_taken_target_addr, basic_blo
     The function returns the updated list of basic blocks.
     '''
     
-    # Create a set to store encountered parameters
-    encountered_params = set()
-    
     # Iterate through all_taken_target_addr to handle new basic block creation
     for addr_pair in all_taken_target_addr:
         jump_addr, target_addr = addr_pair.split(",")
         
         # Check if target address is not already in order_start_addr_list
         if target_addr not in order_start_addr_list:
-            # Find the basic block that contains the target address
-            for bb in basic_block:
-                if int(bb.start,16) <= int(target_addr,16) <= int(bb.end,16):
-                    # Create a string representation of the basic block parameters
-                    bb_params_str = f"{bb.start}_{bb.end}_{bb.taken_target}_{bb.not_taken_target}"
-                    
-                    # Check if the parameters are encountered before
-                    if bb_params_str not in encountered_params:
-                        # Add the parameters to the set
-                        encountered_params.add(bb_params_str)
-                        
+            # Check if a basic block with the same start address exists
+            existing_bb_with_start = next((bb for bb in basic_block if bb.start == target_addr), None)
+            
+            if existing_bb_with_start:
+                in_bb = next((bb for bb in basic_block if int(bb.start,16) <= int(target_addr,16) <= int(bb.end,16)), None)
+                # Update the existing basic block's end address
+                existing_bb_with_start.end = in_bb.end
+                existing_bb_with_start.length = calculate_block_length(existing_bb_with_start.start, existing_bb_with_start.end, used_function_instr)
+            else:
+                # Find the basic block that contains the target address
+                for bb in basic_block:
+                    if int(bb.start,16) <= int(target_addr,16) <= int(bb.end,16):
                         # Create a new basic block with the target address as start and bb.end as end
                         new_bb_name = str(len(basic_block)) + ' start_with_taken_target'
                         new_bb_start = target_addr
@@ -964,8 +963,10 @@ def create_basic_blocks_start_with_taken_target(all_taken_target_addr, basic_blo
                             new_bb_length, new_bb_taken_target, new_bb_not_taken_target, new_bb_start_instr, \
                                 new_bb_end_instr, new_bb_taken_target_instr, new_bb_not_taken_target_instr, new_bb_instr)
                         basic_block.append(new_bb)
-                    break
+                        break
+
     return basic_block
+
 
 def sort_basic_blocks(basic_block):
     sorted_basic_blocks = sorted(basic_block, key=lambda bb: int(bb.start, 16))
@@ -1010,7 +1011,7 @@ def generate_CFG(basic_block, program_name, output_directory):
 
     # Add edges to the graph
     for i, bb in enumerate (basic_block):
-        if bb.taken_target is not '':
+        if bb.taken_target != '':
             if isinstance(bb.taken_target, list):
                 for target_str in bb.taken_target:
                     target = target_str.split()[1]
@@ -1033,11 +1034,11 @@ def generate_CFG(basic_block, program_name, output_directory):
                         if bb.taken_target == basic_block[b_num].start:
                             graph1.edge(bb_nodes[bb.name], node_name)
         
-        elif bb.taken_target is '' and i+1 < len(basic_block):
+        elif bb.taken_target == '' and i+1 < len(basic_block):
             next_bb = basic_block[i+1]
             graph1.edge(bb_nodes[bb.name], bb_nodes[next_bb.name])
 
-        if bb.not_taken_target is not '':
+        if bb.not_taken_target != '':
             for b_num, node_name in bb_nodes.items():
                 if isinstance(b_num, str):
                     num = int(b_num.split()[0])
@@ -1051,107 +1052,7 @@ def generate_CFG(basic_block, program_name, output_directory):
     output_file = os.path.join(output_directory, f'{program_name}_CFG')
 
     # Render the graph and save it to a file
-    graph1.render(filename=output_file, cleanup=True, view=False)
-
-# def generate_main_CFG(basic_block, program_name, output_directory, funcntion_addr_ranges):
-#     graph2 = graphviz.Digraph(format='svg')
-    
-#     main_bb_nodes = {}
-#     ext_func_bb_nodes = {}
-#     main_start_addr = funcntion_addr_ranges['<main>'][0]
-#     main_end_addr = funcntion_addr_ranges['<main>'][1]
-    
-#     # Add nodes to the graph for the main function
-#     for main_bb in basic_block:
-#         if main_bb.func == '<main>':
-#             label = f'Basic_block Name: {main_bb.name}\nIn Function: {main_bb.func}\nStart address: {main_bb.start}\nEnd address: {main_bb.end}\nLength: {main_bb.length}\nTaken_Target: {main_bb.taken_target}'
-#             if main_bb.not_taken_target is not None:
-#                 label += f'\nNot_Taken_Target address: {main_bb.not_taken_target}'
-
-#             m_node_name = str(main_bb.name)
-#             graph2.node(m_node_name, label=label, shape='box')
-#             main_bb_nodes[main_bb.name] = m_node_name
-
-#     # Identify basic blocks from external functions called by the main function
-#     for main_bb in basic_block:
-#         if main_bb.func == '<main>' and main_bb.taken_target is not None:
-#             if isinstance(main_bb.taken_target, list):
-#                 for target_str in main_bb.taken_target:
-#                     target = target_str.split()[1]
-#                     for bb in basic_block:
-#                         if bb.start == target and bb.func != '<main>':
-#                             label = f'Basic_block Name: {bb.name}\nIn Function: {bb.func}\nStart address: {bb.start}\nEnd address: {bb.end}\nLength: {bb.length}\nTaken_Target: {bb.taken_target}'
-#                             if bb.not_taken_target is not None:
-#                                 label += f'\nNot_Taken_Target address: {bb.not_taken_target}'
-
-#                             e_node_name = str(bb.name)
-#                             graph2.node(e_node_name, label=label, shape='box')
-#                             ext_func_bb_nodes[bb.name] = e_node_name
-#             else:
-#                 target = main_bb.taken_target
-#                 for bb in basic_block:
-#                     if bb.start == target and bb.func != '<main>':
-#                         label = f'Basic_block Name: {bb.name}\nIn Function: {bb.func}\nStart address: {bb.start}\nEnd address: {bb.end}\nLength: {bb.length}\nTaken_Target: {bb.taken_target}'
-#                         if bb.not_taken_target is not None:
-#                             label += f'\nNot_Taken_Target address: {bb.not_taken_target}'
-
-#                         e_node_name = str(bb.name)
-#                         graph2.node(e_node_name, label=label, shape='box')
-#                         ext_func_bb_nodes[bb.name] = e_node_name
-
-#     # Add edges to the graph for the main function's outgoing branches
-#     for main_bb in basic_block:
-#         if main_bb.func == '<main>':
-#             if main_bb.taken_target is not None:
-#                 if isinstance(main_bb.taken_target, list):
-#                     for target_str in main_bb.taken_target:
-#                         target = target_str.split()[-1]  # Correctly extract the target address
-#                         for b_num, m_node_name in main_bb_nodes.items():
-#                             if isinstance(b_num, str):
-#                                 num = int(b_num.split()[0])
-#                                 if target == basic_block[int(num)].start:
-#                                     graph2.edge(main_bb_nodes[main_bb.name], m_node_name)
-#                                 elif num in ext_func_bb_nodes and target == basic_block[int(num)].start:
-#                                     graph2.edge(main_bb_nodes[main_bb.name], ext_func_bb_nodes[num])
-#                             else:
-#                                 if target == basic_block[b_num].start:
-#                                     graph2.edge(main_bb_nodes[main_bb.name], m_node_name)
-#                                 elif b_num in ext_func_bb_nodes and target == basic_block[b_num].start:
-#                                     graph2.edge(main_bb_nodes[main_bb.name], ext_func_bb_nodes[b_num])
-#                 else:
-#                     target = main_bb.taken_target.split()[-1]  # Correctly extract the target address
-#                     for b_num, m_node_name in main_bb_nodes.items():
-#                         if isinstance(b_num, str):
-#                             num = int(b_num.split()[0])
-#                             if target == basic_block[int(num)].start:
-#                                 graph2.edge(main_bb_nodes[main_bb.name], m_node_name)
-#                             elif num in ext_func_bb_nodes and target == basic_block[int(num)].start:
-#                                 graph2.edge(main_bb_nodes[main_bb.name], ext_func_bb_nodes[num])
-#                         else:
-#                             if target == basic_block[b_num].start:
-#                                 graph2.edge(main_bb_nodes[main_bb.name], m_node_name)
-#                             elif b_num in ext_func_bb_nodes and target == basic_block[b_num].start:
-#                                 graph2.edge(main_bb_nodes[main_bb.name], ext_func_bb_nodes[b_num])
-
-#             if main_bb.not_taken_target is not None:
-#                 for b_num, m_node_name in main_bb_nodes.items():
-#                     if isinstance(b_num, str):
-#                         num = int(b_num.split()[0])
-#                         if main_bb.not_taken_target == basic_block[num].start:
-#                             graph2.edge(main_bb_nodes[main_bb.name], m_node_name, style='dashed', color='red')
-#                     else:
-#                         if main_bb.not_taken_target == basic_block[b_num].start:
-#                             graph2.edge(main_bb_nodes[main_bb.name], m_node_name, style='dashed', color='red')
-
-
-
-#     # Set the output file path
-#     output_file = os.path.join(output_directory, f'{program_name}_main_CFG')
-
-#     # Render the graph and save it to a file
-#     graph2.render(filename=output_file, cleanup=True, view=False)
-
-        
+    graph1.render(filename=output_file, cleanup=True, view=False)  
 
 def convert_to_binary(basic_block, output_file_name, Hash_algorithm, value_length, output_directory):
     '''
@@ -1273,8 +1174,9 @@ def judge_file_type(input_file_path):
                 type = 1
     return type
 
-class ProgramAnalyzerUI:
+class CFIEE_UI:
     def __init__(self, master):
+
         self.master = master
         master.title("CFIEE")
         # master.geometry("800x600") 
@@ -1429,8 +1331,6 @@ class ProgramAnalyzerUI:
         self.progress_bar = ttk.Progressbar(master, length=300, mode='determinate', orient=tk.HORIZONTAL)
         self.progress_bar.grid(row=1, column=2, padx=10, pady=10, columnspan=1, sticky="s")
         
-
-
     def select_elf_file(self):
         
         current_directory = os.getcwd()
@@ -1529,7 +1429,7 @@ class ProgramAnalyzerUI:
 
 
     def run_analyze_program(self, input_file, rewrite_file, program_name):
-        # try:
+        try:
             self.progress_bar['value'] = 0
 
             hash_algorithm = self.hash_algorithm_var.get()
@@ -1552,11 +1452,11 @@ class ProgramAnalyzerUI:
             self.progress_bar['value'] = 100
 
             self.analyze_label.config(text="Complete!")
+                    
+        except Exception as e:
+            error_message = f"Error: {e}"
+            self.show_error_message(error_message)
         
-        # except Exception as e:
-        #     error_message = f"Error: {e}"
-        #     self.show_error_message(error_message)
-
     def show_help(self):
         try:
             # Open .md files with the default application associated with the system
@@ -1567,12 +1467,16 @@ class ProgramAnalyzerUI:
 
     def show_basic_block_info(self):
         output_files_dir = os.path.join(os.path.dirname(os.getcwd()), "output_files")
-        
+        lastest_modification_time = 0
         bb_info_file_path = None
         for filename in os.listdir(output_files_dir):
             if filename.endswith("basic_block.txt"):
-                bb_info_file_path = os.path.join(output_files_dir, filename)
-                break
+                file_path = os.path.join(output_files_dir, filename)
+                file_modification_time = os.path.getmtime(file_path)
+                
+                if file_modification_time > lastest_modification_time:
+                    lastest_modification_time = file_modification_time
+                    bb_info_file_path = file_path
         
         if bb_info_file_path is None:
             error_message = "Error: File not found"
@@ -1587,12 +1491,16 @@ class ProgramAnalyzerUI:
     
     def show_binary_data(self):
         output_files_dir = os.path.join(os.path.dirname(os.getcwd()), "output_files")
-        
+        lastest_modification_time = 0
         bin_file_path = None
         for filename in os.listdir(output_files_dir):
             if filename.endswith(".bin"):
-                bin_file_path = os.path.join(output_files_dir, filename)
-                break
+                file_path = os.path.join(output_files_dir, filename)
+                file_modification_time = os.path.getmtime(file_path)
+                
+                if file_modification_time > lastest_modification_time:
+                    lastest_modification_time = file_modification_time
+                    bin_file_path = file_path
             
         if bin_file_path is None:
             error_message = "Error: File not found"
@@ -1607,12 +1515,16 @@ class ProgramAnalyzerUI:
     
     def show_transfers_info(self):
         output_files_dir = os.path.join(os.path.dirname(os.getcwd()), "output_files")
-        
+        lastest_modification_time = 0
         transfers_info_file_path = None
         for filename in os.listdir(output_files_dir):
             if filename.endswith("transfers.txt"):
-                transfers_info_file_path = os.path.join(output_files_dir, filename)
-                break
+                file_path = os.path.join(output_files_dir, filename)
+                file_modification_time = os.path.getmtime(file_path)
+                
+                if file_modification_time > lastest_modification_time:
+                    lastest_modification_time = file_modification_time
+                    transfers_info_file_path = file_path
         
         if transfers_info_file_path is None:
             error_message = "Error: File not found"
@@ -1627,12 +1539,16 @@ class ProgramAnalyzerUI:
     
     def show_cfg(self):
         output_files_dir = os.path.join(os.path.dirname(os.getcwd()), "output_files")
-        
+        latest_modification_time = 0
         cfg_file_path = None
         for filename in os.listdir(output_files_dir):
             if filename.endswith(".svg"):
-                cfg_file_path = os.path.join(output_files_dir, filename)
-                break
+                file_path = os.path.join(output_files_dir, filename)
+                file_modification_time = os.path.getmtime(file_path)
+                
+                if file_modification_time > latest_modification_time:
+                    latest_modification_time = file_modification_time
+                    cfg_file_path = file_path
         
         if cfg_file_path is None:
             error_message = "Error: File not found"
@@ -1647,12 +1563,17 @@ class ProgramAnalyzerUI:
         
     def show_transfers_number(self):
         output_files_dir = os.path.join(os.path.dirname(os.getcwd()), "output_files")
-        
+        latest_modification_time = 0
         transfers_number_file_path = None
         for filename in os.listdir(output_files_dir):
-            if filename.endswith("per_function.png"):
-                transfers_number_file_path = os.path.join(output_files_dir, filename)
-                break
+            if filename.endswith("per_function.svg"):
+                file_path = os.path.join(output_files_dir, filename)
+                file_modification_time = os.path.getmtime(file_path)
+                
+                if file_modification_time > latest_modification_time:
+                    latest_modification_time = file_modification_time
+                    transfers_number_file_path = file_path
+                
             
         if transfers_number_file_path is None:
             error_message = "Error: File not found"
@@ -1667,12 +1588,17 @@ class ProgramAnalyzerUI:
         
     def show_function_call(self):
         output_files_dir = os.path.join(os.path.dirname(os.getcwd()), "output_files")
-        
+        latest_modification_time = 0
         function_call_file_path = None
         for filename in os.listdir(output_files_dir):
-            if filename.endswith("call_relationship.png"):
-                function_call_file_path = os.path.join(output_files_dir, filename)
-                break
+            if filename.endswith("call_relationship.svg"):
+                file_path = os.path.join(output_files_dir, filename)
+                file_modification_time = os.path.getmtime(file_path)
+                
+                if file_modification_time > latest_modification_time:
+                    latest_modification_time = file_modification_time
+                    function_call_file_path = file_path
+
             
         if function_call_file_path is None:
             error_message = "Error: File not found"
@@ -1687,12 +1613,16 @@ class ProgramAnalyzerUI:
     
     def show_bin_bb(self):
         output_files_dir = os.path.join(os.path.dirname(os.getcwd()), "output_files")
-        
+        latest_modification_time = 0
         bin_bb_file_path = None
         for filename in os.listdir(output_files_dir):
             if filename.endswith("bin_basic_block_inf.txt"):
-                bin_bb_file_path = os.path.join(output_files_dir, filename)
-                break
+                file_path = os.path.join(output_files_dir, filename)
+                file_modification_time = os.path.getmtime(file_path)
+                
+                if file_modification_time > latest_modification_time:
+                    latest_modification_time = file_modification_time
+                    bin_bb_file_path = file_path
         
         if bin_bb_file_path is None:
             error_message = "Error: File not found"
@@ -1707,12 +1637,16 @@ class ProgramAnalyzerUI:
     
     def show_hex_bb(self):
         output_files_dir = os.path.join(os.path.dirname(os.getcwd()), "output_files")
-        
+        latest_modification_time = 0
         hex_bb_file_path = None
         for filename in os.listdir(output_files_dir):
             if filename.endswith("hex_basic_block_inf.txt"):
-                hex_bb_file_path = os.path.join(output_files_dir, filename)
-                break
+                file_path = os.path.join(output_files_dir, filename)
+                file_modification_time = os.path.getmtime(file_path)
+                
+                if file_modification_time > latest_modification_time:
+                    latest_modification_time = file_modification_time
+                    hex_bb_file_path = file_path
         
         if hex_bb_file_path is None:
             error_message = "Error:File not found"
@@ -1731,7 +1665,7 @@ class ProgramAnalyzerUI:
 
         scrollbar = tk.Scrollbar(error_window)
         scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
-
+ 
         error_text = tk.Text(error_window, wrap=tk.WORD, yscrollcommand=scrollbar.set)
         error_text.pack(fill=tk.BOTH, expand=True)
 
@@ -1739,10 +1673,10 @@ class ProgramAnalyzerUI:
 
         error_text.insert(tk.END, error_message)
 
-root = tk.Tk()
-program_analyzer_ui = ProgramAnalyzerUI(root)
-root.mainloop()
-
+if __name__ == "__main__":
+    root = tk.Tk()
+    gui = CFIEE_UI(root)
+    root.mainloop()
 
 
 

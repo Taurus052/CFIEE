@@ -1396,6 +1396,33 @@ Instruction:
 	4cd2:	2ab77763          	bgeu	a4,a1,4f80 <qsort+0x30c>
 
 
+Basic_block Name: 205 start_with_taken_target
+In Function:      <qsort>
+Start address:    4cbc
+End address:      4cd2
+Start instruction: 
+	4cbc:	039587b3          	mul	a5,a1,s9
+End instruction: 
+	4cd2:	2ab77763          	bgeu	a4,a1,4f80 <qsort+0x30c>
+Length:           9
+Taken_Target address:       4f80
+Taken_Target instruction: 
+	4f80:	4712                	lw	a4,4(sp)
+Not_Taken_Target address:   4cd6
+Not_Taken_Target instruction: 
+	4cd6:	0015dc13          	srli	s8,a1,0x1
+Instruction: 
+	4cbc:	039587b3          	mul	a5,a1,s9
+	4cc0:	01990733          	add	a4,s2,s9
+	4cc4:	86ba                	mv	a3,a4
+	4cc6:	ca36                	sw	a3,20(sp)
+	4cc8:	c23a                	sw	a4,4(sp)
+	4cca:	4719                	li	a4,6
+	4ccc:	00f906b3          	add	a3,s2,a5
+	4cd0:	c836                	sw	a3,16(sp)
+	4cd2:	2ab77763          	bgeu	a4,a1,4f80 <qsort+0x30c>
+
+
 Basic_block Name: 52
 In Function:      <qsort>
 Start address:    4cd6
@@ -1566,7 +1593,7 @@ Instruction:
 	4d24:	10fdef63          	bltu	s11,a5,4e42 <qsort+0x1ce>
 
 
-Basic_block Name: 216 start_with_taken_target
+Basic_block Name: 221 start_with_taken_target
 In Function:      <qsort>
 Start address:    4d22
 End address:      4d24
@@ -1776,6 +1803,28 @@ Instruction:
 	4d6c:	bfd1                	j	4d40 <qsort+0xcc>
 
 
+Basic_block Name: 207 start_with_taken_target
+In Function:      <qsort>
+Start address:    4d66
+End address:      4d6c
+Start instruction: 
+	4d66:	99a2                	add	s3,s3,s0
+End instruction: 
+	4d6c:	bfd1                	j	4d40 <qsort+0xcc>
+Length:           4
+Taken_Target address:       4d40
+Taken_Target instruction: 
+	4d40:	056dea63          	bltu	s11,s6,4d94 <qsort+0x120>
+Not_Taken_Target address:   
+Not_Taken_Target instruction: 
+	
+Instruction: 
+	4d66:	99a2                	add	s3,s3,s0
+	4d68:	4b85                	li	s7,1
+	4d6a:	9da2                	add	s11,s11,s0
+	4d6c:	bfd1                	j	4d40 <qsort+0xcc>
+
+
 Basic_block Name: 199 start_with_taken_target
 In Function:      <qsort>
 Start address:    4d6a
@@ -1864,6 +1913,30 @@ Instruction:
 	4d90:	fa9df2e3          	bgeu	s11,s1,4d34 <qsort+0xc0>
 
 
+Basic_block Name: 215 start_with_taken_target
+In Function:      <qsort>
+Start address:    4d86
+End address:      4d90
+Start instruction: 
+	4d86:	cc36                	sw	a3,24(sp)
+End instruction: 
+	4d90:	fa9df2e3          	bgeu	s11,s1,4d34 <qsort+0xc0>
+Length:           6
+Taken_Target address:       4d34
+Taken_Target instruction: 
+	4d34:	85ca                	mv	a1,s2
+Not_Taken_Target address:   4d94
+Not_Taken_Target instruction: 
+	4d94:	0a0b8763          	beqz	s7,4e42 <qsort+0x1ce>
+Instruction: 
+	4d86:	cc36                	sw	a3,24(sp)
+	4d88:	4b85                	li	s7,1
+	4d8a:	84e2                	mv	s1,s8
+	4d8c:	9b66                	add	s6,s6,s9
+	4d8e:	9c66                	add	s8,s8,s9
+	4d90:	fa9df2e3          	bgeu	s11,s1,4d34 <qsort+0xc0>
+
+
 Basic_block Name: 200 start_with_taken_target
 In Function:      <qsort>
 Start address:    4d8a
@@ -1881,6 +1954,27 @@ Not_Taken_Target instruction:
 	4d94:	0a0b8763          	beqz	s7,4e42 <qsort+0x1ce>
 Instruction: 
 	4d8a:	84e2                	mv	s1,s8
+	4d8c:	9b66                	add	s6,s6,s9
+	4d8e:	9c66                	add	s8,s8,s9
+	4d90:	fa9df2e3          	bgeu	s11,s1,4d34 <qsort+0xc0>
+
+
+Basic_block Name: 208 start_with_taken_target
+In Function:      <qsort>
+Start address:    4d8c
+End address:      4d90
+Start instruction: 
+	4d8c:	9b66                	add	s6,s6,s9
+End instruction: 
+	4d90:	fa9df2e3          	bgeu	s11,s1,4d34 <qsort+0xc0>
+Length:           3
+Taken_Target address:       4d34
+Taken_Target instruction: 
+	4d34:	85ca                	mv	a1,s2
+Not_Taken_Target address:   4d94
+Not_Taken_Target instruction: 
+	4d94:	0a0b8763          	beqz	s7,4e42 <qsort+0x1ce>
+Instruction: 
 	4d8c:	9b66                	add	s6,s6,s9
 	4d8e:	9c66                	add	s8,s8,s9
 	4d90:	fa9df2e3          	bgeu	s11,s1,4d34 <qsort+0xc0>
@@ -2340,7 +2434,7 @@ Instruction:
 	4e5a:	9a02                	jalr	s4
 
 
-Basic_block Name: 205 start_with_taken_target
+Basic_block Name: 206 start_with_taken_target
 In Function:      <qsort>
 Start address:    4e52
 End address:      4e5a
@@ -2606,7 +2700,7 @@ Instruction:
 	4ee0:	b575                	j	4d8c <qsort+0x118>
 
 
-Basic_block Name: 207 start_with_taken_target
+Basic_block Name: 210 start_with_taken_target
 In Function:      <qsort>
 Start address:    4eda
 End address:      4ee0
@@ -2655,7 +2749,7 @@ Instruction:
 	4ef4:	fec048e3          	bgtz	a2,4ee4 <qsort+0x270>
 
 
-Basic_block Name: 206 start_with_taken_target
+Basic_block Name: 209 start_with_taken_target
 In Function:      <qsort>
 Start address:    4ee4
 End address:      4ef4
@@ -2792,7 +2886,7 @@ Instruction:
 	4f30:	fed048e3          	bgtz	a3,4f20 <qsort+0x2ac>
 
 
-Basic_block Name: 208 start_with_taken_target
+Basic_block Name: 211 start_with_taken_target
 In Function:      <qsort>
 Start address:    4f20
 End address:      4f30
@@ -2950,7 +3044,7 @@ Instruction:
 	4f76:	fee048e3          	bgtz	a4,4f66 <qsort+0x2f2>
 
 
-Basic_block Name: 209 start_with_taken_target
+Basic_block Name: 212 start_with_taken_target
 In Function:      <qsort>
 Start address:    4f66
 End address:      4f76
@@ -3078,7 +3172,7 @@ Instruction:
 	4f96:	9a02                	jalr	s4
 
 
-Basic_block Name: 210 start_with_taken_target
+Basic_block Name: 213 start_with_taken_target
 In Function:      <qsort>
 Start address:    4f8e
 End address:      4f96
@@ -3351,7 +3445,7 @@ Instruction:
 	5020:	fee048e3          	bgtz	a4,5010 <qsort+0x39c>
 
 
-Basic_block Name: 211 start_with_taken_target
+Basic_block Name: 214 start_with_taken_target
 In Function:      <qsort>
 Start address:    5010
 End address:      5020
@@ -3618,7 +3712,34 @@ Instruction:
 	50b0:	fef044e3          	bgtz	a5,5098 <qsort+0x424>
 
 
-Basic_block Name: 212 start_with_taken_target
+Basic_block Name: 217 start_with_taken_target
+In Function:      <qsort>
+Start address:    5094
+End address:      50b0
+Start instruction: 
+	5094:	00a486b3          	add	a3,s1,a0
+End instruction: 
+	50b0:	fef044e3          	bgtz	a5,5098 <qsort+0x424>
+Length:           9
+Taken_Target address:       5098
+Taken_Target instruction: 
+	5098:	00074603          	lbu	a2,0(a4)
+Not_Taken_Target address:   50b4
+Not_Taken_Target instruction: 
+	50b4:	bb01                	j	4dc4 <qsort+0x150>
+Instruction: 
+	5094:	00a486b3          	add	a3,s1,a0
+	5098:	00074603          	lbu	a2,0(a4)
+	509c:	0004c783          	lbu	a5,0(s1)
+	50a0:	0705                	addi	a4,a4,1
+	50a2:	0485                	addi	s1,s1,1
+	50a4:	fec48fa3          	sb	a2,-1(s1)
+	50a8:	fef70fa3          	sb	a5,-1(a4)
+	50ac:	409687b3          	sub	a5,a3,s1
+	50b0:	fef044e3          	bgtz	a5,5098 <qsort+0x424>
+
+
+Basic_block Name: 216 start_with_taken_target
 In Function:      <qsort>
 Start address:    5098
 End address:      50b0
@@ -4185,7 +4306,7 @@ Instruction:
 	5174:	fed048e3          	bgtz	a3,5164 <qsort+0x4f0>
 
 
-Basic_block Name: 213 start_with_taken_target
+Basic_block Name: 218 start_with_taken_target
 In Function:      <qsort>
 Start address:    5164
 End address:      5174
@@ -4257,7 +4378,7 @@ Instruction:
 	518c:	fed048e3          	bgtz	a3,517c <qsort+0x508>
 
 
-Basic_block Name: 214 start_with_taken_target
+Basic_block Name: 219 start_with_taken_target
 In Function:      <qsort>
 Start address:    517c
 End address:      518c
@@ -4331,7 +4452,7 @@ Instruction:
 	51ac:	fed047e3          	bgtz	a3,519a <qsort+0x526>
 
 
-Basic_block Name: 215 start_with_taken_target
+Basic_block Name: 220 start_with_taken_target
 In Function:      <qsort>
 Start address:    519a
 End address:      51ac
@@ -4649,7 +4770,7 @@ Instruction:
 	5212:	fee046e3          	bgtz	a4,51fe <qsort+0x58a>
 
 
-Basic_block Name: 217 start_with_taken_target
+Basic_block Name: 222 start_with_taken_target
 In Function:      <qsort>
 Start address:    51fe
 End address:      5212
