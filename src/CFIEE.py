@@ -1,7 +1,7 @@
 '''
 Author: Taurus052
 Date: 2023-07-14 15:34:43
-LastEditTime: 2023-08-25 15:11:41
+LastEditTime: 2023-08-25 15:38:12
 '''
 
 import os
@@ -1387,6 +1387,9 @@ class CFIEE_UI:
         if type == 1:
             self.browse_label.config(
                 text="\nPlease click the 'preprocess' button first")
+        else:
+            self.browse_label.config(
+                text="\nYou can click the 'analyze' button now!")
 
 
     def rewrite_file(self):
