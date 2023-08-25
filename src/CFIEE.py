@@ -1,7 +1,7 @@
 '''
 Author: Taurus052
 Date: 2023-07-14 15:34:43
-LastEditTime: 2023-08-24 15:18:17
+LastEditTime: 2023-08-25 15:11:41
 '''
 
 import os
@@ -835,9 +835,6 @@ def create_basic_blocks_in_order(order_start_addr_list, end_addr_list, used_func
     for i in range(len(order_start_addr_list)):
         basic_block[i].name = i
         basic_block[i].start = order_start_addr_list[i]
-        # if i >= len(end_addr_list) and int(basic_block[i].start,16) > int(end_addr_list[i-1],16):
-        #     basic_block[i].end = basic_block[i].start
-        # else:
         basic_block[i].end = end_addr_list[i]
         basic_block[i].length = calculate_block_length(basic_block[i].start, basic_block[i].end, used_function_instr)
         
