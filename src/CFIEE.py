@@ -1,7 +1,7 @@
 '''
 Author: Taurus052
 Date: 2023-07-14 15:34:43
-LastEditTime: 2023-08-23 10:29:27
+LastEditTime: 2023-08-24 15:18:17
 '''
 
 import os
@@ -13,7 +13,7 @@ import threading
 import subprocess
 import matplotlib.pyplot as plt
 import graphviz
-from multiprocessing import Process, Queue
+
 
 # branch instructions
 branch_inst = ["beq", "bne", "blt", "bltu", "bge", "bgeu", "beqz", "bnez", "bltz", "blez", "bgtz", "bgez", "bgt", "bgtu", "ble", "bleu"]
@@ -1385,6 +1385,11 @@ class CFIEE_UI:
         self.browse_label.config(text="Objdump file selected")
         self.preprocess_button.config(state=tk.NORMAL)
         self.analyze_button.config(state=tk.NORMAL)
+        
+        type = judge_file_type(objdump_file)
+        if type == 1:
+            self.browse_label.config(
+                text="\nPlease click the 'preprocess' button first")
 
 
     def rewrite_file(self):
