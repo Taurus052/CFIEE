@@ -1,10 +1,12 @@
-# CFIEE：A Critical Metadata Extraction Engine for RISC-V Runtime CFI
+# CFIEE: A Critical Metadata Extraction Engine for RISC-V CFI Scheme
 
-#### Author: @Taurus052
+#### Author: @Taurus052&#x20;
 
 ### Program dependencies
 
-- riscv64-unknown-elf toolchain (If you need to disassemble .elf file)
+- riscv64-unknown-elf toolchain (If you need to disassemble RISC-V ELF file.)
+
+- Python version: Python 3.x (It is recommended to use python3.11 or above version.)
 
 - Python modules:
 
@@ -28,11 +30,11 @@
 
 ### Program Function
 
-This program is used to analyze RISC-V ELF file and extract control flow information.
+This program is a highly efficient tool designed specifically for the purpose of extracting control flow integrity metadata.
 
 ### Program Input
 
-The program requires an RISC-V executable file(.elf) as input, which can be generated using the RISC-V toolchain.
+Users can provide RISC-V ELF executable files, or provide ELF disassembly files in .txt format.
 
 ### Program Output
 
@@ -40,7 +42,7 @@ All files will be stored in **"output_files"** directory.
 
 #### 1. 'xxx_basic_block.txt':
 
-This file contains all Basic block information obtained by Program analysis. The number of each Basic block, the start and end addresses (and instructions), the length of the Basic block, the jump target address (and instructions) of the Basic block, and the instructions in the Basic block are all reflected in the file.
+This file contains all Basic block information obtained by Program analysis. The number of each basic block, the start and end addresses (and instructions), the length of the Basic block, the jump target address (and instructions) of the Basic block, and the instructions in the Basic block are all reflected in the file.
 
 #### 2. 'xxx_forward_transfers.txt':
 
@@ -64,7 +66,7 @@ This is a figure that shows the number of forward control transfer instructions 
 
 #### 7. ‘xxx_function_call_relationship.svg':
 
-This picture shows the function call relationship of the current program. If there is a label "\*" after the function name in the figure, it means that the function is not called by the "jal" instruction, but jumps from the "j" instruction at the end of the previous function
+This picture shows the function call relationship of the current program. If there is a label "\*" after the function name in the figure, it means that the function is not called by the "jal" instruction, but jumps from the "j" instruction at the end of the previous function.
 
 #### 8. 'xxx_CFG.svg':
 
@@ -76,10 +78,11 @@ This program can be used via the command line, with the following usage:
 
     python CFIEE.py
 
-In the interface of CFIEE, we have marked the usage steps for you, and you only need to follow the steps to perform corresponding operations. It should be noted that we do not force you to use the disassembly function here, you can complete the disassembly of your executable file in advance and start directly from STEP2. CFIEE invokes the riscv64-unknown-elf-objdump toolchain on your computer.
+In the CFIEE interface, we have provided clear usage instructions for you to follow in order to perform corresponding operations. It is important to note that the disassembly function is not mandatory and if preferred, you may complete the disassembly of your executable file beforehand and proceed directly to STEP2. CFIEE utilizes the riscv64-unknown-elf-objdump toolchain on your local computer.
 
 ### Notice
 
-1. All development and testing processes for this program are based on the T-Head Xuantie E906 RISC-V processor using the RV32IMAFC instruction set. The selected RISC-V toolchain is Xuantie-900-gcc-elf-newlib-x86_64-V2.6.1. Its disassembly toolchain is GNU objdump (GNU Binutils) 2.35.
-      2. We **cannot** guarantee the correctness of this program when analyzing the disassembly files of other RISC-V instruction sets.
-Current program **cannot** analyze information related to indirect jumps. The target addresses of all indirect jump instructions are set to the name of their target registers.
+1.  All development and testing processes for this program are based on the T-Head Xuantie E906 RISC-V processor using the RV32IMAFC instruction set. The selected RISC-V toolchain is Xuantie-900-gcc-elf-newlib-x86_64-V2.6.1. Its disassembly toolchain is GNU objdump (GNU Binutils) 2.35.
+
+2.  We **cannot** guarantee the correctness of this program when analyzing the disassembly files of other RISC-V instruction sets.
+    Current program **cannot** analyze information related to indirect jumps. The target addresses of all indirect jump instructions are set to the name of their target registers.

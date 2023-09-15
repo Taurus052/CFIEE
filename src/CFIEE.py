@@ -1,11 +1,11 @@
 '''
 Author: Taurus052
 Date: 2023-07-14 15:34:43
-LastEditTime: 2023-08-25 15:38:12
+LastEditTime: 2023-09-15 10:17:17
 '''
 
 import os
-import hashlib
+import hashlib # standard hash library
 import tkinter as tk
 from tkinter import filedialog
 from tkinter import ttk
@@ -1130,6 +1130,9 @@ def calculate_hash_value(data, algorithm, value_length):
         hash_type = hashlib.sha1()
     elif algorithm == 'SHA-512':
         hash_type = hashlib.sha512()
+    # Custom hash algorithm
+    # elif algorithm == " ":
+    #     hash_type = xxx.xxx()
 
     # Calculate hash value
     hash_type.update(binary_data)
@@ -1268,9 +1271,17 @@ class CFIEE_UI:
         data_length_label.pack(side=tk.LEFT, anchor="w", padx=10, pady=5)
 
         self.data_length_var = tk.StringVar()
-        data_length_options = ["8", "16", "32"]
+        data_length_options = ["8", "16", "32", "Custom"]
         self.data_length_menu = tk.OptionMenu(analyze_frame, self.data_length_var, *data_length_options)
         self.data_length_menu.pack(side=tk.LEFT, anchor="w", padx=10, pady=5)
+        
+        custom_length_label = tk.Label(analyze_frame, text="Custom Length:", font=("Arial", 10))
+        custom_length_label.pack(side=tk.LEFT, anchor="w", padx=10, pady=5)
+
+        self.custom_length_var = tk.StringVar()
+        custom_length_entry = tk.Entry(analyze_frame, textvariable=self.custom_length_var)
+        custom_length_entry.pack(side=tk.LEFT, anchor="w", padx=10, pady=5)
+        # custom_length_entry.config(state=tk.DISABLED)
         
         # Column 3: Result output
         section3_frame = tk.Frame(master)
@@ -1438,7 +1449,14 @@ class CFIEE_UI:
             self.progress_bar['value'] = 0
 
             hash_algorithm = self.hash_algorithm_var.get()
-            result_length = self.data_length_var.get()
+            if self.data_length_var.get() == "Custom":
+                result_length = self.custom_length_var.get()
+                if result_length == "":
+                    self.analyze_label.config(
+                        text="Please enter a custom length")
+                    return
+            else:
+                result_length = self.data_length_var.get()
 
             if not hash_algorithm or not result_length:
                 self.analyze_label.config(

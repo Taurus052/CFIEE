@@ -1,7 +1,7 @@
 '''
 Author: Taurus052
 Date: 2023-07-14 15:34:43
-LastEditTime: 2023-08-22 17:41:51
+LastEditTime: 2023-09-15 10:04:25
 '''
 
 import re
@@ -18,14 +18,14 @@ def main(input_file):
     rewrite_objdump_file(output_file, instructions)
         
     
-def judge_type(input_file_path):
-    type = None
-    with open(input_file_path, 'r') as file:
-        lines = file.readlines()
-        for line in lines[:15]:
-            if line.startswith('#'):
-                type = 1
-    return type
+# def judge_type(input_file_path):
+#     type = None
+#     with open(input_file_path, 'r') as file:
+#         lines = file.readlines()
+#         for line in lines[:15]:
+#             if line.startswith('#'):
+#                 type = 1
+#     return type
 
 def extract_disassembly_instructions(input_file_path):
     instructions = []
