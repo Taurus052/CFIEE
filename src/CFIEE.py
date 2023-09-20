@@ -1,7 +1,7 @@
 '''
 Author: Taurus052
 Date: 2023-07-14 15:34:43
-LastEditTime: 2023-09-15 10:17:17
+LastEditTime: 2023-09-18 16:02:14
 '''
 
 import os
@@ -967,6 +967,7 @@ def create_basic_blocks_start_with_taken_target(all_taken_target_addr, basic_blo
 
 def sort_basic_blocks(basic_block):
     sorted_basic_blocks = sorted(basic_block, key=lambda bb: int(bb.start, 16))
+    print("basic blocks' num: "+str(len(sorted_basic_blocks)))
     return sorted_basic_blocks
 
 def write_basic_blocks_to_file(file_name, basic_block, output_directory):
@@ -1178,12 +1179,12 @@ class CFIEE_UI:
     def __init__(self, master):
 
         self.master = master
-        master.title("CFIEE")
+        master.title("CFIEE: A Critical Metadata Extraction Engine for RISC-V CFI Scheme")
         # master.geometry("800x600") 
         
         # Column 1: Select .elf file and Disassemble
         elf_file_frame = tk.Frame(master)
-        elf_file_frame.grid(row=0, column=0, padx=70, pady=150, sticky="nw")
+        elf_file_frame.grid(row=0, column=0, padx=30, pady=30, sticky="nw")
         elf_file_label = tk.Label(elf_file_frame, text="STEP1: Disassemble ELF File", font=("Arial", 10, "bold"))
         elf_file_label.pack(side=tk.TOP, anchor="n", pady=20)
 
@@ -1207,27 +1208,26 @@ class CFIEE_UI:
         self.disassemble_label = tk.Label(disassemble_frame, wraplength=200, anchor="w", font=("Arial", 10), justify=tk.LEFT)
         self.disassemble_label.pack(side=tk.TOP, padx=10, fill=tk.X, expand=True)
 
-        # Column 2: Browse file, Preprocess, Analyze, Hash algorithm selection, and Data length selection
-        section2_frame = tk.Frame(master)
-        section2_frame.grid(row=0, column=2, padx=20, pady=10, sticky="nw")
-
         # Browse file section
-        browse_frame = tk.Frame(section2_frame)
+        browse_frame = tk.Frame(elf_file_frame)
         browse_frame.pack(side=tk.TOP, anchor="n", padx=10, pady=10)
 
         self.browse_section_label = tk.Label(browse_frame, text="STEP2: Select disassembly file(.txt)", font=("Arial", 10, "bold"))
         self.browse_section_label.pack(side=tk.TOP, anchor="n", pady=10)
 
-        self.browse_button = tk.Button(browse_frame, text="Browse File", command=self.browse_file, bg="white", padx=10, pady=5, bd=1, relief="raised")
+        self.browse_button = tk.Button(browse_frame, text="Browse File", command=self.browse_file, padx=10, pady=5, bd=1, relief="raised")
         self.browse_button.pack(side=tk.TOP, anchor="n", padx=10, pady=10)
 
         self.file_path_var = tk.StringVar()
-        self.file_path_label = tk.Label(browse_frame, textvariable=self.file_path_var, wraplength=150, anchor="n", bg="white", bd=1, relief="groove", padx=5)
+        self.file_path_label = tk.Label(browse_frame, textvariable=self.file_path_var, wraplength=150, anchor="w", bg="white", bd=1, relief="groove", padx=5)
         self.file_path_label.pack(side=tk.TOP, fill=tk.X, anchor="n", padx=10, pady=10)
 
         self.browse_label = tk.Label(browse_frame, wraplength=200, anchor="w", font=("Arial", 8), justify=tk.LEFT)
         self.browse_label.pack(side=tk.TOP, anchor="n", pady=5)
 
+        # Column 2: Preprocess, Analyze, Hash algorithm selection, and Data length selection
+        section2_frame = tk.Frame(master)
+        section2_frame.grid(row=0, column=2, padx=20, pady=30, sticky="nw")
         # Preprocess section
         preprocess_frame = tk.Frame(section2_frame)
         preprocess_frame.pack(side=tk.TOP, anchor="n", padx=10, pady=10)
@@ -1251,41 +1251,54 @@ class CFIEE_UI:
         self.analyze_section_label = tk.Label(analyze_frame, text="STEP4: File Analyze", font=("Arial", 10, "bold"))
         self.analyze_section_label.pack(side=tk.TOP, anchor="n", pady=10)
 
-        self.analyze_button = tk.Button(analyze_frame, text="Analyze", command=self.analyze_program, state=tk.DISABLED, bg="lightgray", \
-                                            padx=10, pady=5, bd=1, relief="raised")
-        self.analyze_button.pack(side=tk.BOTTOM, padx=10, pady=5, anchor="n")
-
         self.analyze_label = tk.Label(analyze_frame, wraplength=200, anchor="center", font=("Arial", 8), justify=tk.CENTER)
         self.analyze_label.pack(side=tk.BOTTOM, fill=tk.X, padx=10, pady=5)
 
-
-        hash_algorithm_label = tk.Label(analyze_frame, text="Hash:", font=("Arial", 10))
+        hash_algorithm_frame = tk.Frame(analyze_frame)
+        hash_algorithm_frame.pack(side=tk.TOP, anchor="w", padx=10, pady=5)
+        
+        hash_algorithm_label = tk.Label(hash_algorithm_frame, text="Hash:", font=("Arial", 10))
         hash_algorithm_label.pack(side=tk.LEFT, anchor="w",padx=10,pady = 5)
 
         self.hash_algorithm_var = tk.StringVar()
         hash_algorithm_options = ["MD5", "SHA-1", "SHA-256", "SHA-512"]
-        self.hash_algorithm_menu = tk.OptionMenu(analyze_frame, self.hash_algorithm_var, *hash_algorithm_options)
+        self.hash_algorithm_menu = tk.OptionMenu(hash_algorithm_frame, self.hash_algorithm_var, *hash_algorithm_options)
         self.hash_algorithm_menu.pack(side=tk.LEFT, anchor="w", padx = 10, pady = 5)
 
-        data_length_label = tk.Label(analyze_frame, text="Data Length:", font=("Arial", 10))
+        data_length_frame = tk.Frame(analyze_frame)
+        data_length_frame.pack(side=tk.TOP, anchor="w", padx=10, pady=5)
+        
+        data_length_label = tk.Label(data_length_frame, text="Data Length:", font=("Arial", 10))
         data_length_label.pack(side=tk.LEFT, anchor="w", padx=10, pady=5)
 
         self.data_length_var = tk.StringVar()
         data_length_options = ["8", "16", "32", "Custom"]
-        self.data_length_menu = tk.OptionMenu(analyze_frame, self.data_length_var, *data_length_options)
+        self.data_length_menu = tk.OptionMenu(data_length_frame, self.data_length_var, *data_length_options)
         self.data_length_menu.pack(side=tk.LEFT, anchor="w", padx=10, pady=5)
         
-        custom_length_label = tk.Label(analyze_frame, text="Custom Length:", font=("Arial", 10))
+        custom_length_frame = tk.Frame(analyze_frame)
+        custom_length_frame.pack(side=tk.TOP, anchor="w", padx=10, pady=5)
+        
+        custom_length_label = tk.Label(custom_length_frame, text="Custom Length:", font=("Arial", 10))
         custom_length_label.pack(side=tk.LEFT, anchor="w", padx=10, pady=5)
 
         self.custom_length_var = tk.StringVar()
-        custom_length_entry = tk.Entry(analyze_frame, textvariable=self.custom_length_var)
+        custom_length_entry = tk.Entry(custom_length_frame, textvariable=self.custom_length_var)
         custom_length_entry.pack(side=tk.LEFT, anchor="w", padx=10, pady=5)
         # custom_length_entry.config(state=tk.DISABLED)
         
+        self.analyze_button = tk.Button(analyze_frame, text="Analyze", command=self.analyze_program, state=tk.DISABLED, bg="lightgray", \
+                                            padx=10, pady=5, bd=1, relief="raised")
+        self.analyze_button.pack(side=tk.TOP, padx=10, pady=20, anchor="n")
+        
+        # Progress bar 
+        self.progress_bar = ttk.Progressbar(analyze_frame, length=270, mode='determinate', orient=tk.HORIZONTAL)
+        self.progress_bar.pack(side=tk.TOP, anchor="n", padx=10, pady=20)
+        # self.progress_bar.grid(row=1, column=2, padx=10, pady=20, columnspan=1, sticky="n")
+        
         # Column 3: Result output
         section3_frame = tk.Frame(master)
-        section3_frame.grid(row=0, column=4, padx=10, pady=150, sticky="nw")
+        section3_frame.grid(row=0, column=4, padx=10, pady=120, sticky="nw")
 
         self.output_section_label = tk.Label(section3_frame, text="STEP5: Output Files", font=("Arial", 10, "bold"))
         self.output_section_label.pack(side=tk.TOP, anchor="n", pady=20)
@@ -1299,45 +1312,46 @@ class CFIEE_UI:
         button_width = 15
 
         basic_block_info_button = tk.Button(left_frame, text="Basic Block Info", command=self.show_basic_block_info, width=button_width)
-        basic_block_info_button.pack(side=tk.TOP, pady=5)
+        basic_block_info_button.pack(side=tk.TOP, pady=15)
         
         bin_bb_button = tk.Button(left_frame, text="Binary Basic Block", command=self.show_bin_bb, width=button_width)
-        bin_bb_button.pack(side=tk.TOP, pady=5)
+        bin_bb_button.pack(side=tk.TOP, pady=15)
 
         hex_bb_button = tk.Button(left_frame, text="Hex Basic Block", command=self.show_hex_bb, width=button_width)
-        hex_bb_button.pack(side=tk.TOP, pady=5)
+        hex_bb_button.pack(side=tk.TOP, pady=15)
 
         binary_data_button = tk.Button(left_frame, text="Binary Data", command=self.show_binary_data, width=button_width)
-        binary_data_button.pack(side=tk.TOP, pady=5)
+        binary_data_button.pack(side=tk.TOP, pady=15)
 
         transfers_info_button = tk.Button(right_frame, text="Transfers Info", command=self.show_transfers_info, width=button_width)
-        transfers_info_button.pack(side=tk.TOP, pady=5)
+        transfers_info_button.pack(side=tk.TOP, pady=15)
 
         cfg_button = tk.Button(right_frame, text="CFG", command=self.show_cfg, width=button_width)
-        cfg_button.pack(side=tk.TOP, pady=5)
+        cfg_button.pack(side=tk.TOP, pady=15)
 
         transfers_number_button = tk.Button(right_frame, text="Transfers Number", command=self.show_transfers_number, width=button_width)
-        transfers_number_button.pack(side=tk.TOP, pady=5)
+        transfers_number_button.pack(side=tk.TOP, pady=15)
 
         function_call_button = tk.Button(right_frame, text="Function Call", command=self.show_function_call, width=button_width)
-        function_call_button.pack(side=tk.TOP, pady=5)
-
-
+        function_call_button.pack(side=tk.TOP, pady=15)
 
         # Add padding between columns
         separator1 = ttk.Separator(master, orient='vertical')
-        separator1.grid(row=0, column=1, sticky="ns", padx=20, pady=10)
+        separator1.grid(row=0, column=1, sticky="ns", padx=10, pady=30)
 
         separator2 = ttk.Separator(master, orient='vertical')
-        separator2.grid(row=0, column=3, sticky="ns", padx=20, pady=10) 
+        separator2.grid(row=0, column=3, sticky="ns", padx=10, pady=30) 
 
         # Help button
-        self.help_button = tk.Button(master, text="Help", command=self.show_help, padx=10, pady=5, bd=1, relief="raised")
-        self.help_button.grid(row=1, column=0, padx=20, pady=5,columnspan=1, sticky="s")
+        self.help_button = tk.Button(elf_file_frame, text="Help", command=self.show_help, padx=10, pady=5, bd=1, relief="raised")
+        self.help_button.pack(side=tk.TOP, anchor="n", padx=10, pady=10)
+        #self.help_button.grid(row=1, column=0, padx=10, pady=20,columnspan=1, sticky="n")
         
-        # Progress bar (placed at the bottom)
-        self.progress_bar = ttk.Progressbar(master, length=300, mode='determinate', orient=tk.HORIZONTAL)
-        self.progress_bar.grid(row=1, column=2, padx=10, pady=10, columnspan=1, sticky="s")
+        #Custom Label
+        self.author_label = tk.Label(master, text="Github @Taurus052", font=("Arial", 8))
+        self.author_label.grid(row=1, column=2, padx=10, pady=10, sticky="n")
+        
+
         
     def select_elf_file(self):
         
