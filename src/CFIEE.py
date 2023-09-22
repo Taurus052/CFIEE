@@ -38,6 +38,9 @@ os.chdir(current_dir)
 
 def main(objdump_file, Hash_algorithm, Hash_value_length, program_name):
     output_directory = os.path.join(os.path.dirname(os.getcwd()), 'output_files')
+    # Check if the output directory exists, if not, create it
+    if not os.path.exists(output_directory):
+        os.makedirs(output_directory)
     
     function_line_ranges, function_addr_ranges, function_instr =  get_func_information(objdump_file)
     
