@@ -248,7 +248,9 @@ def find_to_visit_function(objdump_file, function_instr, function_addr_ranges, f
                 
                 if line == function_instr[func_name][-1]:# Check if the last instruction is a branch instruction
                     for b_next_func_name in function_addr_ranges.keys():
-                        if b_next_func_name != func_name:
+                        current_func_addr_range = function_addr_ranges[func_name]
+                        next_func_addr_range = function_addr_ranges[b_next_func_name]
+                        if b_next_func_name != func_name and int(next_func_addr_range[0],16) > int(current_func_addr_range[1],16):
                             to_visit_functions.add(b_next_func_name)
                             called_func_name = func_name
                             break
@@ -282,7 +284,9 @@ def find_to_visit_function(objdump_file, function_instr, function_addr_ranges, f
                 
                 if line == function_instr[func_name][-1]:# # Check if the last instruction is a branch instruction
                     for b_next_func_name in function_addr_ranges.keys():
-                        if b_next_func_name != func_name:
+                        current_func_addr_range = function_addr_ranges[func_name]
+                        next_func_addr_range = function_addr_ranges[b_next_func_name]
+                        if b_next_func_name != func_name and int(next_func_addr_range[0],16) > int(current_func_addr_range[1],16):
                             to_visit_functions.add(b_next_func_name)
                             called_func_name = func_name
                             break
@@ -612,6 +616,8 @@ def write_in_may_used_control_transfer_instr(all_instr, functions_with_jump_inst
     ct_path = os.path.join(output_directory, output_file1)
     bin_path = os.path.join(output_directory, output_file2)
     
+    trans_count = 0
+    
     with open (ct_path,'w',encoding='utf-8') as file1, open(bin_path,'wb') as file2:
         for func_name in functions_with_jump_instr_addr:
             file1.write('\n' + func_name + ':\n'+'\n')
@@ -627,6 +633,8 @@ def write_in_may_used_control_transfer_instr(all_instr, functions_with_jump_inst
                 addr_bytes = bin_addr.encode('utf-8')
                 target_bytes = bin_target.encode('utf-8')
                 file2.write(addr_bytes + target_bytes + b'\n')
+                
+                trans_count += 1
 
                 for line_num , instr in enumerate(all_instr):
                     if instr.startswith(taken_target):
@@ -643,6 +651,18 @@ def write_in_may_used_control_transfer_instr(all_instr, functions_with_jump_inst
                         file1.write('j/b_instr: '+all_instr[jump_instr_line_num] + '\n')
                         file1.write('t_instr:   '+all_instr[target_line_num] + '\n')
                         file1.write('\n')
+    
+    with open(ct_path,'r+',encoding='utf-8') as file1, open(bin_path, 'r+', encoding='utf-8') as file2:
+        content1 = file1.read()
+        file1.seek(0,0)
+        file1.write("trans_num: " + str(trans_count) + '\n' + content1)
+        
+        content2 = file2.read()
+        file2.seek(0,0)
+        bin_trans_count = bin(trans_count)[2:].zfill(16)
+        file2.write(str(bin_trans_count) + '\n' + content2)
+
+        
     
     instruction_count = []
     function_names = []
