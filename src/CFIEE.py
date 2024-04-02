@@ -24,6 +24,7 @@ import threading
 import subprocess
 import matplotlib.pyplot as plt
 import graphviz
+import time
 
 
 # branch instructions
@@ -37,6 +38,8 @@ current_dir = os.path.dirname(os.path.abspath(__file__))
 os.chdir(current_dir)
 
 def main(objdump_file, Hash_algorithm, Hash_value_length, program_name):
+    start_time = time.time()
+    
     output_directory = os.path.join(os.path.dirname(os.getcwd()), 'output_files')
     # Check if the output directory exists, if not, create it
     if not os.path.exists(output_directory):
@@ -47,7 +50,7 @@ def main(objdump_file, Hash_algorithm, Hash_value_length, program_name):
     ### find the function to visit 
     function_call_instr = {}
     # extra_func_name = extract_function_before_xx(objdump_file, '<__to_main>')
-    to_visit_functions, visited_functions_id, visited_functions, function_call_instr  \
+    to_visit_functions, visited_functions_id, visited_functions, function_call_instr, visited_functions_count  \
                             = find_to_visit_function(objdump_file, function_instr,function_addr_ranges,\
                                 '<__start>',function_call_instr, visited_functions = None,visited_functions_id=None)
         
@@ -61,7 +64,7 @@ def main(objdump_file, Hash_algorithm, Hash_value_length, program_name):
     return_target = get_return_relationship(function_call_relationship, ret_instr_addr, function_call_instr, \
                                                 all_instr, function_addr_ranges)
         
-    used_function_instr = extract_used_function_instr(function_instr, visited_functions)
+    used_function_instr, instr_count = extract_used_function_instr(function_instr, visited_functions)
     
     address, machine_code, mnemonic, operands = get_func_machine_code(used_function_instr)
     
@@ -75,7 +78,7 @@ def main(objdump_file, Hash_algorithm, Hash_value_length, program_name):
                                        
     basic_block =  create_basic_blocks_start_with_taken_target(all_taken_target_addr, basic_block, order_start_addr_list, used_function_instr)
     
-    sorted_basic_blocks =  sort_basic_blocks(basic_block)
+    sorted_basic_blocks, blocks_count =  sort_basic_blocks(basic_block)
     
 
     export_results(function_addr_ranges, program_name + '_function_addr.txt',
@@ -85,7 +88,20 @@ def main(objdump_file, Hash_algorithm, Hash_value_length, program_name):
                 program_name + '_bin_basic_block_inf.txt', program_name + '_hex_basic_block_inf.txt',
                 Hash_algorithm, Hash_value_length, output_directory, program_name)
     
-    generate_CFG(basic_block, program_name, output_directory)
+    print(f'\nNumber of Functions traversed: {visited_functions_count}')
+    print(f'\nNumber of instructions traversed: {instr_count}')
+    print(f'\nBasic blocks number: {blocks_count}')
+
+    
+    edge_count = generate_CFG(basic_block, program_name, output_directory)
+    print(f'\nEdge number: {edge_count}')
+    end_time = time.time()
+    runtime = end_time - start_time
+    
+
+    print(f'\nRuntime: {runtime} seconds')
+    print(f'\nOutput files are saved in {output_directory}')
+    
     
     # generate_main_CFG(basic_block, program_name, output_directory, function_addr_ranges)
 
@@ -318,9 +334,11 @@ def find_to_visit_function(objdump_file, function_instr, function_addr_ranges, f
     
 
     visited_functions = sorted(visited_functions, key=lambda func_name: int(function_addr_ranges[func_name][0], 16))
+    
+    visited_functions_count = len(visited_functions)
 
     
-    return to_visit_functions, visited_functions_id, visited_functions, function_call_instr    
+    return to_visit_functions, visited_functions_id, visited_functions, function_call_instr, visited_functions_count    
 
 
 def find_ret_instruction(visited_functions, function_addr_ranges, function_instr):
@@ -382,6 +400,24 @@ def get_function_call_relationship(function_call_instr, function_addr_ranges, ou
     
     # Initialize dictionary to store the function call relationship
     function_call_relationship = {}
+
+    # # Create a dictionary for quick lookup of function start addresses
+    # function_start_addresses = {addr[0]: name for name, addr in function_addr_ranges.items()}
+
+    # for caller_func_name, call_instrs in function_call_instr.items():
+    #     for call_instr in call_instrs:
+    #         tokens = call_instr.split()
+    #         mnemonic = tokens[2]
+    #         operand = tokens[3]
+    #         jump_target = operand.split(',')[-1] if ',' in operand else operand
+
+    #         # Use the dictionary for quick lookup of the jump target
+    #         callee_func_name = function_start_addresses.get(jump_target)
+    #         if callee_func_name:
+    #             function_call_relationship.setdefault(caller_func_name, []).append(callee_func_name + ' *' if mnemonic == 'j' else callee_func_name)
+
+    # # Remove duplicates and sort the function call relationship
+    # function_call_relationship = {k: sorted(set(v), key=lambda name: int(function_addr_ranges[name.rstrip(' *')][0], 16)) for k, v in function_call_relationship.items()}
     
     # Iterate over the function call instructions
     for caller_func_name, call_instrs in function_call_instr.items():
@@ -422,7 +458,10 @@ def get_function_call_relationship(function_call_instr, function_addr_ranges, ou
     # Sort the function call relationship based on the start address of the caller functions
     function_call_relationship = {k: v for k, v in sorted(function_call_relationship.items(), key=lambda item: int(function_addr_ranges[item[0]][0], 16))}
     
-    G = graphviz.Digraph(format='svg')
+    G = graphviz.Digraph(format='svg', engine='dot', strict=True)
+    
+    # #new added
+    G.attr('graph', overlap='false', ranksep='1.0', nodesep='0.5')
 
     # Add nodes and edges to the graph
     for caller_func_name, callee_func_names in function_call_relationship.items():
@@ -701,11 +740,15 @@ def extract_used_function_instr(function_instr, visited_functions):
             used_function_instr.extend(instr_list)
             
     used_function_instr.sort(key=lambda x: int(x.split(':')[0], 16))
+    
+    # number of instructions in the used functions
+    instr_count = len(used_function_instr)
+    
     # with open(output_file,'w',encoding='utf-8') as file :
     #     for instr in used_function_instr:
     #         file.write(instr + '\n')
             
-    return used_function_instr
+    return used_function_instr, instr_count
 
 def get_the_addr_information_for_basic_block(address, mnemonic, operands, function_addr_ranges):
     '''
@@ -1001,8 +1044,9 @@ def create_basic_blocks_start_with_taken_target(all_taken_target_addr, basic_blo
 
 def sort_basic_blocks(basic_block):
     sorted_basic_blocks = sorted(basic_block, key=lambda bb: int(bb.start, 16))
-    print("basic blocks' num: "+str(len(sorted_basic_blocks)))
-    return sorted_basic_blocks
+    blocks_counter = len(sorted_basic_blocks)
+    # print("basic blocks' num: "+str(len(sorted_basic_blocks)))
+    return sorted_basic_blocks, blocks_counter
 
 def write_basic_blocks_to_file(file_name, basic_block, output_directory):
     basic_block_path = os.path.join(output_directory, file_name)
@@ -1023,7 +1067,7 @@ def write_basic_blocks_to_file(file_name, basic_block, output_directory):
             for line in bb.instr:
                 file.write(f'\t{line.strip()}\n')
             file.write('\n\n')
-
+"""
 def generate_CFG(basic_block, program_name, output_directory):
     # Create a new Graphviz graph
     graph1 = graphviz.Digraph(format='svg')
@@ -1040,7 +1084,10 @@ def generate_CFG(basic_block, program_name, output_directory):
         node_name = str(bb.name)
         graph1.node(node_name, label=label, shape='box')
         bb_nodes[bb.name] = node_name 
-
+    
+    # edge counter
+    edge_counter = 0
+    
     # Add edges to the graph
     for i, bb in enumerate (basic_block):
         if bb.taken_target != '':
@@ -1052,9 +1099,11 @@ def generate_CFG(basic_block, program_name, output_directory):
                             num = int(b_num.split()[0])
                             if target == basic_block[num].start:
                                 graph1.edge(bb_nodes[bb.name], node_name)
+                                edge_counter += 1
                         else:
                             if target == basic_block[b_num].start:
                                 graph1.edge(bb_nodes[bb.name], node_name)
+                                edge_counter += 1
 
             else:
                 for b_num, node_name in bb_nodes.items():
@@ -1062,13 +1111,16 @@ def generate_CFG(basic_block, program_name, output_directory):
                         num = int(b_num.split()[0])
                         if bb.taken_target == basic_block[num].start:
                             graph1.edge(bb_nodes[bb.name], node_name)
+                            edge_counter += 1
                     else:
                         if bb.taken_target == basic_block[b_num].start:
                             graph1.edge(bb_nodes[bb.name], node_name)
+                            edge_counter += 1
         
         elif bb.taken_target == '' and i+1 < len(basic_block):
             next_bb = basic_block[i+1]
             graph1.edge(bb_nodes[bb.name], bb_nodes[next_bb.name])
+            edge_counter += 1
 
         if bb.not_taken_target != '':
             for b_num, node_name in bb_nodes.items():
@@ -1076,15 +1128,73 @@ def generate_CFG(basic_block, program_name, output_directory):
                     num = int(b_num.split()[0])
                     if bb.not_taken_target == basic_block[num].start:
                         graph1.edge(bb_nodes[bb.name], node_name,style='dashed',color = 'red')
+                        edge_counter += 1
                 else:
                     if bb.not_taken_target == basic_block[b_num].start:
                         graph1.edge(bb_nodes[bb.name], node_name, style='dashed',color = 'red')
+                        edge_counter += 1
                         
     # Set the output file path
     output_file = os.path.join(output_directory, f'{program_name}_CFG')
 
     # Render the graph and save it to a file
     graph1.render(filename=output_file, cleanup=True, view=False)  
+    
+    return edge_counter
+"""
+def generate_CFG(basic_block, program_name, output_directory):
+    # Create a new Graphviz graph
+    graph1 = graphviz.Digraph(format='svg')
+    
+    # Create a mapping of basic block names to their respective nodes
+    bb_nodes = {}
+    bb_start_to_name = {}
+
+    # Add nodes to the graph
+    for bb in basic_block:
+        label = f'Basic_block Name: {bb.name}\nIn Function: {bb.func}\nStart address: {bb.start}\nEnd address: {bb.end}\nLength: {bb.length}\nTaken_Target: {bb.taken_target}'
+        if bb.not_taken_target is not None:
+            label += f'\nNot_Taken_Target address: {bb.not_taken_target}'
+
+        node_name = str(bb.name)
+        graph1.node(node_name, label=label, shape='box')
+        bb_nodes[bb.name] = node_name 
+        bb_start_to_name[bb.start] = node_name
+    
+    # edge counter
+    edge_counter = 0
+    
+    # Function to add edges to the graph
+    def add_edge(target, style=None, color=None):
+        nonlocal edge_counter
+        if target in bb_start_to_name:
+            graph1.edge(bb_nodes[bb.name], bb_start_to_name[target], style=style, color=color)
+            edge_counter += 1
+
+    # Add edges to the graph
+    for i, bb in enumerate(basic_block):
+        if bb.taken_target:
+            if isinstance(bb.taken_target, list):
+                for target_str in bb.taken_target:
+                    target = target_str.split()[1]
+                    add_edge(target)
+            else:
+                add_edge(bb.taken_target)
+        elif not bb.taken_target and i+1 < len(basic_block):
+            next_bb = basic_block[i+1]
+            graph1.edge(bb_nodes[bb.name], bb_nodes[next_bb.name])
+            edge_counter += 1
+
+        if bb.not_taken_target:
+            add_edge(bb.not_taken_target, style='dashed', color='red')
+                        
+    # Set the output file path
+    output_file = os.path.join(output_directory, f'{program_name}_CFG')
+
+    # Render the graph and save it to a file
+    graph1.render(filename=output_file, cleanup=True, view=False)  
+    
+    return edge_counter
 
 def convert_to_binary(basic_block, output_file_name, Hash_algorithm, value_length, output_directory):
     '''
@@ -1213,7 +1323,7 @@ class CFIEE_UI:
     def __init__(self, master):
 
         self.master = master
-        master.title("CFIEE: A Critical Metadata Extraction Engine for RISC-V CFI Scheme")
+        master.title("CFIEE V1.0")
         # master.geometry("800x600") 
         
         # Column 1: Select .elf file and Disassemble
@@ -1382,8 +1492,8 @@ class CFIEE_UI:
         #self.help_button.grid(row=1, column=0, padx=10, pady=20,columnspan=1, sticky="n")
         
         #Custom Label
-        self.author_label = tk.Label(master, text="Github @Taurus052", font=("Arial", 8))
-        self.author_label.grid(row=1, column=2, padx=10, pady=10, sticky="n")
+        # self.author_label = tk.Label(master, text="Github @Taurus052", font=("Arial", 8))
+        # self.author_label.grid(row=1, column=2, padx=10, pady=10, sticky="n")
         
 
         
@@ -1409,7 +1519,7 @@ class CFIEE_UI:
             if not os.path.exists(output_directory):
                 os.makedirs(output_directory)
             output_file = os.path.join(output_directory, os.path.splitext(os.path.basename(elf_file))[0] + "_disassembly.txt")
-            process = subprocess.run(["riscv64-unknown-elf-objdump", "-S", elf_file], capture_output=True, text=True)
+            process = subprocess.run(["riscv64-unknown-elf-objdump", "-d", elf_file], capture_output=True, text=True)
             with open(output_file, 'w') as file:
                 file.write(process.stdout)
             self.disassemble_label.config(text="Disassembly complete.")
