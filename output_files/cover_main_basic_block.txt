@@ -1236,7 +1236,7 @@ Start instruction:
 End instruction: 
 	7a4:	8082                	ret
 Length:           15
-Taken_Target address:       ['<_vsnprintf> 1602', '<_ftoa> 111c', '<_ftoa> 119a', '<_ntoa_long> a30']
+Taken_Target address:       ['<_ntoa_long> a30', '<_ntoa_format> 852', '<_ntoa_format> 906', '<_ftoa> 111c', '<_ftoa> 119a']
 Taken_Target instruction: 
 	
 Not_Taken_Target address:   
@@ -2935,7 +2935,7 @@ Start instruction:
 End instruction: 
 	a36:	8082                	ret
 Length:           4
-Taken_Target address:       ['<_vsnprintf> 15a2', '<_vsnprintf> 16f2', '<_etoa> e90']
+Taken_Target address:       ['<_etoa> e90', '<_vsnprintf> 15a2', '<_vsnprintf> 16f2']
 Taken_Target instruction: 
 	
 Not_Taken_Target address:   
@@ -5006,7 +5006,7 @@ Start instruction:
 End instruction: 
 	ed0:	8082                	ret
 Length:           16
-Taken_Target address:       ['<_vsnprintf> 1762', '<_vsnprintf> 1602']
+Taken_Target address:       ['<_ftoa> 116c', '<_vsnprintf> 1762']
 Taken_Target instruction: 
 	
 Not_Taken_Target address:   
@@ -6375,7 +6375,7 @@ Start instruction:
 End instruction: 
 	11b6:	8082                	ret
 Length:           15
-Taken_Target address:       ['<_vsnprintf> 1602', '<_etoa> e4e', '<_etoa> f02', '<_vsnprintf> 1762']
+Taken_Target address:       ['<_etoa> e4e', '<_etoa> f02', '<_vsnprintf> 1602']
 Taken_Target instruction: 
 	
 Not_Taken_Target address:   
@@ -24816,7 +24816,7 @@ Start instruction:
 End instruction: 
 	3428:	8082                	ret
 Length:           3
-Taken_Target address:       ['<_ftoa> f6c', '<_etoa> b70']
+Taken_Target address:       ['<_etoa> b70', '<_ftoa> f6c']
 Taken_Target instruction: 
 	
 Not_Taken_Target address:   
@@ -24857,7 +24857,7 @@ Start instruction:
 End instruction: 
 	3432:	8082                	ret
 Length:           2
-Taken_Target address:       ['<_ftoa> f6c', '<_etoa> b70']
+Taken_Target address:       ['<_etoa> b70', '<_ftoa> f6c']
 Taken_Target instruction: 
 	
 Not_Taken_Target address:   
@@ -25000,7 +25000,7 @@ Start instruction:
 End instruction: 
 	3464:	8082                	ret
 Length:           2
-Taken_Target address:       ['<_ftoa> f6c', '<_etoa> b70']
+Taken_Target address:       ['<_etoa> b70', '<_ftoa> f6c']
 Taken_Target instruction: 
 	
 Not_Taken_Target address:   
@@ -25020,7 +25020,7 @@ Start instruction:
 End instruction: 
 	3464:	8082                	ret
 Length:           1
-Taken_Target address:       ['<_ftoa> f6c', '<_etoa> b70']
+Taken_Target address:       ['<_etoa> b70', '<_ftoa> f6c']
 Taken_Target instruction: 
 	
 Not_Taken_Target address:   
@@ -25093,7 +25093,7 @@ Start instruction:
 End instruction: 
 	34a8:	8082                	ret
 Length:           3
-Taken_Target address:       ['<_ftoa> f9a', '<_ftoa> fb0', '<_ftoa> 1074', '<_ftoa> 11f0', '<_etoa> b88', '<_etoa> d7a', '<_etoa> dae']
+Taken_Target address:       ['<_etoa> b88', '<_etoa> d7a', '<_etoa> dae', '<_ftoa> f9a', '<_ftoa> fb0', '<_ftoa> 1074', '<_ftoa> 11f0']
 Taken_Target instruction: 
 	
 Not_Taken_Target address:   
@@ -25289,7 +25289,7 @@ Start instruction:
 End instruction: 
 	34da:	8082                	ret
 Length:           2
-Taken_Target address:       ['<_ftoa> f9a', '<_ftoa> fb0', '<_ftoa> 1074', '<_ftoa> 11f0', '<_etoa> b88', '<_etoa> d7a', '<_etoa> dae']
+Taken_Target address:       ['<_etoa> b88', '<_etoa> d7a', '<_etoa> dae', '<_ftoa> f9a', '<_ftoa> fb0', '<_ftoa> 1074', '<_ftoa> 11f0']
 Taken_Target instruction: 
 	
 Not_Taken_Target address:   
@@ -25329,7 +25329,7 @@ Start instruction:
 End instruction: 
 	34e2:	8082                	ret
 Length:           2
-Taken_Target address:       ['<_ftoa> f9a', '<_ftoa> fb0', '<_ftoa> 1074', '<_ftoa> 11f0', '<_etoa> b88', '<_etoa> d7a', '<_etoa> dae']
+Taken_Target address:       ['<_etoa> b88', '<_etoa> d7a', '<_etoa> dae', '<_ftoa> f9a', '<_ftoa> fb0', '<_ftoa> 1074', '<_ftoa> 11f0']
 Taken_Target instruction: 
 	
 Not_Taken_Target address:   
@@ -25387,7 +25387,7 @@ Start instruction:
 End instruction: 
 	34ec:	8082                	ret
 Length:           1
-Taken_Target address:       ['<_ftoa> f9a', '<_ftoa> fb0', '<_ftoa> 1074', '<_ftoa> 11f0', '<_etoa> b88', '<_etoa> d7a', '<_etoa> dae']
+Taken_Target address:       ['<_etoa> b88', '<_etoa> d7a', '<_etoa> dae', '<_ftoa> f9a', '<_ftoa> fb0', '<_ftoa> 1074', '<_ftoa> 11f0']
 Taken_Target instruction: 
 	
 Not_Taken_Target address:   
@@ -25482,7 +25482,7 @@ Start instruction:
 End instruction: 
 	3500:	8082                	ret
 Length:           2
-Taken_Target address:       ['<_ftoa> f9a', '<_ftoa> fb0', '<_ftoa> 1074', '<_ftoa> 11f0', '<_etoa> b88', '<_etoa> d7a', '<_etoa> dae']
+Taken_Target address:       ['<_etoa> b88', '<_etoa> d7a', '<_etoa> dae', '<_ftoa> f9a', '<_ftoa> fb0', '<_ftoa> 1074', '<_ftoa> 11f0']
 Taken_Target instruction: 
 	
 Not_Taken_Target address:   
@@ -25502,7 +25502,7 @@ Start instruction:
 End instruction: 
 	3504:	8082                	ret
 Length:           2
-Taken_Target address:       ['<_ftoa> f9a', '<_ftoa> fb0', '<_ftoa> 1074', '<_ftoa> 11f0', '<_etoa> b88', '<_etoa> d7a', '<_etoa> dae']
+Taken_Target address:       ['<_etoa> b88', '<_etoa> d7a', '<_etoa> dae', '<_ftoa> f9a', '<_ftoa> fb0', '<_ftoa> 1074', '<_ftoa> 11f0']
 Taken_Target instruction: 
 	
 Not_Taken_Target address:   
@@ -25710,7 +25710,7 @@ Start instruction:
 End instruction: 
 	355e:	8082                	ret
 Length:           3
-Taken_Target address:       ['<_ftoa> f84', '<_ftoa> fc6', '<_ftoa> fd6', '<_ftoa> 1096', '<_ftoa> 11e0', '<_ftoa> 1256', '<_etoa> b9e', '<_etoa> bae', '<_etoa> dc8', '<_etoa> e22']
+Taken_Target address:       ['<_etoa> b9e', '<_etoa> bae', '<_etoa> dc8', '<_etoa> e22', '<_ftoa> f84', '<_ftoa> fc6', '<_ftoa> fd6', '<_ftoa> 1096', '<_ftoa> 11e0', '<_ftoa> 1256']
 Taken_Target instruction: 
 	
 Not_Taken_Target address:   
@@ -25906,7 +25906,7 @@ Start instruction:
 End instruction: 
 	3590:	8082                	ret
 Length:           2
-Taken_Target address:       ['<_ftoa> f84', '<_ftoa> fc6', '<_ftoa> fd6', '<_ftoa> 1096', '<_ftoa> 11e0', '<_ftoa> 1256', '<_etoa> b9e', '<_etoa> bae', '<_etoa> dc8', '<_etoa> e22']
+Taken_Target address:       ['<_etoa> b9e', '<_etoa> bae', '<_etoa> dc8', '<_etoa> e22', '<_ftoa> f84', '<_ftoa> fc6', '<_ftoa> fd6', '<_ftoa> 1096', '<_ftoa> 11e0', '<_ftoa> 1256']
 Taken_Target instruction: 
 	
 Not_Taken_Target address:   
@@ -25946,7 +25946,7 @@ Start instruction:
 End instruction: 
 	3598:	8082                	ret
 Length:           2
-Taken_Target address:       ['<_ftoa> f84', '<_ftoa> fc6', '<_ftoa> fd6', '<_ftoa> 1096', '<_ftoa> 11e0', '<_ftoa> 1256', '<_etoa> b9e', '<_etoa> bae', '<_etoa> dc8', '<_etoa> e22']
+Taken_Target address:       ['<_etoa> b9e', '<_etoa> bae', '<_etoa> dc8', '<_etoa> e22', '<_ftoa> f84', '<_ftoa> fc6', '<_ftoa> fd6', '<_ftoa> 1096', '<_ftoa> 11e0', '<_ftoa> 1256']
 Taken_Target instruction: 
 	
 Not_Taken_Target address:   
@@ -26004,7 +26004,7 @@ Start instruction:
 End instruction: 
 	35a2:	8082                	ret
 Length:           1
-Taken_Target address:       ['<_ftoa> f84', '<_ftoa> fc6', '<_ftoa> fd6', '<_ftoa> 1096', '<_ftoa> 11e0', '<_ftoa> 1256', '<_etoa> b9e', '<_etoa> bae', '<_etoa> dc8', '<_etoa> e22']
+Taken_Target address:       ['<_etoa> b9e', '<_etoa> bae', '<_etoa> dc8', '<_etoa> e22', '<_ftoa> f84', '<_ftoa> fc6', '<_ftoa> fd6', '<_ftoa> 1096', '<_ftoa> 11e0', '<_ftoa> 1256']
 Taken_Target instruction: 
 	
 Not_Taken_Target address:   
@@ -26099,7 +26099,7 @@ Start instruction:
 End instruction: 
 	35b6:	8082                	ret
 Length:           2
-Taken_Target address:       ['<_ftoa> f84', '<_ftoa> fc6', '<_ftoa> fd6', '<_ftoa> 1096', '<_ftoa> 11e0', '<_ftoa> 1256', '<_etoa> b9e', '<_etoa> bae', '<_etoa> dc8', '<_etoa> e22']
+Taken_Target address:       ['<_etoa> b9e', '<_etoa> bae', '<_etoa> dc8', '<_etoa> e22', '<_ftoa> f84', '<_ftoa> fc6', '<_ftoa> fd6', '<_ftoa> 1096', '<_ftoa> 11e0', '<_ftoa> 1256']
 Taken_Target instruction: 
 	
 Not_Taken_Target address:   
@@ -26119,7 +26119,7 @@ Start instruction:
 End instruction: 
 	35ba:	8082                	ret
 Length:           2
-Taken_Target address:       ['<_ftoa> f84', '<_ftoa> fc6', '<_ftoa> fd6', '<_ftoa> 1096', '<_ftoa> 11e0', '<_ftoa> 1256', '<_etoa> b9e', '<_etoa> bae', '<_etoa> dc8', '<_etoa> e22']
+Taken_Target address:       ['<_etoa> b9e', '<_etoa> bae', '<_etoa> dc8', '<_etoa> e22', '<_ftoa> f84', '<_ftoa> fc6', '<_ftoa> fd6', '<_ftoa> 1096', '<_ftoa> 11e0', '<_ftoa> 1256']
 Taken_Target instruction: 
 	
 Not_Taken_Target address:   
@@ -27223,7 +27223,7 @@ Start instruction:
 End instruction: 
 	37de:	8082                	ret
 Length:           14
-Taken_Target address:       ['<_ftoa> 1040', '<_etoa> be6', '<_etoa> c26', '<_etoa> c4e', '<_etoa> c78', '<_etoa> c94', '<_etoa> cae', '<_etoa> d6e']
+Taken_Target address:       ['<_etoa> be6', '<_etoa> c26', '<_etoa> c4e', '<_etoa> c78', '<_etoa> c94', '<_etoa> cae', '<_etoa> d6e', '<_ftoa> 1040']
 Taken_Target instruction: 
 	
 Not_Taken_Target address:   
@@ -27255,7 +27255,7 @@ Start instruction:
 End instruction: 
 	37de:	8082                	ret
 Length:           13
-Taken_Target address:       ['<_ftoa> 1040', '<_etoa> be6', '<_etoa> c26', '<_etoa> c4e', '<_etoa> c78', '<_etoa> c94', '<_etoa> cae', '<_etoa> d6e']
+Taken_Target address:       ['<_etoa> be6', '<_etoa> c26', '<_etoa> c4e', '<_etoa> c78', '<_etoa> c94', '<_etoa> cae', '<_etoa> d6e', '<_ftoa> 1040']
 Taken_Target instruction: 
 	
 Not_Taken_Target address:   
@@ -31364,7 +31364,7 @@ Start instruction:
 End instruction: 
 	3f12:	8082                	ret
 Length:           9
-Taken_Target address:       ['<_ftoa> 1038', '<_ftoa> 105e', '<_ftoa> 1132', '<_ftoa> 11ca', '<_etoa> c18', '<_etoa> ca2', '<_etoa> d32']
+Taken_Target address:       ['<_etoa> c18', '<_etoa> ca2', '<_etoa> d32', '<_ftoa> 1038', '<_ftoa> 105e', '<_ftoa> 1132', '<_ftoa> 11ca']
 Taken_Target instruction: 
 	
 Not_Taken_Target address:   
@@ -31391,7 +31391,7 @@ Start instruction:
 End instruction: 
 	3f12:	8082                	ret
 Length:           8
-Taken_Target address:       ['<_ftoa> 1038', '<_ftoa> 105e', '<_ftoa> 1132', '<_ftoa> 11ca', '<_etoa> c18', '<_etoa> ca2', '<_etoa> d32']
+Taken_Target address:       ['<_etoa> c18', '<_etoa> ca2', '<_etoa> d32', '<_ftoa> 1038', '<_ftoa> 105e', '<_ftoa> 1132', '<_ftoa> 11ca']
 Taken_Target instruction: 
 	
 Not_Taken_Target address:   
@@ -34885,7 +34885,7 @@ Start instruction:
 End instruction: 
 	4466:	8082                	ret
 Length:           1
-Taken_Target address:       ['<_ftoa> 1010', '<_etoa> c36', '<_etoa> c60']
+Taken_Target address:       ['<_etoa> c36', '<_etoa> c60', '<_ftoa> 1010']
 Taken_Target instruction: 
 	
 Not_Taken_Target address:   
@@ -35009,7 +35009,7 @@ Start instruction:
 End instruction: 
 	449a:	8082                	ret
 Length:           1
-Taken_Target address:       ['<_ftoa> 1010', '<_etoa> c36', '<_etoa> c60']
+Taken_Target address:       ['<_etoa> c36', '<_etoa> c60', '<_ftoa> 1010']
 Taken_Target instruction: 
 	
 Not_Taken_Target address:   
@@ -35134,7 +35134,7 @@ Start instruction:
 End instruction: 
 	44cc:	8082                	ret
 Length:           2
-Taken_Target address:       ['<_ftoa> 1010', '<_etoa> c36', '<_etoa> c60']
+Taken_Target address:       ['<_etoa> c36', '<_etoa> c60', '<_ftoa> 1010']
 Taken_Target instruction: 
 	
 Not_Taken_Target address:   
@@ -35154,7 +35154,7 @@ Start instruction:
 End instruction: 
 	44cc:	8082                	ret
 Length:           1
-Taken_Target address:       ['<_ftoa> 1010', '<_etoa> c36', '<_etoa> c60']
+Taken_Target address:       ['<_etoa> c36', '<_etoa> c60', '<_ftoa> 1010']
 Taken_Target instruction: 
 	
 Not_Taken_Target address:   
@@ -35758,7 +35758,7 @@ Start instruction:
 End instruction: 
 	45ee:	8082                	ret
 Length:           19
-Taken_Target address:       ['<_ftoa> 102c', '<_ftoa> 11be', '<_etoa> bd8', '<_etoa> c3c', '<_etoa> c86']
+Taken_Target address:       ['<_etoa> bd8', '<_etoa> c3c', '<_etoa> c86', '<_ftoa> 102c', '<_ftoa> 11be']
 Taken_Target instruction: 
 	
 Not_Taken_Target address:   
@@ -35795,7 +35795,7 @@ Start instruction:
 End instruction: 
 	45ee:	8082                	ret
 Length:           13
-Taken_Target address:       ['<_ftoa> 102c', '<_ftoa> 11be', '<_etoa> bd8', '<_etoa> c3c', '<_etoa> c86']
+Taken_Target address:       ['<_etoa> bd8', '<_etoa> c3c', '<_etoa> c86', '<_ftoa> 102c', '<_ftoa> 11be']
 Taken_Target instruction: 
 	
 Not_Taken_Target address:   
@@ -36078,7 +36078,7 @@ Start instruction:
 End instruction: 
 	467c:	8082                	ret
 Length:           12
-Taken_Target address:       ['<__floatsidf> 45b8', '<__muldf3> 3644', '<__muldf3> 3674', '<__muldf3> 3726', '<__muldf3> 3756', '<__adddf3> 2b1e', '<__adddf3> 2b7a', '<__subdf3> 42b2', '<__subdf3> 430c', '<__divdf3> 2da8', '<__divdf3> 2dd8', '<__divdf3> 2e8c', '<__divdf3> 2ec0', '<__floatunsidf> 460e']
+Taken_Target address:       ['<__adddf3> 2b1e', '<__adddf3> 2b7a', '<__divdf3> 2da8', '<__divdf3> 2dd8', '<__divdf3> 2e8c', '<__divdf3> 2ec0', '<__muldf3> 3644', '<__muldf3> 3674', '<__muldf3> 3726', '<__muldf3> 3756', '<__subdf3> 42b2', '<__subdf3> 430c', '<__floatsidf> 45b8', '<__floatunsidf> 460e']
 Taken_Target instruction: 
 	
 Not_Taken_Target address:   
@@ -36108,7 +36108,7 @@ Start instruction:
 End instruction: 
 	467c:	8082                	ret
 Length:           9
-Taken_Target address:       ['<__floatsidf> 45b8', '<__muldf3> 3644', '<__muldf3> 3674', '<__muldf3> 3726', '<__muldf3> 3756', '<__adddf3> 2b1e', '<__adddf3> 2b7a', '<__subdf3> 42b2', '<__subdf3> 430c', '<__divdf3> 2da8', '<__divdf3> 2dd8', '<__divdf3> 2e8c', '<__divdf3> 2ec0', '<__floatunsidf> 460e']
+Taken_Target address:       ['<__adddf3> 2b1e', '<__adddf3> 2b7a', '<__divdf3> 2da8', '<__divdf3> 2dd8', '<__divdf3> 2e8c', '<__divdf3> 2ec0', '<__muldf3> 3644', '<__muldf3> 3674', '<__muldf3> 3726', '<__muldf3> 3756', '<__subdf3> 42b2', '<__subdf3> 430c', '<__floatsidf> 45b8', '<__floatunsidf> 460e']
 Taken_Target instruction: 
 	
 Not_Taken_Target address:   

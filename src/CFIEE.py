@@ -1067,81 +1067,7 @@ def write_basic_blocks_to_file(file_name, basic_block, output_directory):
             for line in bb.instr:
                 file.write(f'\t{line.strip()}\n')
             file.write('\n\n')
-"""
-def generate_CFG(basic_block, program_name, output_directory):
-    # Create a new Graphviz graph
-    graph1 = graphviz.Digraph(format='svg')
-    
-    # Create a mapping of basic block names to their respective nodes
-    bb_nodes = {}
 
-    # Add nodes to the graph
-    for bb in basic_block:
-        label = f'Basic_block Name: {bb.name}\nIn Function: {bb.func}\nStart address: {bb.start}\nEnd address: {bb.end}\nLength: {bb.length}\nTaken_Target: {bb.taken_target}'
-        if bb.not_taken_target is not None:
-            label += f'\nNot_Taken_Target address: {bb.not_taken_target}'
-
-        node_name = str(bb.name)
-        graph1.node(node_name, label=label, shape='box')
-        bb_nodes[bb.name] = node_name 
-    
-    # edge counter
-    edge_counter = 0
-    
-    # Add edges to the graph
-    for i, bb in enumerate (basic_block):
-        if bb.taken_target != '':
-            if isinstance(bb.taken_target, list):
-                for target_str in bb.taken_target:
-                    target = target_str.split()[1]
-                    for b_num, node_name in bb_nodes.items():
-                        if isinstance(b_num, str):
-                            num = int(b_num.split()[0])
-                            if target == basic_block[num].start:
-                                graph1.edge(bb_nodes[bb.name], node_name)
-                                edge_counter += 1
-                        else:
-                            if target == basic_block[b_num].start:
-                                graph1.edge(bb_nodes[bb.name], node_name)
-                                edge_counter += 1
-
-            else:
-                for b_num, node_name in bb_nodes.items():
-                    if isinstance(b_num, str):
-                        num = int(b_num.split()[0])
-                        if bb.taken_target == basic_block[num].start:
-                            graph1.edge(bb_nodes[bb.name], node_name)
-                            edge_counter += 1
-                    else:
-                        if bb.taken_target == basic_block[b_num].start:
-                            graph1.edge(bb_nodes[bb.name], node_name)
-                            edge_counter += 1
-        
-        elif bb.taken_target == '' and i+1 < len(basic_block):
-            next_bb = basic_block[i+1]
-            graph1.edge(bb_nodes[bb.name], bb_nodes[next_bb.name])
-            edge_counter += 1
-
-        if bb.not_taken_target != '':
-            for b_num, node_name in bb_nodes.items():
-                if isinstance(b_num, str):
-                    num = int(b_num.split()[0])
-                    if bb.not_taken_target == basic_block[num].start:
-                        graph1.edge(bb_nodes[bb.name], node_name,style='dashed',color = 'red')
-                        edge_counter += 1
-                else:
-                    if bb.not_taken_target == basic_block[b_num].start:
-                        graph1.edge(bb_nodes[bb.name], node_name, style='dashed',color = 'red')
-                        edge_counter += 1
-                        
-    # Set the output file path
-    output_file = os.path.join(output_directory, f'{program_name}_CFG')
-
-    # Render the graph and save it to a file
-    graph1.render(filename=output_file, cleanup=True, view=False)  
-    
-    return edge_counter
-"""
 def generate_CFG(basic_block, program_name, output_directory):
     # Create a new Graphviz graph
     graph1 = graphviz.Digraph(format='svg')
@@ -1165,10 +1091,10 @@ def generate_CFG(basic_block, program_name, output_directory):
     edge_counter = 0
     
     # Function to add edges to the graph
-    def add_edge(target, style=None, color=None):
+    def add_edge(source, target, style=None, color=None):
         nonlocal edge_counter
-        if target in bb_start_to_name:
-            graph1.edge(bb_nodes[bb.name], bb_start_to_name[target], style=style, color=color)
+        if source in bb_nodes and target in bb_start_to_name:
+            graph1.edge(bb_nodes[source], bb_start_to_name[target], style=style, color=color)
             edge_counter += 1
 
     # Add edges to the graph
@@ -1177,16 +1103,17 @@ def generate_CFG(basic_block, program_name, output_directory):
             if isinstance(bb.taken_target, list):
                 for target_str in bb.taken_target:
                     target = target_str.split()[1]
-                    add_edge(target)
+                    add_edge(bb.name, target)
             else:
-                add_edge(bb.taken_target)
-        elif not bb.taken_target and i+1 < len(basic_block):
+                add_edge(bb.name, bb.taken_target)
+        elif not bb.taken_target and i+1 < len(basic_block) and 'ret' not in bb.end_instr:
             next_bb = basic_block[i+1]
-            graph1.edge(bb_nodes[bb.name], bb_nodes[next_bb.name])
+            add_edge(bb.name, next_bb.start)
+            # graph1.edge(bb_nodes[bb.name], bb_nodes[next_bb.name])
             edge_counter += 1
 
         if bb.not_taken_target:
-            add_edge(bb.not_taken_target, style='dashed', color='red')
+            add_edge(bb.name, bb.not_taken_target, style='dashed', color='red')
                         
     # Set the output file path
     output_file = os.path.join(output_directory, f'{program_name}_CFG')
