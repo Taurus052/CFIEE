@@ -28,6 +28,8 @@
 
     *   graphviz
 
+    *   time
+
 ### Program Function
 
 This program is a highly efficient tool designed specifically for the purpose of extracting control flow integrity metadata.

@@ -1,0 +1,328 @@
+trans_num: 92
+
+<__start>:
+
+j/b_instr: 24:	00028b63          	beqz	t0,3a <L_loop0_done>
+t_instr:   3a:	20001197          	auipc	gp,0x20001
+
+
+<L_loop0>:
+
+j/b_instr: 36:	fe0299e3          	bnez	t0,28 <L_loop0>
+t_instr:   28:	0001a303          	lw	t1,0(gp)
+
+
+<L_loop0_done>:
+
+j/b_instr: 50:	00020863          	beqz	tp,60 <L_loop1_done>
+t_instr:   60:	00000197          	auipc	gp,0x0
+
+
+<L_loop1>:
+
+j/b_instr: 5c:	fe021ce3          	bnez	tp,54 <L_loop1>
+t_instr:   54:	0051a023          	sw	t0,0(gp)
+
+
+<L_loop1_done>:
+
+
+<__to_main>:
+
+j/b_instr: e0:	243000ef          	jal	ra,b22 <main>
+t_instr:   b22:	6795                	lui	a5,0x5
+
+
+<fputc>:
+
+j/b_instr: 5c2:	3c70106f          	j	2188 <ck_uart_putc>
+t_instr:   2188:	4d5c                	lw	a5,28(a0)
+
+
+<sglib_dllist_sort>:
+
+j/b_instr: 82a:	0c0e0c63          	beqz	t3,902 <sglib_dllist_sort+0xdc>
+t_instr:   902:	8082                	ret
+
+j/b_instr: 836:	fe0e1de3          	bnez	t3,830 <sglib_dllist_sort+0xa>
+t_instr:   830:	85f2                	mv	a1,t3
+
+j/b_instr: 848:	00681463          	bne	a6,t1,850 <sglib_dllist_sort+0x2a>
+t_instr:   850:	0785                	addi	a5,a5,1
+
+j/b_instr: 84c:	a895                	j	8c0 <sglib_dllist_sort+0x9a>
+t_instr:   8c0:	41d4                	lw	a3,4(a1)
+
+j/b_instr: 84e:	cb41                	beqz	a4,8de <sglib_dllist_sort+0xb8>
+t_instr:   8de:	c20c                	sw	a1,0(a2)
+
+j/b_instr: 854:	ff079de3          	bne	a5,a6,84e <sglib_dllist_sort+0x28>
+t_instr:   84e:	cb41                	beqz	a4,8de <sglib_dllist_sort+0xb8>
+
+j/b_instr: 858:	08070363          	beqz	a4,8de <sglib_dllist_sort+0xb8>
+t_instr:   8de:	c20c                	sw	a1,0(a2)
+
+j/b_instr: 866:	e399                	bnez	a5,86c <sglib_dllist_sort+0x46>
+t_instr:   86c:	0705                	addi	a4,a4,1
+
+j/b_instr: 868:	a849                	j	8fa <sglib_dllist_sort+0xd4>
+t_instr:   8fa:	c20c                	sw	a1,0(a2)
+
+j/b_instr: 86a:	ca99                	beqz	a3,880 <sglib_dllist_sort+0x5a>
+t_instr:   880:	cf89                	beqz	a5,89a <sglib_dllist_sort+0x74>
+
+j/b_instr: 870:	ff071de3          	bne	a4,a6,86a <sglib_dllist_sort+0x44>
+t_instr:   86a:	ca99                	beqz	a3,880 <sglib_dllist_sort+0x5a>
+
+j/b_instr: 874:	00068663          	beqz	a3,880 <sglib_dllist_sort+0x5a>
+t_instr:   880:	cf89                	beqz	a5,89a <sglib_dllist_sort+0x74>
+
+j/b_instr: 880:	cf89                	beqz	a5,89a <sglib_dllist_sort+0x74>
+t_instr:   89a:	c20c                	sw	a1,0(a2)
+
+j/b_instr: 88c:	02074f63          	bltz	a4,8ca <sglib_dllist_sort+0xa4>
+t_instr:   8ca:	c20c                	sw	a1,0(a2)
+
+j/b_instr: 898:	f7ed                	bnez	a5,882 <sglib_dllist_sort+0x5c>
+t_instr:   882:	4198                	lw	a4,0(a1)
+
+j/b_instr: 8a4:	fff5                	bnez	a5,8a0 <sglib_dllist_sort+0x7a>
+t_instr:   8a0:	863e                	mv	a2,a5
+
+j/b_instr: 8aa:	fdc9                	bnez	a1,844 <sglib_dllist_sort+0x1e>
+t_instr:   844:	872e                	mv	a4,a1
+
+j/b_instr: 8b2:	c1a9                	beqz	a1,8f4 <sglib_dllist_sort+0xce>
+t_instr:   8f4:	c10c                	sw	a1,0(a0)
+
+j/b_instr: 8bc:	f8681ae3          	bne	a6,t1,850 <sglib_dllist_sort+0x2a>
+t_instr:   850:	0785                	addi	a5,a5,1
+
+j/b_instr: 8c8:	b775                	j	874 <sglib_dllist_sort+0x4e>
+t_instr:   874:	00068663          	beqz	a3,880 <sglib_dllist_sort+0x5a>
+
+j/b_instr: 8d2:	c319                	beqz	a4,8d8 <sglib_dllist_sort+0xb2>
+t_instr:   8d8:	c1dc                	sw	a5,4(a1)
+
+j/b_instr: 8d6:	b76d                	j	880 <sglib_dllist_sort+0x5a>
+t_instr:   880:	cf89                	beqz	a5,89a <sglib_dllist_sort+0x74>
+
+j/b_instr: 8dc:	b7d1                	j	8a0 <sglib_dllist_sort+0x7a>
+t_instr:   8a0:	863e                	mv	a2,a5
+
+j/b_instr: 8e2:	f6f1                	bnez	a3,8ae <sglib_dllist_sort+0x88>
+t_instr:   8ae:	45b2                	lw	a1,12(sp)
+
+j/b_instr: 8e6:	c599                	beqz	a1,8f4 <sglib_dllist_sort+0xce>
+t_instr:   8f4:	c10c                	sw	a1,0(a0)
+
+j/b_instr: 8f2:	ffe5                	bnez	a5,8ea <sglib_dllist_sort+0xc4>
+t_instr:   8ea:	01c7a423          	sw	t3,8(a5)
+
+j/b_instr: 900:	b745                	j	8a0 <sglib_dllist_sort+0x7a>
+t_instr:   8a0:	863e                	mv	a2,a5
+
+
+<sglib_dllist_it_next>:
+
+j/b_instr: 968:	c885                	beqz	s1,998 <sglib_dllist_it_next+0x46>
+t_instr:   998:	f07d                	bnez	s0,97e <sglib_dllist_it_next+0x2c>
+
+j/b_instr: 96e:	e401                	bnez	s0,976 <sglib_dllist_it_next+0x24>
+t_instr:   976:	85a2                	mv	a1,s0
+
+j/b_instr: 970:	a8b9                	j	9ce <sglib_dllist_it_next+0x7c>
+t_instr:   9ce:	4500                	lw	s0,8(a0)
+
+j/b_instr: 974:	c81d                	beqz	s0,9aa <sglib_dllist_it_next+0x58>
+t_instr:   9aa:	00c92483          	lw	s1,12(s2)
+
+j/b_instr: 97c:	f97d                	bnez	a0,972 <sglib_dllist_it_next+0x20>
+t_instr:   972:	4400                	lw	s0,8(s0)
+
+j/b_instr: 998:	f07d                	bnez	s0,97e <sglib_dllist_it_next+0x2c>
+t_instr:   97e:	441c                	lw	a5,8(s0)
+
+j/b_instr: 9a0:	c40d                	beqz	s0,9ca <sglib_dllist_it_next+0x78>
+t_instr:   9ca:	4401                	li	s0,0
+
+j/b_instr: 9a8:	bff1                	j	984 <sglib_dllist_it_next+0x32>
+t_instr:   984:	00892023          	sw	s0,0(s2)
+
+j/b_instr: 9b6:	d4ed                	beqz	s1,9a0 <sglib_dllist_it_next+0x4e>
+t_instr:   9a0:	c40d                	beqz	s0,9ca <sglib_dllist_it_next+0x78>
+
+j/b_instr: 9bc:	c419                	beqz	s0,9ca <sglib_dllist_it_next+0x78>
+t_instr:   9ca:	4401                	li	s0,0
+
+j/b_instr: 9c4:	dd79                	beqz	a0,9a2 <sglib_dllist_it_next+0x50>
+t_instr:   9a2:	405c                	lw	a5,4(s0)
+
+j/b_instr: 9c8:	f87d                	bnez	s0,9be <sglib_dllist_it_next+0x6c>
+t_instr:   9be:	8522                	mv	a0,s0
+
+j/b_instr: 9cc:	bf65                	j	984 <sglib_dllist_it_next+0x32>
+t_instr:   984:	00892023          	sw	s0,0(s2)
+
+j/b_instr: 9d4:	b7e5                	j	9bc <sglib_dllist_it_next+0x6a>
+t_instr:   9bc:	c419                	beqz	s0,9ca <sglib_dllist_it_next+0x78>
+
+
+<benchmark>:
+
+j/b_instr: a78:	a819                	j	a8e <benchmark+0x44>
+t_instr:   a8e:	00c58613          	addi	a2,a1,12
+
+j/b_instr: a84:	c211                	beqz	a2,a88 <benchmark+0x3e>
+t_instr:   a88:	0711                	addi	a4,a4,4
+
+j/b_instr: a8a:	02e50663          	beq	a0,a4,ab6 <benchmark+0x6c>
+t_instr:   ab6:	00088463          	beqz	a7,abe <benchmark+0x74>
+
+j/b_instr: a94:	00c86563          	bltu	a6,a2,a9e <benchmark+0x54>
+t_instr:   a9e:	4310                	lw	a2,0(a4)
+
+j/b_instr: aa2:	fee1                	bnez	a3,a7a <benchmark+0x30>
+t_instr:   a7a:	4690                	lw	a2,8(a3)
+
+j/b_instr: ab2:	fce51ee3          	bne	a0,a4,a8e <benchmark+0x44>
+t_instr:   a8e:	00c58613          	addi	a2,a1,12
+
+j/b_instr: ab6:	00088463          	beqz	a7,abe <benchmark+0x74>
+t_instr:   abe:	00030363          	beqz	t1,ac4 <benchmark+0x7a>
+
+j/b_instr: abe:	00030363          	beqz	t1,ac4 <benchmark+0x7a>
+t_instr:   ac4:	0028                	addi	a0,sp,8
+
+j/b_instr: ac6:	3385                	jal	826 <sglib_dllist_sort>
+t_instr:   826:	00052e03          	lw	t3,0(a0)
+
+j/b_instr: aca:	c639                	beqz	a2,b18 <benchmark+0xce>
+t_instr:   b18:	cc02                	sw	zero,24(sp)
+
+j/b_instr: ad2:	fff5                	bnez	a5,ace <benchmark+0x84>
+t_instr:   ace:	86be                	mv	a3,a5
+
+j/b_instr: ada:	ff75                	bnez	a4,ad6 <benchmark+0x8c>
+t_instr:   ad6:	87ba                	mv	a5,a4
+
+j/b_instr: ae2:	fff5                	bnez	a5,ade <benchmark+0x94>
+t_instr:   ade:	c394                	sw	a3,0(a5)
+
+j/b_instr: aea:	ff75                	bnez	a4,ae6 <benchmark+0x9c>
+t_instr:   ae6:	87ba                	mv	a5,a4
+
+j/b_instr: af0:	fff5                	bnez	a5,aec <benchmark+0xa2>
+t_instr:   aec:	c394                	sw	a3,0(a5)
+
+j/b_instr: afe:	3d91                	jal	952 <sglib_dllist_it_next>
+t_instr:   952:	1101                	addi	sp,sp,-32
+
+j/b_instr: b00:	c901                	beqz	a0,b10 <benchmark+0xc6>
+t_instr:   b10:	50b2                	lw	ra,44(sp)
+
+j/b_instr: b0c:	3599                	jal	952 <sglib_dllist_it_next>
+t_instr:   952:	1101                	addi	sp,sp,-32
+
+j/b_instr: b0e:	f975                	bnez	a0,b02 <benchmark+0xb8>
+t_instr:   b02:	4792                	lw	a5,4(sp)
+
+j/b_instr: b20:	bff1                	j	afc <benchmark+0xb2>
+t_instr:   afc:	0068                	addi	a0,sp,12
+
+
+<main>:
+
+j/b_instr: b46:	570010ef          	jal	ra,20b6 <ck_uart_open>
+t_instr:   20b6:	e981                	bnez	a1,20c6 <ck_uart_open+0x10>
+
+j/b_instr: b50:	57a010ef          	jal	ra,20ca <ck_uart_init>
+t_instr:   20ca:	4118                	lw	a4,0(a0)
+
+j/b_instr: b54:	3ddd                	jal	a4a <benchmark>
+t_instr:   a4a:	20000537          	lui	a0,0x20000
+
+j/b_instr: b5c:	2bc010ef          	jal	ra,1e18 <puts>
+t_instr:   1e18:	1141                	addi	sp,sp,-16
+
+
+<puts>:
+
+j/b_instr: 1e24:	c901                	beqz	a0,1e34 <puts+0x1c>
+t_instr:   1e34:	55fd                	li	a1,-1
+
+j/b_instr: 1e2a:	f8cfe0ef          	jal	ra,5b6 <fputc>
+t_instr:   5b6:	0ff57593          	andi	a1,a0,255
+
+j/b_instr: 1e32:	f975                	bnez	a0,1e26 <puts+0xe>
+t_instr:   1e26:	55fd                	li	a1,-1
+
+j/b_instr: 1e38:	f7efe0ef          	jal	ra,5b6 <fputc>
+t_instr:   5b6:	0ff57593          	andi	a1,a0,255
+
+
+<ck_uart_set_parity>:
+
+j/b_instr: 1f96:	04f58363          	beq	a1,a5,1fdc <ck_uart_set_parity+0x4a>
+t_instr:   1fdc:	4158                	lw	a4,4(a0)
+
+j/b_instr: 1f9c:	00f58d63          	beq	a1,a5,1fb6 <ck_uart_set_parity+0x24>
+t_instr:   1fb6:	4158                	lw	a4,4(a0)
+
+j/b_instr: 1fa0:	00058363          	beqz	a1,1fa6 <ck_uart_set_parity+0x14>
+t_instr:   1fa6:	4158                	lw	a4,4(a0)
+
+
+<ck_uart_set_wordsize>:
+
+j/b_instr: 2002:	04f58d63          	beq	a1,a5,205c <ck_uart_set_wordsize+0x5e>
+t_instr:   205c:	4158                	lw	a4,4(a0)
+
+j/b_instr: 2006:	02b7e563          	bltu	a5,a1,2030 <ck_uart_set_wordsize+0x32>
+t_instr:   2030:	478d                	li	a5,3
+
+j/b_instr: 200a:	04058163          	beqz	a1,204c <ck_uart_set_wordsize+0x4e>
+t_instr:   204c:	4158                	lw	a4,4(a0)
+
+j/b_instr: 2032:	00f59c63          	bne	a1,a5,204a <ck_uart_set_wordsize+0x4c>
+t_instr:   204a:	8082                	ret
+
+
+<ck_uart_open>:
+
+j/b_instr: 20b6:	e981                	bnez	a1,20c6 <ck_uart_open+0x10>
+t_instr:   20c6:	4505                	li	a0,1
+
+
+<ck_uart_init>:
+
+j/b_instr: 20d0:	0af70163          	beq	a4,a5,2172 <ck_uart_init+0xa8>
+t_instr:   2172:	4505                	li	a0,1
+
+j/b_instr: 2126:	35b5                	jal	1f92 <ck_uart_set_parity>
+t_instr:   1f92:	c54c                	sw	a1,12(a0)
+
+j/b_instr: 212c:	3dc9                	jal	1ffe <ck_uart_set_wordsize>
+t_instr:   1ffe:	c94c                	sw	a1,20(a0)
+
+j/b_instr: 2132:	cb85                	beqz	a5,2162 <ck_uart_init+0x98>
+t_instr:   2162:	4058                	lw	a4,4(s0)
+
+j/b_instr: 2136:	00e78c63          	beq	a5,a4,214e <ck_uart_init+0x84>
+t_instr:   214e:	4058                	lw	a4,4(s0)
+
+j/b_instr: 2160:	bfe9                	j	213a <ck_uart_init+0x70>
+t_instr:   213a:	4898                	lw	a4,16(s1)
+
+j/b_instr: 2170:	b7e9                	j	213a <ck_uart_init+0x70>
+t_instr:   213a:	4898                	lw	a4,16(s1)
+
+
+<ck_uart_putc>:
+
+j/b_instr: 218a:	cb99                	beqz	a5,21a0 <ck_uart_putc+0x18>
+t_instr:   21a0:	4505                	li	a0,1
+
+j/b_instr: 2196:	dfe5                	beqz	a5,218e <ck_uart_putc+0x6>
+t_instr:   218e:	01474783          	lbu	a5,20(a4)
+

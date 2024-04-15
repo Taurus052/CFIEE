@@ -1140,7 +1140,7 @@ def convert_to_binary(basic_block, output_file_name, Hash_algorithm, value_lengt
             binary_machine_code = []
             for j in range (len(machine_code)):
                 int_machine_code = int(machine_code[j], 16)
-                bin_machine_code = bin(int_machine_code)[2:].zfill(32)
+                bin_machine_code = bin(int_machine_code)[2:]
                 binary_machine_code.append(bin_machine_code)
 
             # Get binary_address
@@ -1152,6 +1152,7 @@ def convert_to_binary(basic_block, output_file_name, Hash_algorithm, value_lengt
             
             # Get hash value
             hash_value = calculate_hash_value(binary_machine_code, Hash_algorithm, value_length)
+            bin_hash_value = bin(int(hash_value, 16))[2:]
 
             # Write to file
             file.write(f'Basic_block: {basic_block[i].name}\n')
@@ -1160,7 +1161,7 @@ def convert_to_binary(basic_block, output_file_name, Hash_algorithm, value_lengt
             for i in range(len(binary_address)):
                 file.write(f'\t{binary_address[i]}: {binary_machine_code[i]}\n')
 
-            file.write(f'hash_value: \n\t{hash_value}\n')
+            file.write(f'hash_value: \n\t{bin_hash_value}\n')
             file.write('\n')
 
 def convert_to_hex(basic_block, output_file, Hash_algorithm, value_length, output_directory):
@@ -1175,9 +1176,16 @@ def convert_to_hex(basic_block, output_file, Hash_algorithm, value_length, outpu
         for i in range (len(basic_block)):
             bb_instr = basic_block[i].instr
             address, machine_code, mnemonic, operands =  get_func_machine_code(bb_instr)
+            
+            # Get binary_machine_code    
+            binary_machine_code = []
+            for j in range (len(machine_code)):
+                int_machine_code = int(machine_code[j], 16)
+                bin_machine_code = bin(int_machine_code)[2:]
+                binary_machine_code.append(bin_machine_code)
         
             # Get hash value
-            hash_value = calculate_hash_value(machine_code, Hash_algorithm, value_length)
+            hash_value = calculate_hash_value(binary_machine_code, Hash_algorithm, value_length)
 
             # Write to file
             file.write(f'Basic_block: {basic_block[i].name}\n')

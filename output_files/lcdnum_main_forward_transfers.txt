@@ -1,0 +1,151 @@
+trans_num: 35
+
+<__start>:
+
+j/b_instr: 24:	00028b63          	beqz	t0,3a <L_loop0_done>
+t_instr:   3a:	20001197          	auipc	gp,0x20001
+
+
+<L_loop0>:
+
+j/b_instr: 36:	fe0299e3          	bnez	t0,28 <L_loop0>
+t_instr:   28:	0001a303          	lw	t1,0(gp)
+
+
+<L_loop0_done>:
+
+j/b_instr: 50:	00020863          	beqz	tp,60 <L_loop1_done>
+t_instr:   60:	00000197          	auipc	gp,0x0
+
+
+<L_loop1>:
+
+j/b_instr: 5c:	fe021ce3          	bnez	tp,54 <L_loop1>
+t_instr:   54:	0051a023          	sw	t0,0(gp)
+
+
+<L_loop1_done>:
+
+
+<__to_main>:
+
+j/b_instr: e0:	570000ef          	jal	ra,650 <main>
+t_instr:   650:	6795                	lui	a5,0x5
+
+
+<benchmark>:
+
+j/b_instr: 61e:	00e5ec63          	bltu	a1,a4,636 <benchmark+0x44>
+t_instr:   636:	ffc69ee3          	bne	a3,t3,632 <benchmark+0x40>
+
+j/b_instr: 626:	00f36463          	bltu	t1,a5,62e <benchmark+0x3c>
+t_instr:   62e:	8cc88e23          	sb	a2,-1828(a7) # 200008dc <OUT>
+
+j/b_instr: 634:	bfd1                	j	608 <benchmark+0x16>
+t_instr:   608:	8dd54783          	lbu	a5,-1827(a0) # 200008dd <IN>
+
+j/b_instr: 636:	ffc69ee3          	bne	a3,t3,632 <benchmark+0x40>
+t_instr:   632:	8736                	mv	a4,a3
+
+
+<fputc>:
+
+j/b_instr: 64c:	6480106f          	j	1c94 <ck_uart_putc>
+t_instr:   1c94:	4d5c                	lw	a5,28(a0)
+
+
+<main>:
+
+j/b_instr: 674:	54e010ef          	jal	ra,1bc2 <ck_uart_open>
+t_instr:   1bc2:	e981                	bnez	a1,1bd2 <ck_uart_open+0x10>
+
+j/b_instr: 67e:	558010ef          	jal	ra,1bd6 <ck_uart_init>
+t_instr:   1bd6:	4118                	lw	a4,0(a0)
+
+j/b_instr: 682:	3f85                	jal	5f2 <benchmark>
+t_instr:   5f2:	6815                	lui	a6,0x5
+
+j/b_instr: 68a:	2a0010ef          	jal	ra,192a <puts>
+t_instr:   192a:	1141                	addi	sp,sp,-16
+
+
+<puts>:
+
+j/b_instr: 1936:	c901                	beqz	a0,1946 <puts+0x1c>
+t_instr:   1946:	55fd                	li	a1,-1
+
+j/b_instr: 193c:	d05fe0ef          	jal	ra,640 <fputc>
+t_instr:   640:	0ff57593          	andi	a1,a0,255
+
+j/b_instr: 1944:	f975                	bnez	a0,1938 <puts+0xe>
+t_instr:   1938:	55fd                	li	a1,-1
+
+j/b_instr: 194a:	cf7fe0ef          	jal	ra,640 <fputc>
+t_instr:   640:	0ff57593          	andi	a1,a0,255
+
+
+<ck_uart_set_parity>:
+
+j/b_instr: 1aa2:	04f58363          	beq	a1,a5,1ae8 <ck_uart_set_parity+0x4a>
+t_instr:   1ae8:	4158                	lw	a4,4(a0)
+
+j/b_instr: 1aa8:	00f58d63          	beq	a1,a5,1ac2 <ck_uart_set_parity+0x24>
+t_instr:   1ac2:	4158                	lw	a4,4(a0)
+
+j/b_instr: 1aac:	00058363          	beqz	a1,1ab2 <ck_uart_set_parity+0x14>
+t_instr:   1ab2:	4158                	lw	a4,4(a0)
+
+
+<ck_uart_set_wordsize>:
+
+j/b_instr: 1b0e:	04f58d63          	beq	a1,a5,1b68 <ck_uart_set_wordsize+0x5e>
+t_instr:   1b68:	4158                	lw	a4,4(a0)
+
+j/b_instr: 1b12:	02b7e563          	bltu	a5,a1,1b3c <ck_uart_set_wordsize+0x32>
+t_instr:   1b3c:	478d                	li	a5,3
+
+j/b_instr: 1b16:	04058163          	beqz	a1,1b58 <ck_uart_set_wordsize+0x4e>
+t_instr:   1b58:	4158                	lw	a4,4(a0)
+
+j/b_instr: 1b3e:	00f59c63          	bne	a1,a5,1b56 <ck_uart_set_wordsize+0x4c>
+t_instr:   1b56:	8082                	ret
+
+
+<ck_uart_open>:
+
+j/b_instr: 1bc2:	e981                	bnez	a1,1bd2 <ck_uart_open+0x10>
+t_instr:   1bd2:	4505                	li	a0,1
+
+
+<ck_uart_init>:
+
+j/b_instr: 1bdc:	0af70163          	beq	a4,a5,1c7e <ck_uart_init+0xa8>
+t_instr:   1c7e:	4505                	li	a0,1
+
+j/b_instr: 1c32:	35b5                	jal	1a9e <ck_uart_set_parity>
+t_instr:   1a9e:	c54c                	sw	a1,12(a0)
+
+j/b_instr: 1c38:	3dc9                	jal	1b0a <ck_uart_set_wordsize>
+t_instr:   1b0a:	c94c                	sw	a1,20(a0)
+
+j/b_instr: 1c3e:	cb85                	beqz	a5,1c6e <ck_uart_init+0x98>
+t_instr:   1c6e:	4058                	lw	a4,4(s0)
+
+j/b_instr: 1c42:	00e78c63          	beq	a5,a4,1c5a <ck_uart_init+0x84>
+t_instr:   1c5a:	4058                	lw	a4,4(s0)
+
+j/b_instr: 1c6c:	bfe9                	j	1c46 <ck_uart_init+0x70>
+t_instr:   1c46:	4898                	lw	a4,16(s1)
+
+j/b_instr: 1c7c:	b7e9                	j	1c46 <ck_uart_init+0x70>
+t_instr:   1c46:	4898                	lw	a4,16(s1)
+
+
+<ck_uart_putc>:
+
+j/b_instr: 1c96:	cb99                	beqz	a5,1cac <ck_uart_putc+0x18>
+t_instr:   1cac:	4505                	li	a0,1
+
+j/b_instr: 1ca2:	dfe5                	beqz	a5,1c9a <ck_uart_putc+0x6>
+t_instr:   1c9a:	01474783          	lbu	a5,20(a4)
+
